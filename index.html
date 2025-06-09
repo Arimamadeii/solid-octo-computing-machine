@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System Part Number Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .header h1 {
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+        .section {
+            border: 1px solid #ddd;
+            padding: 15px;
+            border-radius: 5px;
+        }
+        .section-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        select, input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        .dimensions {
+            display: flex;
+            gap: 10px;
+        }
+        .dimension-input {
+            flex: 1;
+        }
+        .generate-section {
+            text-align: center;
+            margin-top: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+        .copy-btn {
+            background-color: #3498db;
+            margin-left: 10px;
+        }
+        .copy-btn:hover {
+            background-color: #2980b9;
+        }
+        .qr-container {
+            margin-top: 15px;
+            text-align: center;
+        }
+        .qr-value {
+            text-align: left;
+            margin-top: 5px;
+            font-family: monospace;
+            white-space: pre-wrap;
+            background-color: #f0f0f0;
+            padding: 8px;
+            border-radius: 4px;
+        }
+        .flex-row {
+            display: flex;
+            align-items: center;
+        }
+        #qr-code {
+            width: 200px;
+            height: 200px;
+            margin: 0 auto;
+            border: 1px solid #ddd;
+            padding: 10px;
+            background: white;
+        }
+        .save-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 10px;
+        }
+        .save-btn {
+            padding: 8px 15px;
+            background-color: #5cb85c;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .save-btn:hover {
+            background-color: #4cae4c;
+        }
+    </style>
+    <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>System Part Number Generator</h1>
+        </div>
+        
+        <div class="section">
+            <div class="section-title">Kategori</div>
+            
+            <div class="form-group">
+                <label for="category">Kategori</label>
+                <select id="category" onchange="updateSubCategories()">
+                    <option value="">-- Pilih Kategori --</option>
+                    <option value="01">01. Filter</option>
+                    <option value="02">02. Sheetmetal</option>
+                    <option value="03">03. Bahan baku</option>
+                    <option value="04">04. Barang jadi</option>
+                    <option value="05">05. Jasa</option>
+                    <option value="06">06. Subcount</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="subCategory">Sub Kategori</label>
+                <select id="subCategory" onchange="updateProductNames()" disabled>
+                    <option value="">-- Pilih Sub Kategori --</option>
+                </select>
+            </div>
+            
+            <div class="form-group" id="productNameGroup">
+                <label for="productName">Nama Product</label>
+                <select id="productName" onchange="updateMaterialOptions()" disabled>
+                    <option value="">-- Pilih Nama Product --</option>
+                </select>
+            </div>
+            
+            <div class="form-group" id="materialGroup">
+                <label for="material">Bahan/Media Utama</label>
+                <select id="material" disabled>
+                    <option value="">-- Pilih Bahan/Media --</option>
+                </select>
+            </div>
+        </div>
+        
+        <div class="section">
+            <div class="section-title">System Part Number</div>
+            
+            <div class="form-group">
+                <label>Ukuran (mm)</label>
+                <div class="dimensions">
+                    <div class="dimension-input">
+                        <label for="length">Panjang</label>
+                        <input type="number" id="length" min="0" onchange="generateSizeCode()">
+                    </div>
+                    <div class="dimension-input">
+                        <label for="width">Lebar</label>
+                        <input type="number" id="width" min="0" onchange="generateSizeCode()">
+                    </div>
+                    <div class="dimension-input">
+                        <label for="height">Tinggi</label>
+                        <input type="number" id="height" min="0" onchange="generateSizeCode()">
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="sizeCode">Kode Ukuran</label>
+                <input type="text" id="sizeCode" readonly>
+            </div>
+            
+            <div class="form-group">
+                <label for="price">Harga Rp.</label>
+                <input type="number" id="price" min="0">
+            </div>
+        </div>
+        
+        <div class="generate-section">
+            <button onclick="generatePartNumber()">Generate</button>
+        </div>
+        
+        <div class="result" id="result" style="display: none;">
+            <div class="form-group">
+                <label for="partNumber">Part Number</label>
+                <div class="flex-row">
+                    <input type="text" id="partNumber" readonly style="flex: 1;">
+                    <button class="copy-btn" onclick="copyToClipboard('partNumber')">Copy</button>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label>QR Code Data</label>
+                <div class="flex-row">
+                    <input type="text" id="qrData" readonly style="flex: 1;">
+                    <button class="copy-btn" onclick="copyToClipboard('qrData')">Copy</button>
+                </div>
+                <div class="qr-container">
+                    <div id="qr-code"></div>
+                    <div class="save-buttons">
+                        <button class="save-btn" onclick="saveQRCode('png')">Save as PNG</button>
+                        <button class="save-btn" onclick="saveQRCode('jpeg')">Save as JPEG</button>
+                    </div>
+                    <div class="qr-value" id="qr-text"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sub categories data
+        const subCategories = {
+            '01': [
+                {value: '01', text: '01. Pre Filter'},
+                {value: '02', text: '02. Medium Filter'},
+                {value: '03', text: '03. HEPA Filter'},
+                {value: '04', text: '04. Catridge Filter'},
+                {value: '05', text: '05. Carbon Filter'}
+            ],
+            '02': [],
+            '03': [],
+            '04': [],
+            '05': [],
+            '06': []
+        };
+        
+        // Product names data
+        const productNames = {
+            '01-01': [
+                {value: '01', text: 'NAF CR Pre Filter Washable Pleated Radial'},
+                {value: '02', text: 'NAF CR Pre Filter Washable Flat'},
+                {value: '03', text: 'Pre Filter NAF 30 (Disposable)'},
+                {value: '04', text: 'NAF CR Pre Filter Washable Flange Type'},
+                {value: '05', text: 'NAF CR Prefilter IU'}
+            ],
+            '01-02': [
+                {value: '01', text: 'NAF V-PAC (2V)'},
+                {value: '02', text: 'NAF V Bank Carbon Filter Active 3V'},
+                {value: '03', text: 'NAF V-PAC Carbon Filter'},
+                {value: '04', text: 'NAF V-PAC Medium Filter'},
+                {value: '05', text: 'NAF Rigid Flange Type Stainless Steel'},
+                {value: '06', text: 'NAF RIGID Medium Filter'},
+                {value: '07', text: 'NAF Multi Pocket Filter / Medium Bag Filter'},
+                {value: '08', text: 'NAF Multi Pocket Airweb'},
+                {value: '09', text: 'NAF ECO PAC Seri Karton'},
+                {value: '10', text: 'NAF ECO PAC Seri Metal'},
+                {value: '11', text: 'NAF PAC'},
+                {value: '12', text: 'NAF PAC Wooden Frame'},
+                {value: '13', text: 'Medium Filter Carbon Multi Layer (3 Stage)'}
+            ],
+            '01-03': [
+                {value: '01', text: 'NAF Absolute MX'},
+                {value: '02', text: 'NAF Absolute HEPA Minipleat XL – Deep 12 Inch'},
+                {value: '03', text: 'NAF Absolute HEPA Minipleat XL – Deep 6 Inch'},
+                {value: '04', text: 'NAF Absolute XL | HEPA Filter High Capacity (Aluminium Separator)'},
+                {value: '05', text: 'NAF Absolute HEPA Filter Gel'},
+                {value: '06', text: 'NAF Absolute HEPA V-Type'}
+            ],
+            '01-04': [
+                {value: '01', text: 'NAF V-PAC GT'},
+                {value: '02', text: 'NAF PAC GT'},
+                {value: '03', text: 'NAF HP GT'},
+                {value: '04', text: 'NAF 30 GT'},
+                {value: '05', text: 'NAF RIGID GT'},
+                {value: '06', text: 'NAF Profile Square End Cap Cartridge Filter'},
+                {value: '07', text: 'NAF Profile Cylindrical Cartridge Filter'},
+                {value: '08', text: 'NAF Profile Conical Cartridge Filter'},
+                {value: '09', text: 'NAF Profile Spunbond Cartridge Filter'}
+            ],
+            '01-05': [
+                {value: '01', text: 'NAF V Bank Carbon Filter Active 3V'},
+                {value: '02', text: 'NAF V-PAC Carbon Filter (V Bank)'}
+            ],
+            '02': [],
+            '03': [],
+            '04': [],
+            '05': [],
+            '06': []
+        };
+
+        const materialOptions = [
+            'Washable 150',
+            'Washable 350',
+            'Washable 500',
+            'WF 100',
+            'G560',
+            'G4',
+            'G4 BIRU(DAF)',
+            'TKC',
+            '350 CHINA',
+            'Glassfiber AHLS/HV',
+            'GF China',
+            'PP China',
+            'GlassFiberAHLS/HVH13',
+            'GlassfiberAHLS/HVH14',
+            'GF China H13',
+            'GF China H14',
+            'PP  China H13',
+            'GF China H13 + Carbon',
+            'F9 AHLS',
+            'PST',
+            'PTA / Cylinder',
+            'PTB /',
+            'PTCone',
+            'PTD',
+            'TDCE',
+            'PTA+PTB',
+            'Filter Compresor',
+            'CYLIDRICAL + CONICAL'
+        ];
+
+        const sizeCodeMap = new Map();
+        let sizeCodeCounter = 1;
+        
+        function updateSubCategories() {
+            const categorySelect = document.getElementById('category');
+            const subCategorySelect = document.getElementById('subCategory');
+            const productNameSelect = document.getElementById('productName');
+            const productNameGroup = document.getElementById('productNameGroup');
+            const materialSelect = document.getElementById('material');
+            const materialGroup = document.getElementById('materialGroup');
+            
+            subCategorySelect.innerHTML = '<option value="">-- Pilih Sub Kategori --</option>';
+            productNameSelect.innerHTML = '<option value="">-- Pilih Nama Product --</option>';
+            materialSelect.innerHTML = '<option value="">-- Pilih Bahan/Media --</option>';
+            
+            const selectedCategory = categorySelect.value;
+            
+            if (selectedCategory) {
+                subCategorySelect.disabled = false;
+                
+                const subs = subCategories[selectedCategory] || [];
+                subs.forEach(sub => {
+                    const option = document.createElement('option');
+                    option.value = sub.value;
+                    option.textContent = sub.text;
+                    subCategorySelect.appendChild(option);
+                });
+                
+                if (['01', '02', '03', '04'].includes(selectedCategory)) {
+                    productNameGroup.style.display = 'block';
+                    materialGroup.style.display = 'block';
+                } else {
+                    productNameGroup.style.display = 'none';
+                    materialGroup.style.display = 'none';
+                }
+            } else {
+                subCategorySelect.disabled = true;
+                productNameSelect.disabled = true;
+                materialSelect.disabled = true;
+                productNameGroup.style.display = 'none';
+                materialGroup.style.display = 'none';
+            }
+        }
+        
+        function updateProductNames() {
+            const categorySelect = document.getElementById('category');
+            const subCategorySelect = document.getElementById('subCategory');
+            const productNameSelect = document.getElementById('productName');
+            const materialSelect = document.getElementById('material');
+            
+            productNameSelect.innerHTML = '<option value="">-- Pilih Nama Product --</option>';
+            materialSelect.innerHTML = '<option value="">-- Pilih Bahan/Media --</option>';
+            
+            const selectedCategory = categorySelect.value;
+            const selectedSubCategory = subCategorySelect.value;
+            
+            if (selectedCategory && selectedSubCategory) {
+                productNameSelect.disabled = false;
+                
+                const key = selectedCategory + '-' + selectedSubCategory;
+                const products = productNames[key] || [];
+                products.forEach(product => {
+                    const option = document.createElement('option');
+                    option.value = product.value;
+                    option.textContent = product.text;
+                    productNameSelect.appendChild(option);
+                });
+            } else {
+                productNameSelect.disabled = true;
+                materialSelect.disabled = true;
+            }
+        }
+
+        function updateMaterialOptions() {
+            const productNameSelect = document.getElementById('productName');
+            const materialSelect = document.getElementById('material');
+            
+            materialSelect.innerHTML = '<option value="">-- Pilih Bahan/Media --</option>';
+            
+            if (productNameSelect.value) {
+                materialSelect.disabled = false;
+                
+                materialOptions.forEach(material => {
+                    const option = document.createElement('option');
+                    option.value = material;
+                    option.textContent = material;
+                    materialSelect.appendChild(option);
+                });
+            } else {
+                materialSelect.disabled = true;
+            }
+        }
+
+        function generateSizeCode() {
+            const lengthInput = document.getElementById('length');
+            const widthInput = document.getElementById('width');
+            const heightInput = document.getElementById('height');
+            const sizeCodeInput = document.getElementById('sizeCode');
+            
+            const length = lengthInput.value;
+            const width = widthInput.value;
+            const height = heightInput.value;
+            
+            if (length && width && height) {
+                const sizeKey = `${length}x${width}x${height}`;
+                
+                if (!sizeCodeMap.has(sizeKey)) {
+                    const code = 'A' + String(sizeCodeCounter).padStart(2, '0');
+                    sizeCodeMap.set(sizeKey, code);
+                    sizeCodeCounter++;
+                }
+                
+                sizeCodeInput.value = sizeCodeMap.get(sizeKey);
+            } else {
+                sizeCodeInput.value = '';
+            }
+        }
+        
+        function generatePartNumber() {
+            const categorySelect = document.getElementById('category');
+            const subCategorySelect = document.getElementById('subCategory');
+            const productNameSelect = document.getElementById('productName');
+            const materialSelect = document.getElementById('material');
+            const lengthInput = document.getElementById('length');
+            const widthInput = document.getElementById('width');
+            const heightInput = document.getElementById('height');
+            const sizeCodeInput = document.getElementById('sizeCode');
+            const priceInput = document.getElementById('price');
+            
+            const partNumberInput = document.getElementById('partNumber');
+            const qrDataInput = document.getElementById('qrData');
+            const resultDiv = document.getElementById('result');
+            
+            if (!categorySelect.value || !subCategorySelect.value || 
+                (['01', '02', '03', '04'].includes(categorySelect.value) && (!productNameSelect.value || !materialSelect.value)) ||
+                (!sizeCodeInput.value && (!lengthInput.value || !widthInput.value || !heightInput.value))) {
+                alert('Harap lengkapi semua field yang diperlukan!');
+                return;
+            }
+            
+            let partNumber = '';
+            partNumber += categorySelect.options[categorySelect.selectedIndex].text.substring(0, 2);
+            partNumber += subCategorySelect.value;
+            
+            if (productNameSelect.value && productNameSelect.disabled === false) {
+                partNumber += productNameSelect.value;
+            }
+            
+            if (materialSelect.value && materialSelect.disabled === false) {
+                const material = materialSelect.value;
+                const firstWord = material.split(' ')[0];
+                const digits = material.match(/\d+/);
+                
+                let materialCode = firstWord.substring(0, 3).toUpperCase();
+                if (digits) {
+                    materialCode += digits[0].substring(0, 1);
+                }
+                partNumber += '-' + materialCode;
+            }
+            
+            if (sizeCodeInput.value) {
+                partNumber += '-' + sizeCodeInput.value;
+            } else if (lengthInput.value && widthInput.value && heightInput.value) {
+                partNumber += '-' + lengthInput.value + 'x' + widthInput.value + 'x' + heightInput.value;
+            }
+            
+            partNumberInput.value = partNumber;
+            
+            // Create structured QR data in JSON format
+            const qrData = {
+                partNumber: partNumber,
+                category: categorySelect.options[categorySelect.selectedIndex].text,
+                subCategory: subCategorySelect.options[subCategorySelect.selectedIndex].text,
+                product: productNameSelect.value && productNameSelect.disabled === false 
+                    ? productNameSelect.options[productNameSelect.selectedIndex].text 
+                    : null,
+                material: materialSelect.value && materialSelect.disabled === false 
+                    ? materialSelect.options[materialSelect.selectedIndex].text 
+                    : null,
+                size: sizeCodeInput.value 
+                    ? sizeCodeInput.value 
+                    : (lengthInput.value && widthInput.value && heightInput.value 
+                        ? `${lengthInput.value}x${widthInput.value}x${heightInput.value} mm` 
+                        : null),
+                price: priceInput.value 
+                    ? `Rp. ${new Intl.NumberFormat('id-ID').format(priceInput.value)}` 
+                    : null
+            };
+            
+            const qrDataString = JSON.stringify(qrData, null, 2);
+            qrDataInput.value = qrDataString;
+            generateQRCode(qrDataString);
+            
+            // Create display text
+            let displayText = '';
+            displayText += `Kategori: ${qrData.category}\n`;
+            displayText += `Sub Kategori: ${qrData.subCategory}\n`;
+            
+            if (qrData.product) {
+                displayText += `Produk: ${qrData.product}\n`;
+            }
+            
+            if (qrData.material) {
+                displayText += `Material: ${qrData.material}\n`;
+            }
+            
+            if (qrData.size) {
+                displayText += `Ukuran: ${qrData.size}\n`;
+            }
+            
+            if (qrData.price) {
+                displayText += `Harga: ${qrData.price}`;
+            }
+            
+            document.getElementById('qr-text').textContent = displayText;
+            resultDiv.style.display = 'block';
+        }
+
+        function generateQRCode(data) {
+            const qrCodeElement = document.getElementById('qr-code');
+            qrCodeElement.innerHTML = ''; // Clear previous QR code
+            
+            try {
+                new QRCode(qrCodeElement, {
+                    text: data,
+                    width: 200,
+                    height: 200,
+                    colorDark: "#000000",
+                    colorLight: "#ffffff",
+                    correctLevel: QRCode.CorrectLevel.H
+                });
+            } catch (error) {
+                console.error("QR Code generation error:", error);
+                qrCodeElement.innerHTML = '<p>Error generating QR code. Please try again.</p>';
+            }
+        }
+
+        function saveQRCode(format) {
+            const qrElement = document.getElementById('qr-code');
+            const partNumber = document.getElementById('partNumber').value || 'QRCode';
+            
+            html2canvas(qrElement).then(canvas => {
+                // Create download link
+                const link = document.createElement('a');
+                link.download = `QR_${partNumber}.${format}`;
+                link.href = canvas.toDataURL(`image/${format}`);
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            }).catch(err => {
+                console.error('Error saving QR code:', err);
+                alert('Error saving QR code. Please try again.');
+            });
+        }
+
+        function copyToClipboard(elementId) {
+            const element = document.getElementById(elementId);
+            element.select();
+            document.execCommand('copy');
+            alert('Copied to clipboard: ' + element.value);
+        }
+    </script>
+</body>
+</html>
