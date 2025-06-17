@@ -13,7 +13,7 @@
             display: flex;
             flex-direction: column;
             gap: 15px;
-            max-width: 800px;
+            max-width: 1200px;
             margin: 0 auto;
         }
         .header {
@@ -129,6 +129,75 @@
         .save-btn:hover {
             background-color: #4cae4c;
         }
+        .data-section {
+            margin-top: 30px;
+        }
+        .category-tabs {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+        .category-tab {
+            padding: 8px 15px;
+            background-color: #e0e0e0;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .category-tab.active {
+            background-color: #4CAF50;
+            color: white;
+        }
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        .data-table th, .data-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        .data-table th {
+            background-color: #f2f2f2;
+            position: sticky;
+            top: 0;
+        }
+        .data-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        .data-table tr:hover {
+            background-color: #f1f1f1;
+        }
+        .table-container {
+            max-height: 500px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .action-buttons {
+            display: flex;
+            gap: 5px;
+        }
+        .action-btn {
+            padding: 3px 8px;
+            font-size: 12px;
+            border-radius: 3px;
+        }
+        .view-btn {
+            background-color: #3498db;
+            color: white;
+        }
+        .delete-btn {
+            background-color: #e74c3c;
+            color: white;
+        }
+        .no-data {
+            text-align: center;
+            padding: 20px;
+            color: #777;
+        }
     </style>
     <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
@@ -238,6 +307,43 @@
                 </div>
             </div>
         </div>
+        
+        <div class="section data-section">
+            <div class="section-title">Data Part Number</div>
+            
+            <div class="category-tabs" id="categoryTabs">
+                <button class="category-tab active" onclick="filterDataTable('all')">Semua</button>
+                <button class="category-tab" onclick="filterDataTable('01')">Filter</button>
+                <button class="category-tab" onclick="filterDataTable('02')">Sheetmetal</button>
+                <button class="category-tab" onclick="filterDataTable('03')">Bahan baku</button>
+                <button class="category-tab" onclick="filterDataTable('04')">Barang jadi</button>
+                <button class="category-tab" onclick="filterDataTable('05')">Jasa</button>
+                <button class="category-tab" onclick="filterDataTable('06')">Subcount</button>
+            </div>
+            
+            <div class="table-container">
+                <table class="data-table" id="dataTable">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Part Number</th>
+                            <th>Kategori</th>
+                            <th>Sub Kategori</th>
+                            <th>Produk</th>
+                            <th>Material</th>
+                            <th>Ukuran</th>
+                            <th>Harga</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody">
+                        <tr>
+                            <td colspan="9" class="no-data">Belum ada data</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 
     <script>
@@ -344,6 +450,10 @@
 
         const sizeCodeMap = new Map();
         let sizeCodeCounter = 1;
+        
+        // Data storage
+        let partNumberData = [];
+        let currentDataId = 1;
         
         function updateSubCategories() {
             const categorySelect = document.getElementById('category');
@@ -558,6 +668,164 @@
             
             document.getElementById('qr-text').textContent = displayText;
             resultDiv.style.display = 'block';
+            
+            // Save the data to storage
+            savePartNumberData(qrData);
+        }
+
+        function savePartNumberData(data) {
+            // Add to data array
+            const newData = {
+                id: currentDataId++,
+                partNumber: data.partNumber,
+                category: data.category,
+                subCategory: data.subCategory,
+                product: data.product || '-',
+                material: data.material || '-',
+                size: data.size || '-',
+                price: data.price || '-',
+                categoryCode: data.partNumber.substring(0, 2)
+            };
+            
+            partNumberData.push(newData);
+            
+            // Update the table
+            updateDataTable();
+            
+            // Set active tab to the category of the new data
+            filterDataTable(newData.categoryCode);
+        }
+
+        function updateDataTable(data = partNumberData) {
+            const tableBody = document.getElementById('tableBody');
+            
+            if (data.length === 0) {
+                tableBody.innerHTML = '<tr><td colspan="9" class="no-data">Belum ada data</td></tr>';
+                return;
+            }
+            
+            tableBody.innerHTML = '';
+            
+            data.forEach((item, index) => {
+                const row = document.createElement('tr');
+                
+                row.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td>${item.partNumber}</td>
+                    <td>${item.category}</td>
+                    <td>${item.subCategory}</td>
+                    <td>${item.product}</td>
+                    <td>${item.material}</td>
+                    <td>${item.size}</td>
+                    <td>${item.price}</td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="action-btn view-btn" onclick="viewItem(${item.id})">Lihat</button>
+                            <button class="action-btn delete-btn" onclick="deleteItem(${item.id})">Hapus</button>
+                        </div>
+                    </td>
+                `;
+                
+                tableBody.appendChild(row);
+            });
+        }
+
+        function filterDataTable(categoryCode) {
+            // Update active tab
+            const tabs = document.querySelectorAll('.category-tab');
+            tabs.forEach(tab => {
+                tab.classList.remove('active');
+                if ((tab.textContent === 'Semua' && categoryCode === 'all') || 
+                    (tab.textContent.includes(categoryDescriptions[categoryCode]))) {
+                    tab.classList.add('active');
+                }
+            });
+            
+            // Filter data
+            let filteredData = [];
+            if (categoryCode === 'all') {
+                filteredData = partNumberData;
+            } else {
+                filteredData = partNumberData.filter(item => item.categoryCode === categoryCode);
+            }
+            
+            // Update table
+            updateDataTable(filteredData);
+        }
+
+        const categoryDescriptions = {
+            '01': 'Filter',
+            '02': 'Sheetmetal',
+            '03': 'Bahan baku',
+            '04': 'Barang jadi',
+            '05': 'Jasa',
+            '06': 'Subcount'
+        };
+
+        function viewItem(id) {
+            const item = partNumberData.find(item => item.id === id);
+            if (!item) return;
+            
+            // Show the item details in the result section
+            document.getElementById('partNumber').value = item.partNumber;
+            
+            // Create QR data
+            const qrData = {
+                partNumber: item.partNumber,
+                category: item.category,
+                subCategory: item.subCategory,
+                product: item.product !== '-' ? item.product : null,
+                material: item.material !== '-' ? item.material : null,
+                size: item.size !== '-' ? item.size : null,
+                price: item.price !== '-' ? item.price : null
+            };
+            
+            const qrDataString = JSON.stringify(qrData, null, 2);
+            document.getElementById('qrData').value = qrDataString;
+            
+            // Create display text
+            let displayText = '';
+            displayText += `Kategori: ${qrData.category}\n`;
+            displayText += `Sub Kategori: ${qrData.subCategory}\n`;
+            
+            if (qrData.product) {
+                displayText += `Produk: ${qrData.product}\n`;
+            }
+            
+            if (qrData.material) {
+                displayText += `Material: ${qrData.material}\n`;
+            }
+            
+            if (qrData.size) {
+                displayText += `Ukuran: ${qrData.size}\n`;
+            }
+            
+            if (qrData.price) {
+                displayText += `Harga: ${qrData.price}`;
+            }
+            
+            document.getElementById('qr-text').textContent = displayText;
+            
+            // Generate QR code
+            generateQRCode(qrDataString);
+            
+            // Show result section
+            document.getElementById('result').style.display = 'block';
+            
+            // Scroll to result section
+            document.getElementById('result').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function deleteItem(id) {
+            if (confirm('Apakah Anda yakin ingin menghapus data ini?')) {
+                partNumberData = partNumberData.filter(item => item.id !== id);
+                updateDataTable();
+                
+                // Check if we need to show "no data" message
+                if (partNumberData.length === 0) {
+                    document.getElementById('tableBody').innerHTML = '<tr><td colspan="9" class="no-data">Belum ada data</td></tr>';
+                }
+            }
         }
 
         function generateQRCode(data) {
