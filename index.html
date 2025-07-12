@@ -5,9 +5,158 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>System Part Number Generator</title>
     <style>
+        /* Clock Styles */
+        .jakarta-clock {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 5px;
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            z-index: 1001;
+        }
+        .clock-time {
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .clock-date {
+            font-size: 12px;
+            margin-top: 3px;
+        }
+
+        /* Login Modal Styles */
+        .login-modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.7);
+        }
+        .login-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 300px;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+        }
+        .login-content h2 {
+            text-align: center;
+            color: #2c3e50;
+        }
+        .login-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .login-form input {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .login-form button {
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .login-form button:hover {
+            background-color: #45a049;
+        }
+        .error-message {
+            color: red;
+            text-align: center;
+            margin-top: 10px;
+            display: none;
+        }
+        
+        /* Add Option Modal Styles */
+        .add-option-modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.7);
+        }
+        .add-option-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 400px;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+        }
+        .add-option-content h2 {
+            text-align: center;
+            color: #2c3e50;
+        }
+        .add-option-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .add-option-form input, .add-option-form select {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .add-option-form button {
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .add-option-form button:hover {
+            background-color: #45a049;
+        }
+        .form-buttons {
+            display: flex;
+            gap: 10px;
+        }
+        .cancel-btn {
+            background-color: #e74c3c;
+        }
+        
+        /* Dropdown with Add Button Styles */
+        .dropdown-with-add {
+            display: flex;
+            gap: 5px;
+        }
+        .dropdown-with-add select {
+            flex: 1;
+        }
+        .add-btn {
+            padding: 8px 12px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .add-btn:hover {
+            background-color: #2980b9;
+        }
+        
+        /* Main Application Styles */
         body {
             font-family: Arial, sans-serif;
             margin: 20px;
+            padding-top: 40px; /* Added to prevent content from being hidden under clock */
         }
         .container {
             display: flex;
@@ -198,157 +347,288 @@
             padding: 20px;
             color: #777;
         }
+        .clear-data-btn {
+            background-color: #e74c3c;
+            margin-top: 10px;
+        }
+        .clear-data-btn:hover {
+            background-color: #c0392b;
+        }
     </style>
     <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>System Part Number Generator</h1>
+    <!-- Jakarta Clock -->
+    <div class="jakarta-clock">
+        <div>Jakarta, Indonesia</div>
+        <div class="clock-time" id="jakarta-time"></div>
+        <div class="clock-date" id="jakarta-date"></div>
+    </div>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="login-modal">
+        <div class="login-content">
+            <h2>Login Required</h2>
+            <form class="login-form" onsubmit="return validateLogin()">
+                <input type="text" id="username" placeholder="Username" required>
+                <input type="password" id="password" placeholder="Password" required>
+                <button type="submit">Login</button>
+            </form>
+            <div id="loginError" class="error-message">Invalid username or password</div>
         </div>
-        
-        <div class="section">
-            <div class="section-title">Kategori</div>
-            
-            <div class="form-group">
-                <label for="category">Kategori</label>
-                <select id="category" onchange="updateSubCategories()">
-                    <option value="">-- Pilih Kategori --</option>
-                    <option value="01">01. Filter</option>
-                    <option value="02">02. Sheetmetal</option>
-                    <option value="03">03. Bahan baku</option>
-                    <option value="04">04. Barang jadi</option>
-                    <option value="05">05. Jasa</option>
-                    <option value="06">06. Subcount</option>
-                </select>
-            </div>
-            
-            <div class="form-group">
-                <label for="subCategory">Sub Kategori</label>
-                <select id="subCategory" onchange="updateProductNames()" disabled>
-                    <option value="">-- Pilih Sub Kategori --</option>
-                </select>
-            </div>
-            
-            <div class="form-group" id="productNameGroup">
-                <label for="productName">Nama Product</label>
-                <select id="productName" onchange="updateMaterialOptions()" disabled>
-                    <option value="">-- Pilih Nama Product --</option>
-                </select>
-            </div>
-            
-            <div class="form-group" id="materialGroup">
-                <label for="material">Bahan/Media Utama</label>
-                <select id="material" disabled>
-                    <option value="">-- Pilih Bahan/Media --</option>
-                </select>
-            </div>
+    </div>
+
+    <!-- Add Option Modal -->
+    <div id="addOptionModal" class="add-option-modal">
+        <div class="add-option-content">
+            <h2 id="addOptionTitle">Add New Option</h2>
+            <form class="add-option-form" onsubmit="return saveNewOption()">
+                <div id="categorySelection" style="display: none;">
+                    <label for="parentCategory">Category</label>
+                    <select id="parentCategory" required>
+                        <option value="">-- Select Category --</option>
+                        <option value="01">01. Filter</option>
+                        <option value="02">02. Sheetmetal</option>
+                        <option value="03">03. Bahan baku</option>
+                        <option value="04">04. Barang jadi</option>
+                        <option value="05">05. Jasa</option>
+                        <option value="06">06. Subcount</option>
+                    </select>
+                </div>
+                <div id="subCategorySelection" style="display: none;">
+                    <label for="parentSubCategory">Sub Category</label>
+                    <select id="parentSubCategory" required>
+                        <option value="">-- Select Sub Category --</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="newOptionCode">Code</label>
+                    <input type="text" id="newOptionCode" required>
+                </div>
+                <div>
+                    <label for="newOptionName">Name</label>
+                    <input type="text" id="newOptionName" required>
+                </div>
+                <div class="form-buttons">
+                    <button type="submit">Save</button>
+                    <button type="button" class="cancel-btn" onclick="closeAddOptionModal()">Cancel</button>
+                </div>
+            </form>
         </div>
-        
-        <div class="section">
-            <div class="section-title">System Part Number</div>
+    </div>
+
+    <!-- Main Content (hidden until login) -->
+    <div id="mainContent" style="display: none;">
+        <div class="container">
+            <div class="header">
+                <h1>System Part Number Generator</h1>
+            </div>
             
-            <div class="form-group">
-                <label>Ukuran (mm)</label>
-                <div class="dimensions">
-                    <div class="dimension-input">
-                        <label for="length">Panjang</label>
-                        <input type="number" id="length" min="0" onchange="generateSizeCode()">
+            <div class="section">
+                <div class="section-title">Kategori</div>
+                
+                <div class="form-group">
+                    <label for="category">Kategori</label>
+                    <div class="dropdown-with-add">
+                        <select id="category" onchange="updateSubCategories()">
+                            <option value="">-- Pilih Kategori --</option>
+                            <option value="01">01. Filter</option>
+                            <option value="02">02. Sheetmetal</option>
+                            <option value="03">03. Bahan baku</option>
+                            <option value="04">04. Barang jadi</option>
+                            <option value="05">05. Jasa</option>
+                            <option value="06">06. Subcount</option>
+                        </select>
+                        <button class="add-btn" onclick="showAddOptionModal('category')">+</button>
                     </div>
-                    <div class="dimension-input">
-                        <label for="width">Lebar</label>
-                        <input type="number" id="width" min="0" onchange="generateSizeCode()">
+                </div>
+                
+                <div class="form-group">
+                    <label for="subCategory">Sub Kategori</label>
+                    <div class="dropdown-with-add">
+                        <select id="subCategory" onchange="updateProductNames()" disabled>
+                            <option value="">-- Pilih Sub Kategori --</option>
+                        </select>
+                        <button class="add-btn" onclick="showAddOptionModal('subCategory')">+</button>
                     </div>
-                    <div class="dimension-input">
-                        <label for="height">Tinggi</label>
-                        <input type="number" id="height" min="0" onchange="generateSizeCode()">
+                </div>
+                
+                <div class="form-group" id="productNameGroup">
+                    <label for="productName">Nama Product</label>
+                    <div class="dropdown-with-add">
+                        <select id="productName" onchange="updateMaterialOptions()" disabled>
+                            <option value="">-- Pilih Nama Product --</option>
+                        </select>
+                        <button class="add-btn" onclick="showAddOptionModal('productName')">+</button>
+                    </div>
+                </div>
+                
+                <div class="form-group" id="materialGroup">
+                    <label for="material">Bahan/Media Utama</label>
+                    <div class="dropdown-with-add">
+                        <select id="material" disabled>
+                            <option value="">-- Pilih Bahan/Media --</option>
+                        </select>
+                        <button class="add-btn" onclick="showAddOptionModal('material')">+</button>
                     </div>
                 </div>
             </div>
             
-            <div class="form-group">
-                <label for="sizeCode">Kode Ukuran</label>
-                <input type="text" id="sizeCode" readonly>
-            </div>
-            
-            <div class="form-group">
-                <label for="price">Harga Rp.</label>
-                <input type="number" id="price" min="0">
-            </div>
-        </div>
-        
-        <div class="generate-section">
-            <button onclick="generatePartNumber()">Generate</button>
-        </div>
-        
-        <div class="result" id="result" style="display: none;">
-            <div class="form-group">
-                <label for="partNumber">Part Number</label>
-                <div class="flex-row">
-                    <input type="text" id="partNumber" readonly style="flex: 1;">
-                    <button class="copy-btn" onclick="copyToClipboard('partNumber')">Copy</button>
-                </div>
-            </div>
-            
-            <div class="form-group">
-                <label>QR Code Data</label>
-                <div class="flex-row">
-                    <input type="text" id="qrData" readonly style="flex: 1;">
-                    <button class="copy-btn" onclick="copyToClipboard('qrData')">Copy</button>
-                </div>
-                <div class="qr-container">
-                    <div id="qr-code"></div>
-                    <div class="save-buttons">
-                        <button class="save-btn" onclick="saveQRCode('png')">Save as PNG</button>
-                        <button class="save-btn" onclick="saveQRCode('jpeg')">Save as JPEG</button>
+            <div class="section">
+                <div class="section-title">System Part Number</div>
+                
+                <div class="form-group">
+                    <label>Ukuran (mm)</label>
+                    <div class="dimensions">
+                        <div class="dimension-input">
+                            <label for="length">Panjang</label>
+                            <input type="number" id="length" min="0" onchange="generateSizeCode()">
+                        </div>
+                        <div class="dimension-input">
+                            <label for="width">Lebar</label>
+                            <input type="number" id="width" min="0" onchange="generateSizeCode()">
+                        </div>
+                        <div class="dimension-input">
+                            <label for="height">Tinggi</label>
+                            <input type="number" id="height" min="0" onchange="generateSizeCode()">
+                        </div>
                     </div>
-                    <div class="qr-value" id="qr-text"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="sizeCode">Kode Ukuran</label>
+                    <input type="text" id="sizeCode" readonly>
+                </div>
+                
+                <div class="form-group">
+                    <label for="price">Harga Rp.</label>
+                    <input type="number" id="price" min="0">
                 </div>
             </div>
-        </div>
-        
-        <div class="section data-section">
-            <div class="section-title">Data Part Number</div>
             
-            <div class="category-tabs" id="categoryTabs">
-                <button class="category-tab active" onclick="filterDataTable('all')">Semua</button>
-                <button class="category-tab" onclick="filterDataTable('01')">Filter</button>
-                <button class="category-tab" onclick="filterDataTable('02')">Sheetmetal</button>
-                <button class="category-tab" onclick="filterDataTable('03')">Bahan baku</button>
-                <button class="category-tab" onclick="filterDataTable('04')">Barang jadi</button>
-                <button class="category-tab" onclick="filterDataTable('05')">Jasa</button>
-                <button class="category-tab" onclick="filterDataTable('06')">Subcount</button>
+            <div class="generate-section">
+                <button onclick="generatePartNumber()">Generate</button>
             </div>
             
-            <div class="table-container">
-                <table class="data-table" id="dataTable">
-                    <thead>
-                        <tr>
-                            <th>No</th>
-                            <th>Part Number</th>
-                            <th>Kategori</th>
-                            <th>Sub Kategori</th>
-                            <th>Produk</th>
-                            <th>Material</th>
-                            <th>Ukuran</th>
-                            <th>Harga</th>
-                            <th>Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody id="tableBody">
-                        <tr>
-                            <td colspan="9" class="no-data">Belum ada data</td>
-                        </tr>
-                    </tbody>
-                </table>
+            <div class="result" id="result" style="display: none;">
+                <div class="form-group">
+                    <label for="partNumber">Part Number</label>
+                    <div class="flex-row">
+                        <input type="text" id="partNumber" readonly style="flex: 1;">
+                        <button class="copy-btn" onclick="copyToClipboard('partNumber')">Copy</button>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>QR Code Data</label>
+                    <div class="flex-row">
+                        <input type="text" id="qrData" readonly style="flex: 1;">
+                        <button class="copy-btn" onclick="copyToClipboard('qrData')">Copy</button>
+                    </div>
+                    <div class="qr-container">
+                        <div id="qr-code"></div>
+                        <div class="save-buttons">
+                            <button class="save-btn" onclick="saveQRCode('png')">Save as PNG</button>
+                            <button class="save-btn" onclick="saveQRCode('jpeg')">Save as JPEG</button>
+                        </div>
+                        <div class="qr-value" id="qr-text"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section data-section">
+                <div class="section-title">Data Part Number</div>
+                
+                <div class="category-tabs" id="categoryTabs">
+                    <button class="category-tab active" onclick="filterDataTable('all')">Semua</button>
+                    <button class="category-tab" onclick="filterDataTable('01')">Filter</button>
+                    <button class="category-tab" onclick="filterDataTable('02')">Sheetmetal</button>
+                    <button class="category-tab" onclick="filterDataTable('03')">Bahan baku</button>
+                    <button class="category-tab" onclick="filterDataTable('04')">Barang jadi</button>
+                    <button class="category-tab" onclick="filterDataTable('05')">Jasa</button>
+                    <button class="category-tab" onclick="filterDataTable('06')">Subcount</button>
+                </div>
+                
+                <div class="table-container">
+                    <table class="data-table" id="dataTable">
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Part Number</th>
+                                <th>Kategori</th>
+                                <th>Sub Kategori</th>
+                                <th>Produk</th>
+                                <th>Material</th>
+                                <th>Ukuran</th>
+                                <th>Harga</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableBody">
+                            <tr>
+                                <td colspan="9" class="no-data">Belum ada data</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div style="text-align: center; margin-top: 15px;">
+                    <button class="clear-data-btn" onclick="clearAllData()">Clear All Data</button>
+                </div>
             </div>
         </div>
     </div>
 
     <script>
-        // Sub categories data
-        const subCategories = {
+        // Clock function for Jakarta, Indonesia (GMT+7)
+        function updateJakartaClock() {
+            const options = {
+                timeZone: 'Asia/Jakarta',
+                hour12: false,
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            };
+            
+            const now = new Date();
+            const jakartaTime = now.toLocaleTimeString('id-ID', {
+                timeZone: 'Asia/Jakarta',
+                hour12: false,
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+            });
+            
+            const jakartaDate = now.toLocaleDateString('id-ID', {
+                timeZone: 'Asia/Jakarta',
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+            
+            document.getElementById('jakarta-time').textContent = jakartaTime;
+            document.getElementById('jakarta-date').textContent = jakartaDate;
+        }
+        
+        // Update clock every second
+        setInterval(updateJakartaClock, 1000);
+        updateJakartaClock(); // Initial call
+
+        // Data structure for saved options
+        let savedOptions = {
+            categories: [],
+            subCategories: {},
+            productNames: {},
+            materials: []
+        };
+
+        // Default data structures
+        const defaultSubCategories = {
             '01': [
                 {value: '01', text: '01. Pre Filter'},
                 {value: '02', text: '02. Medium Filter'},
@@ -363,8 +643,7 @@
             '06': []
         };
         
-        // Product names data
-        const productNames = {
+        const defaultProductNames = {
             '01-01': [
                 {value: '01', text: 'NAF CR Pre Filter Washable Pleated Radial'},
                 {value: '02', text: 'NAF CR Pre Filter Washable Flat'},
@@ -417,7 +696,7 @@
             '06': []
         };
 
-        const materialOptions = [
+        const defaultMaterialOptions = [
             'Washable 150',
             'Washable 350',
             'Washable 500',
@@ -455,6 +734,262 @@
         let partNumberData = [];
         let currentDataId = 1;
         
+        // Category descriptions
+        const categoryDescriptions = {
+            '01': 'Filter',
+            '02': 'Sheetmetal',
+            '03': 'Bahan baku',
+            '04': 'Barang jadi',
+            '05': 'Jasa',
+            '06': 'Subcount'
+        };
+
+        // Show login modal when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('loginModal').style.display = 'block';
+            loadSavedOptions();
+            loadPartNumberData();
+        });
+
+        // Login validation
+        function validateLogin() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const errorElement = document.getElementById('loginError');
+            
+            if (username === 'Farrindo' && password === 'Farrindo365') {
+                document.getElementById('loginModal').style.display = 'none';
+                document.getElementById('mainContent').style.display = 'block';
+                return false;
+            } else {
+                errorElement.style.display = 'block';
+                return false;
+            }
+        }
+
+        // Load saved options from localStorage
+        function loadSavedOptions() {
+            const savedData = localStorage.getItem('partNumberOptions');
+            if (savedData) {
+                savedOptions = JSON.parse(savedData);
+                
+                // Add saved categories to the dropdown
+                savedOptions.categories.forEach(cat => {
+                    addOptionToSelect('category', cat.value, cat.text);
+                });
+                
+                // Add saved materials to the dropdown
+                savedOptions.materials.forEach(mat => {
+                    addOptionToSelect('material', mat, mat);
+                });
+            }
+        }
+
+        // Load part number data from localStorage
+        function loadPartNumberData() {
+            const savedData = localStorage.getItem('partNumberData');
+            if (savedData) {
+                partNumberData = JSON.parse(savedData);
+                if (partNumberData.length > 0) {
+                    currentDataId = Math.max(...partNumberData.map(item => item.id)) + 1;
+                }
+                updateDataTable();
+            }
+        }
+
+        // Save options to localStorage
+        function saveOptionsToStorage() {
+            localStorage.setItem('partNumberOptions', JSON.stringify(savedOptions));
+        }
+
+        // Save part number data to localStorage
+        function savePartNumberDataToStorage() {
+            localStorage.setItem('partNumberData', JSON.stringify(partNumberData));
+        }
+
+        // Show add option modal
+        let currentAddOptionType = '';
+        function showAddOptionModal(type) {
+            currentAddOptionType = type;
+            const modal = document.getElementById('addOptionModal');
+            const title = document.getElementById('addOptionTitle');
+            const categorySelection = document.getElementById('categorySelection');
+            const subCategorySelection = document.getElementById('subCategorySelection');
+            const parentCategory = document.getElementById('parentCategory');
+            const parentSubCategory = document.getElementById('parentSubCategory');
+            
+            document.getElementById('newOptionCode').value = '';
+            document.getElementById('newOptionName').value = '';
+            
+            switch(type) {
+                case 'category':
+                    title.textContent = 'Add New Category';
+                    categorySelection.style.display = 'none';
+                    subCategorySelection.style.display = 'none';
+                    break;
+                case 'subCategory':
+                    title.textContent = 'Add New Sub Category';
+                    categorySelection.style.display = 'block';
+                    subCategorySelection.style.display = 'none';
+                    parentCategory.innerHTML = '<option value="">-- Select Category --</option>';
+                    document.querySelectorAll('#category option').forEach(option => {
+                        if (option.value) {
+                            const newOption = document.createElement('option');
+                            newOption.value = option.value;
+                            newOption.textContent = option.text;
+                            parentCategory.appendChild(newOption);
+                        }
+                    });
+                    break;
+                case 'productName':
+                    title.textContent = 'Add New Product Name';
+                    categorySelection.style.display = 'block';
+                    subCategorySelection.style.display = 'block';
+                    parentCategory.innerHTML = '<option value="">-- Select Category --</option>';
+                    document.querySelectorAll('#category option').forEach(option => {
+                        if (option.value) {
+                            const newOption = document.createElement('option');
+                            newOption.value = option.value;
+                            newOption.textContent = option.text;
+                            parentCategory.appendChild(newOption);
+                        }
+                    });
+                    parentSubCategory.innerHTML = '<option value="">-- Select Sub Category --</option>';
+                    break;
+                case 'material':
+                    title.textContent = 'Add New Material';
+                    categorySelection.style.display = 'none';
+                    subCategorySelection.style.display = 'none';
+                    break;
+            }
+            
+            modal.style.display = 'block';
+        }
+
+        // Close add option modal
+        function closeAddOptionModal() {
+            document.getElementById('addOptionModal').style.display = 'none';
+        }
+
+        // Update subcategory dropdown when parent category changes in add modal
+        document.getElementById('parentCategory').addEventListener('change', function() {
+            if (currentAddOptionType === 'productName') {
+                const parentSubCategory = document.getElementById('parentSubCategory');
+                const category = this.value;
+                
+                parentSubCategory.innerHTML = '<option value="">-- Select Sub Category --</option>';
+                
+                if (category) {
+                    const defaultSubs = defaultSubCategories[category] || [];
+                    const savedSubs = savedOptions.subCategories[category] || [];
+                    const allSubs = [...defaultSubs, ...savedSubs];
+                    
+                    allSubs.forEach(sub => {
+                        const option = document.createElement('option');
+                        option.value = sub.value;
+                        option.textContent = sub.text;
+                        parentSubCategory.appendChild(option);
+                    });
+                }
+            }
+        });
+
+        // Save new option
+        function saveNewOption() {
+            const code = document.getElementById('newOptionCode').value;
+            const name = document.getElementById('newOptionName').value;
+            
+            if (!code || !name) {
+                alert('Please fill in both code and name');
+                return false;
+            }
+            
+            switch(currentAddOptionType) {
+                case 'category':
+                    const newCategory = {
+                        value: code,
+                        text: code + '. ' + name
+                    };
+                    savedOptions.categories.push(newCategory);
+                    addOptionToSelect('category', newCategory.value, newCategory.text);
+                    break;
+                    
+                case 'subCategory':
+                    const parentCategory = document.getElementById('parentCategory').value;
+                    if (!parentCategory) {
+                        alert('Please select a category');
+                        return false;
+                    }
+                    
+                    const newSubCategory = {
+                        value: code,
+                        text: code + '. ' + name
+                    };
+                    
+                    if (!savedOptions.subCategories[parentCategory]) {
+                        savedOptions.subCategories[parentCategory] = [];
+                    }
+                    
+                    savedOptions.subCategories[parentCategory].push(newSubCategory);
+                    
+                    if (document.getElementById('category').value === parentCategory) {
+                        addOptionToSelect('subCategory', newSubCategory.value, newSubCategory.text);
+                    }
+                    break;
+                    
+                case 'productName':
+                    const parentCategoryPN = document.getElementById('parentCategory').value;
+                    const parentSubCategoryPN = document.getElementById('parentSubCategory').value;
+                    
+                    if (!parentCategoryPN || !parentSubCategoryPN) {
+                        alert('Please select both category and subcategory');
+                        return false;
+                    }
+                    
+                    const newProductName = {
+                        value: code,
+                        text: name
+                    };
+                    
+                    const key = parentCategoryPN + '-' + parentSubCategoryPN;
+                    if (!savedOptions.productNames[key]) {
+                        savedOptions.productNames[key] = [];
+                    }
+                    
+                    savedOptions.productNames[key].push(newProductName);
+                    
+                    if (document.getElementById('category').value === parentCategoryPN && 
+                        document.getElementById('subCategory').value === parentSubCategoryPN) {
+                        addOptionToSelect('productName', newProductName.value, newProductName.text);
+                    }
+                    break;
+                    
+                case 'material':
+                    const newMaterial = name;
+                    savedOptions.materials.push(newMaterial);
+                    addOptionToSelect('material', newMaterial, newMaterial);
+                    break;
+            }
+            
+            saveOptionsToStorage();
+            closeAddOptionModal();
+            return false;
+        }
+
+        // Add option to select dropdown
+        function addOptionToSelect(selectId, value, text) {
+            const select = document.getElementById(selectId);
+            const option = document.createElement('option');
+            option.value = value;
+            option.textContent = text;
+            select.appendChild(option);
+            
+            if (select.disabled && selectId !== 'category') {
+                select.disabled = false;
+            }
+        }
+
+        // Update sub categories dropdown
         function updateSubCategories() {
             const categorySelect = document.getElementById('category');
             const subCategorySelect = document.getElementById('subCategory');
@@ -472,8 +1007,11 @@
             if (selectedCategory) {
                 subCategorySelect.disabled = false;
                 
-                const subs = subCategories[selectedCategory] || [];
-                subs.forEach(sub => {
+                const defaultSubs = defaultSubCategories[selectedCategory] || [];
+                const savedSubs = savedOptions.subCategories[selectedCategory] || [];
+                const allSubs = [...defaultSubs, ...savedSubs];
+                
+                allSubs.forEach(sub => {
                     const option = document.createElement('option');
                     option.value = sub.value;
                     option.textContent = sub.text;
@@ -496,6 +1034,7 @@
             }
         }
         
+        // Update product names dropdown
         function updateProductNames() {
             const categorySelect = document.getElementById('category');
             const subCategorySelect = document.getElementById('subCategory');
@@ -512,8 +1051,11 @@
                 productNameSelect.disabled = false;
                 
                 const key = selectedCategory + '-' + selectedSubCategory;
-                const products = productNames[key] || [];
-                products.forEach(product => {
+                const defaultProducts = defaultProductNames[key] || [];
+                const savedProducts = savedOptions.productNames[key] || [];
+                const allProducts = [...defaultProducts, ...savedProducts];
+                
+                allProducts.forEach(product => {
                     const option = document.createElement('option');
                     option.value = product.value;
                     option.textContent = product.text;
@@ -525,6 +1067,7 @@
             }
         }
 
+        // Update material options dropdown
         function updateMaterialOptions() {
             const productNameSelect = document.getElementById('productName');
             const materialSelect = document.getElementById('material');
@@ -534,7 +1077,9 @@
             if (productNameSelect.value) {
                 materialSelect.disabled = false;
                 
-                materialOptions.forEach(material => {
+                const allMaterials = [...defaultMaterialOptions, ...savedOptions.materials];
+                
+                allMaterials.forEach(material => {
                     const option = document.createElement('option');
                     option.value = material;
                     option.textContent = material;
@@ -545,6 +1090,7 @@
             }
         }
 
+        // Generate size code from dimensions
         function generateSizeCode() {
             const lengthInput = document.getElementById('length');
             const widthInput = document.getElementById('width');
@@ -570,6 +1116,7 @@
             }
         }
         
+        // Generate part number
         function generatePartNumber() {
             const categorySelect = document.getElementById('category');
             const subCategorySelect = document.getElementById('subCategory');
@@ -602,8 +1149,10 @@
             
             if (materialSelect.value && materialSelect.disabled === false) {
                 const material = materialSelect.value;
-                const firstWord = material.split(' ')[0];
-                const digits = material.match(/\d+/);
+                // Clean the material string by removing special characters that might cause issues
+                const cleanedMaterial = material.replace(/[^\w\s]/gi, '');
+                const firstWord = cleanedMaterial.split(' ')[0];
+                const digits = cleanedMaterial.match(/\d+/);
                 
                 let materialCode = firstWord.substring(0, 3).toUpperCase();
                 if (digits) {
@@ -620,61 +1169,68 @@
             
             partNumberInput.value = partNumber;
             
-            // Create structured QR data in JSON format
-            const qrData = {
-                partNumber: partNumber,
-                category: categorySelect.options[categorySelect.selectedIndex].text,
-                subCategory: subCategorySelect.options[subCategorySelect.selectedIndex].text,
-                product: productNameSelect.value && productNameSelect.disabled === false 
-                    ? productNameSelect.options[productNameSelect.selectedIndex].text 
-                    : null,
-                material: materialSelect.value && materialSelect.disabled === false 
-                    ? materialSelect.options[materialSelect.selectedIndex].text 
-                    : null,
-                size: sizeCodeInput.value 
-                    ? sizeCodeInput.value 
-                    : (lengthInput.value && widthInput.value && heightInput.value 
-                        ? `${lengthInput.value}x${widthInput.value}x${heightInput.value} mm` 
-                        : null),
-                price: priceInput.value 
-                    ? `Rp. ${new Intl.NumberFormat('id-ID').format(priceInput.value)}` 
-                    : null
-            };
-            
-            const qrDataString = JSON.stringify(qrData, null, 2);
-            qrDataInput.value = qrDataString;
-            generateQRCode(qrDataString);
-            
-            // Create display text
-            let displayText = '';
-            displayText += `Kategori: ${qrData.category}\n`;
-            displayText += `Sub Kategori: ${qrData.subCategory}\n`;
-            
-            if (qrData.product) {
-                displayText += `Produk: ${qrData.product}\n`;
+            // Create structured QR data in JSON format with proper error handling
+            try {
+                const qrData = {
+                    partNumber: partNumber,
+                    category: categorySelect.options[categorySelect.selectedIndex].text,
+                    subCategory: subCategorySelect.options[subCategorySelect.selectedIndex].text,
+                    product: productNameSelect.value && productNameSelect.disabled === false 
+                        ? productNameSelect.options[productNameSelect.selectedIndex].text 
+                        : null,
+                    material: materialSelect.value && materialSelect.disabled === false 
+                        ? materialSelect.options[materialSelect.selectedIndex].text 
+                        : null,
+                    size: sizeCodeInput.value 
+                        ? sizeCodeInput.value 
+                        : (lengthInput.value && widthInput.value && heightInput.value 
+                            ? `${lengthInput.value}x${widthInput.value}x${heightInput.value} mm` 
+                            : null),
+                    price: priceInput.value 
+                        ? `Rp. ${new Intl.NumberFormat('id-ID').format(priceInput.value)}` 
+                        : null
+                };
+                
+                const qrDataString = JSON.stringify(qrData, null, 2);
+                qrDataInput.value = qrDataString;
+                
+                // Create display text
+                let displayText = '';
+                displayText += `Kategori: ${qrData.category}\n`;
+                displayText += `Sub Kategori: ${qrData.subCategory}\n`;
+                
+                if (qrData.product) {
+                    displayText += `Produk: ${qrData.product}\n`;
+                }
+                
+                if (qrData.material) {
+                    displayText += `Material: ${qrData.material}\n`;
+                }
+                
+                if (qrData.size) {
+                    displayText += `Ukuran: ${qrData.size}\n`;
+                }
+                
+                if (qrData.price) {
+                    displayText += `Harga: ${qrData.price}`;
+                }
+                
+                document.getElementById('qr-text').textContent = displayText;
+                
+                // Generate QR code with error handling
+                generateQRCode(qrDataString);
+                resultDiv.style.display = 'block';
+                
+                // Save the data to storage
+                savePartNumberData(qrData);
+            } catch (error) {
+                console.error("Error generating part number data:", error);
+                alert("Terjadi kesalahan saat menghasilkan data. Silakan coba lagi dengan input yang berbeda.");
             }
-            
-            if (qrData.material) {
-                displayText += `Material: ${qrData.material}\n`;
-            }
-            
-            if (qrData.size) {
-                displayText += `Ukuran: ${qrData.size}\n`;
-            }
-            
-            if (qrData.price) {
-                displayText += `Harga: ${qrData.price}`;
-            }
-            
-            document.getElementById('qr-text').textContent = displayText;
-            resultDiv.style.display = 'block';
-            
-            // Save the data to storage
-            savePartNumberData(qrData);
         }
 
+        // Save part number data
         function savePartNumberData(data) {
-            // Add to data array
             const newData = {
                 id: currentDataId++,
                 partNumber: data.partNumber,
@@ -688,14 +1244,12 @@
             };
             
             partNumberData.push(newData);
-            
-            // Update the table
+            savePartNumberDataToStorage();
             updateDataTable();
-            
-            // Set active tab to the category of the new data
             filterDataTable(newData.categoryCode);
         }
 
+        // Update data table
         function updateDataTable(data = partNumberData) {
             const tableBody = document.getElementById('tableBody');
             
@@ -730,8 +1284,8 @@
             });
         }
 
+        // Filter data table by category
         function filterDataTable(categoryCode) {
-            // Update active tab
             const tabs = document.querySelectorAll('.category-tab');
             tabs.forEach(tab => {
                 tab.classList.remove('active');
@@ -741,7 +1295,6 @@
                 }
             });
             
-            // Filter data
             let filteredData = [];
             if (categoryCode === 'all') {
                 filteredData = partNumberData;
@@ -749,27 +1302,16 @@
                 filteredData = partNumberData.filter(item => item.categoryCode === categoryCode);
             }
             
-            // Update table
             updateDataTable(filteredData);
         }
 
-        const categoryDescriptions = {
-            '01': 'Filter',
-            '02': 'Sheetmetal',
-            '03': 'Bahan baku',
-            '04': 'Barang jadi',
-            '05': 'Jasa',
-            '06': 'Subcount'
-        };
-
+        // View item details
         function viewItem(id) {
             const item = partNumberData.find(item => item.id === id);
             if (!item) return;
             
-            // Show the item details in the result section
             document.getElementById('partNumber').value = item.partNumber;
             
-            // Create QR data
             const qrData = {
                 partNumber: item.partNumber,
                 category: item.category,
@@ -783,7 +1325,6 @@
             const qrDataString = JSON.stringify(qrData, null, 2);
             document.getElementById('qrData').value = qrDataString;
             
-            // Create display text
             let displayText = '';
             displayText += `Kategori: ${qrData.category}\n`;
             displayText += `Sub Kategori: ${qrData.subCategory}\n`;
@@ -805,36 +1346,40 @@
             }
             
             document.getElementById('qr-text').textContent = displayText;
-            
-            // Generate QR code
             generateQRCode(qrDataString);
-            
-            // Show result section
             document.getElementById('result').style.display = 'block';
-            
-            // Scroll to result section
             document.getElementById('result').scrollIntoView({ behavior: 'smooth' });
         }
 
+        // Delete item
         function deleteItem(id) {
             if (confirm('Apakah Anda yakin ingin menghapus data ini?')) {
                 partNumberData = partNumberData.filter(item => item.id !== id);
+                savePartNumberDataToStorage();
                 updateDataTable();
                 
-                // Check if we need to show "no data" message
                 if (partNumberData.length === 0) {
                     document.getElementById('tableBody').innerHTML = '<tr><td colspan="9" class="no-data">Belum ada data</td></tr>';
                 }
             }
         }
 
+        // Generate QR code
         function generateQRCode(data) {
             const qrCodeElement = document.getElementById('qr-code');
-            qrCodeElement.innerHTML = ''; // Clear previous QR code
+            qrCodeElement.innerHTML = '';
             
             try {
+                // Ensure data is a string and not empty
+                if (typeof data !== 'string' || data.trim() === '') {
+                    throw new Error("Invalid data for QR code");
+                }
+                
+                // Clean the data by removing any problematic characters
+                const cleanedData = data.replace(/[^\x00-\x7F]/g, "");
+                
                 new QRCode(qrCodeElement, {
-                    text: data,
+                    text: cleanedData,
                     width: 200,
                     height: 200,
                     colorDark: "#000000",
@@ -843,16 +1388,16 @@
                 });
             } catch (error) {
                 console.error("QR Code generation error:", error);
-                qrCodeElement.innerHTML = '<p>Error generating QR code. Please try again.</p>';
+                qrCodeElement.innerHTML = '<p style="color:red;">Error generating QR code. Please check your input data.</p>';
             }
         }
 
+        // Save QR code as image
         function saveQRCode(format) {
             const qrElement = document.getElementById('qr-code');
             const partNumber = document.getElementById('partNumber').value || 'QRCode';
             
             html2canvas(qrElement).then(canvas => {
-                // Create download link
                 const link = document.createElement('a');
                 link.download = `QR_${partNumber}.${format}`;
                 link.href = canvas.toDataURL(`image/${format}`);
@@ -865,11 +1410,23 @@
             });
         }
 
+        // Copy to clipboard
         function copyToClipboard(elementId) {
             const element = document.getElementById(elementId);
             element.select();
             document.execCommand('copy');
             alert('Copied to clipboard: ' + element.value);
+        }
+
+        // Clear all data
+        function clearAllData() {
+            if (confirm('Are you sure you want to clear ALL data? This cannot be undone!')) {
+                partNumberData = [];
+                currentDataId = 1;
+                localStorage.removeItem('partNumberData');
+                updateDataTable();
+                document.getElementById('tableBody').innerHTML = '<tr><td colspan="9" class="no-data">Belum ada data</td></tr>';
+            }
         }
     </script>
 </body>
