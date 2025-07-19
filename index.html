@@ -151,6 +151,10 @@
         .add-btn:hover {
             background-color: #2980b9;
         }
+        .add-btn:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
         
         /* Main Application Styles */
         body {
@@ -402,9 +406,9 @@
                         <option value="">-- Select Sub Category --</option>
                     </select>
                 </div>
-                <div>
+                <div id="codeFieldGroup">
                     <label for="newOptionCode">Code</label>
-                    <input type="text" id="newOptionCode" required>
+                    <input type="text" id="newOptionCode">
                 </div>
                 <div>
                     <label for="newOptionName">Name</label>
@@ -470,7 +474,7 @@
                         <select id="material" disabled>
                             <option value="">-- Pilih Bahan/Media --</option>
                         </select>
-                        <button class="add-btn" onclick="showAddOptionModal('material')">+</button>
+                        <button class="add-btn" id="materialAddBtn" onclick="showAddOptionModal('material')" disabled>+</button>
                     </div>
                 </div>
             </div>
@@ -696,36 +700,47 @@
             '06': []
         };
 
-        const defaultMaterialOptions = [
-            'Washable 150',
-            'Washable 350',
-            'Washable 500',
-            'WF 100',
-            'G560',
-            'G4',
-            'G4 BIRU(DAF)',
-            'TKC',
-            '350 CHINA',
-            'Glassfiber AHLS/HV',
-            'GF China',
-            'PP China',
-            'GlassFiberAHLS/HVH13',
-            'GlassfiberAHLS/HVH14',
-            'GF China H13',
-            'GF China H14',
-            'PP  China H13',
-            'GF China H13 + Carbon',
-            'F9 AHLS',
-            'PST',
-            'PTA / Cylinder',
-            'PTB /',
-            'PTCone',
-            'PTD',
-            'TDCE',
-            'PTA+PTB',
-            'Filter Compresor',
-            'CYLIDRICAL + CONICAL'
-        ];
+        // Media options classified by sub-category
+        const mediaOptionsBySubCategory = {
+            '01': [ // Pre Filter
+                'Washable 150',
+                'Washable 350',
+                'Washable 500',
+                'WF 100',
+                'G560',
+                'G4',
+                'G4 BIRU(DAF)',
+                '350 CHINA'
+            ],
+            '02': [ // Medium Filter
+                'Glassfiber AHLS/HV',
+                'F9 AHLS'
+            ],
+            '03': [ // HEPA Filter
+                'GF China',
+                'PP China',
+                'GlassFiberAHLS/HVH13',
+                'GlassFiberAHLS/HVH14',
+                'GF China H13',
+                'GF China H14',
+                'PP China H13',
+                'GF China H13 + Carbon'
+            ],
+            '04': [ // Cartridge Filter
+                'PST',
+                'PTA / Cylinder',
+                'PTB /',
+                'PTCone',
+                'PTD',
+                'TDCE',
+                'PTA+PTB',
+                'Filter Compresor',
+                'CYLIDRICAL + CONICAL'
+            ],
+            '05': [ // Carbon Filter
+                'Carbon sheet granule'
+            ]
+        };
 
         const sizeCodeMap = new Map();
         let sizeCodeCounter = 1;
@@ -817,20 +832,29 @@
             const subCategorySelection = document.getElementById('subCategorySelection');
             const parentCategory = document.getElementById('parentCategory');
             const parentSubCategory = document.getElementById('parentSubCategory');
+            const codeField = document.getElementById('newOptionCode');
+            const nameField = document.getElementById('newOptionName');
             
-            document.getElementById('newOptionCode').value = '';
-            document.getElementById('newOptionName').value = '';
+            // Reset fields
+            codeField.value = '';
+            nameField.value = '';
             
             switch(type) {
                 case 'category':
                     title.textContent = 'Add New Category';
                     categorySelection.style.display = 'none';
                     subCategorySelection.style.display = 'none';
+                    codeField.style.display = 'block';
+                    codeField.previousElementSibling.style.display = 'block';
                     break;
+                    
                 case 'subCategory':
                     title.textContent = 'Add New Sub Category';
                     categorySelection.style.display = 'block';
                     subCategorySelection.style.display = 'none';
+                    codeField.style.display = 'block';
+                    codeField.previousElementSibling.style.display = 'block';
+                    
                     parentCategory.innerHTML = '<option value="">-- Select Category --</option>';
                     document.querySelectorAll('#category option').forEach(option => {
                         if (option.value) {
@@ -841,10 +865,14 @@
                         }
                     });
                     break;
+                    
                 case 'productName':
                     title.textContent = 'Add New Product Name';
                     categorySelection.style.display = 'block';
                     subCategorySelection.style.display = 'block';
+                    codeField.style.display = 'block';
+                    codeField.previousElementSibling.style.display = 'block';
+                    
                     parentCategory.innerHTML = '<option value="">-- Select Category --</option>';
                     document.querySelectorAll('#category option').forEach(option => {
                         if (option.value) {
@@ -854,12 +882,24 @@
                             parentCategory.appendChild(newOption);
                         }
                     });
+                    
                     parentSubCategory.innerHTML = '<option value="">-- Select Sub Category --</option>';
                     break;
+                    
                 case 'material':
                     title.textContent = 'Add New Material';
                     categorySelection.style.display = 'none';
                     subCategorySelection.style.display = 'none';
+                    
+                    // For materials, we only need the name field
+                    codeField.style.display = 'none';
+                    codeField.previousElementSibling.style.display = 'none';
+                    
+                    // Set the current sub-category as context for the new material
+                    const currentSubCategory = document.getElementById('subCategory').value;
+                    if (currentSubCategory) {
+                        document.getElementById('parentSubCategory').value = currentSubCategory;
+                    }
                     break;
             }
             
@@ -899,7 +939,12 @@
             const code = document.getElementById('newOptionCode').value;
             const name = document.getElementById('newOptionName').value;
             
-            if (!code || !name) {
+            if (currentAddOptionType === 'material' && !name) {
+                alert('Please fill in the material name');
+                return false;
+            }
+            
+            if (currentAddOptionType !== 'material' && (!code || !name)) {
                 alert('Please fill in both code and name');
                 return false;
             }
@@ -966,8 +1011,24 @@
                     
                 case 'material':
                     const newMaterial = name;
-                    savedOptions.materials.push(newMaterial);
-                    addOptionToSelect('material', newMaterial, newMaterial);
+                    const subCategory = document.getElementById('parentSubCategory').value;
+                    
+                    if (!subCategory) {
+                        alert('Please select a sub-category first');
+                        return false;
+                    }
+                    
+                    // Only save if it's a valid material for this sub-category
+                    const validMediaOptions = mediaOptionsBySubCategory[subCategory] || [];
+                    if (!validMediaOptions.includes(newMaterial)) {
+                        savedOptions.materials.push(newMaterial);
+                    }
+                    
+                    // Update the material dropdown if we're currently viewing this sub-category
+                    const currentSubCategory = document.getElementById('subCategory').value;
+                    if (currentSubCategory === subCategory) {
+                        addOptionToSelect('material', newMaterial, newMaterial);
+                    }
                     break;
             }
             
@@ -997,6 +1058,7 @@
             const productNameGroup = document.getElementById('productNameGroup');
             const materialSelect = document.getElementById('material');
             const materialGroup = document.getElementById('materialGroup');
+            const materialAddBtn = document.getElementById('materialAddBtn');
             
             subCategorySelect.innerHTML = '<option value="">-- Pilih Sub Kategori --</option>';
             productNameSelect.innerHTML = '<option value="">-- Pilih Nama Product --</option>';
@@ -1029,6 +1091,7 @@
                 subCategorySelect.disabled = true;
                 productNameSelect.disabled = true;
                 materialSelect.disabled = true;
+                materialAddBtn.disabled = true;
                 productNameGroup.style.display = 'none';
                 materialGroup.style.display = 'none';
             }
@@ -1040,6 +1103,7 @@
             const subCategorySelect = document.getElementById('subCategory');
             const productNameSelect = document.getElementById('productName');
             const materialSelect = document.getElementById('material');
+            const materialAddBtn = document.getElementById('materialAddBtn');
             
             productNameSelect.innerHTML = '<option value="">-- Pilih Nama Product --</option>';
             materialSelect.innerHTML = '<option value="">-- Pilih Bahan/Media --</option>';
@@ -1061,23 +1125,39 @@
                     option.textContent = product.text;
                     productNameSelect.appendChild(option);
                 });
+                
+                // Enable material add button only for Filter category (01)
+                materialAddBtn.disabled = selectedCategory !== '01';
             } else {
                 productNameSelect.disabled = true;
                 materialSelect.disabled = true;
+                materialAddBtn.disabled = true;
             }
         }
 
         // Update material options dropdown
         function updateMaterialOptions() {
+            const categorySelect = document.getElementById('category');
+            const subCategorySelect = document.getElementById('subCategory');
             const productNameSelect = document.getElementById('productName');
             const materialSelect = document.getElementById('material');
+            const materialAddBtn = document.getElementById('materialAddBtn');
             
             materialSelect.innerHTML = '<option value="">-- Pilih Bahan/Media --</option>';
             
-            if (productNameSelect.value) {
+            if (categorySelect.value === '01' && subCategorySelect.value) {
                 materialSelect.disabled = false;
                 
-                const allMaterials = [...defaultMaterialOptions, ...savedOptions.materials];
+                // Get the appropriate media options based on sub-category
+                const subCategory = subCategorySelect.value;
+                const mediaOptions = mediaOptionsBySubCategory[subCategory] || [];
+                
+                // Also include any saved materials that match the sub-category
+                const savedMaterials = savedOptions.materials.filter(mat => {
+                    return mediaOptions.some(opt => opt === mat);
+                });
+                
+                const allMaterials = [...mediaOptions, ...savedMaterials];
                 
                 allMaterials.forEach(material => {
                     const option = document.createElement('option');
@@ -1085,8 +1165,12 @@
                     option.textContent = material;
                     materialSelect.appendChild(option);
                 });
+                
+                // Enable the add button only for this category and when sub-category is selected
+                materialAddBtn.disabled = false;
             } else {
                 materialSelect.disabled = true;
+                materialAddBtn.disabled = true;
             }
         }
 
@@ -1428,6 +1512,12 @@
                 document.getElementById('tableBody').innerHTML = '<tr><td colspan="9" class="no-data">Belum ada data</td></tr>';
             }
         }
+
+        // Add event listener for sub-category change to update material options
+        document.getElementById('subCategory').addEventListener('change', function() {
+            updateProductNames();
+            updateMaterialOptions();
+        });
     </script>
 </body>
 </html>
