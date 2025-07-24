@@ -156,6 +156,12 @@
             cursor: not-allowed;
         }
         
+        /* Pocket Input Styles */
+        .pocket-input {
+            display: none;
+            margin-top: 10px;
+        }
+        
         /* Main Application Styles */
         body {
             font-family: Arial, sans-serif;
@@ -358,11 +364,30 @@
         .clear-data-btn:hover {
             background-color: #c0392b;
         }
+        .export-btn {
+            background-color: #2ecc71;
+            margin-top: 10px;
+        }
+        .export-btn:hover {
+            background-color: #27ae60;
+        }
+        .farrindo-logo {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            z-index: 1001;
+        }
     </style>
     <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    <script src="https://cdn.sheetjs.com/xlsx-0.19.3/package/dist/xlsx.full.min.js"></script>
 </head>
 <body>
+    <!-- Farrindo Logo -->
+    <div class="farrindo-logo">
+        <img src="https://www.farrindo.co.id/wp-content/uploads/2025/01/300x39-logofarrindo2025bawahbanget.webp" alt="Farrindo Logo" width="150" height="20">
+    </div>
+
     <!-- Jakarta Clock -->
     <div class="jakarta-clock">
         <div>Jakarta, Indonesia</div>
@@ -434,18 +459,15 @@
                 
                 <div class="form-group">
                     <label for="category">Kategori</label>
-                    <div class="dropdown-with-add">
-                        <select id="category" onchange="updateSubCategories()">
-                            <option value="">-- Pilih Kategori --</option>
-                            <option value="01">01. Filter</option>
-                            <option value="02">02. Sheetmetal</option>
-                            <option value="03">03. Bahan baku</option>
-                            <option value="04">04. Barang jadi</option>
-                            <option value="05">05. Jasa</option>
-                            <option value="06">06. Subcount</option>
-                        </select>
-                        <button class="add-btn" onclick="showAddOptionModal('category')">+</button>
-                    </div>
+                    <select id="category" onchange="updateSubCategories()">
+                        <option value="">-- Pilih Kategori --</option>
+                        <option value="01">01. Filter</option>
+                        <option value="02">02. Sheetmetal</option>
+                        <option value="03">03. Bahan baku</option>
+                        <option value="04">04. Barang jadi</option>
+                        <option value="05">05. Jasa</option>
+                        <option value="06">06. Subcount</option>
+                    </select>
                 </div>
                 
                 <div class="form-group">
@@ -477,13 +499,18 @@
                         <button class="add-btn" id="materialAddBtn" onclick="showAddOptionModal('material')" disabled>+</button>
                     </div>
                 </div>
+
+                <!-- Pocket Input Field -->
+                <div class="form-group pocket-input" id="pocketInputGroup">
+                    <label for="pocketCount">Number of Pockets</label>
+                    <input type="number" id="pocketCount" min="1" value="1">
+                </div>
             </div>
             
             <div class="section">
-                <div class="section-title">System Part Number</div>
+                <div class="section-title">Ukuran (mm)</div>
                 
                 <div class="form-group">
-                    <label>Ukuran (mm)</label>
                     <div class="dimensions">
                         <div class="dimension-input">
                             <label for="length">Panjang</label>
@@ -578,6 +605,7 @@
                 </div>
                 <div style="text-align: center; margin-top: 15px;">
                     <button class="clear-data-btn" onclick="clearAllData()">Clear All Data</button>
+                    <button class="export-btn" onclick="exportToExcel()">Export to Excel</button>
                 </div>
             </div>
         </div>
@@ -636,9 +664,9 @@
             '01': [
                 {value: '01', text: '01. Pre Filter'},
                 {value: '02', text: '02. Medium Filter'},
-                {value: '03', text: '03. HEPA Filter'},
-                {value: '04', text: '04. Catridge Filter'},
-                {value: '05', text: '05. Carbon Filter'}
+                {value: '03', text: '03. Hepa Filter'},
+                {value: '04', text: '04. Ulpa Filter'},
+                {value: '05', text: '05. Cartridge Filter Gasturbine'}
             ],
             '02': [],
             '03': [],
@@ -653,7 +681,8 @@
                 {value: '02', text: 'NAF CR Pre Filter Washable Flat'},
                 {value: '03', text: 'Pre Filter NAF 30 (Disposable)'},
                 {value: '04', text: 'NAF CR Pre Filter Washable Flange Type'},
-                {value: '05', text: 'NAF CR Prefilter IU'}
+                {value: '05', text: 'NAF CR Prefilter IU'},
+                {value: '06', text: 'NAF Multi Pocket Filter / Medium Bag Filter'}
             ],
             '01-02': [
                 {value: '01', text: 'NAF V-PAC (2V)'},
@@ -690,8 +719,10 @@
                 {value: '09', text: 'NAF Profile Spunbond Cartridge Filter'}
             ],
             '01-05': [
-                {value: '01', text: 'NAF V Bank Carbon Filter Active 3V'},
-                {value: '02', text: 'NAF V-PAC Carbon Filter (V Bank)'}
+                {value: '01', text: 'Filter paper Media SK7538 ADWRC'},
+                {value: '02', text: 'Filter Media Paper SK7538 ADWRC/HNV (Ex-China)'},
+                {value: '03', text: 'Filter Media Paper type. RF-3134 CWI (RF Ex-China)'},
+                {value: '04', text: 'G.2260-15 AXSTAR Japan Spunbond'}
             ],
             '02': [],
             '03': [],
@@ -700,50 +731,76 @@
             '06': []
         };
 
-        // Media options classified by sub-category
+        // Media options classified by sub-category with numeric codes
         const mediaOptionsBySubCategory = {
             '01': [ // Pre Filter
-                'Washable 150',
-                'Washable 350',
-                'Washable 500',
-                'WF 100',
-                'G560',
-                'G4',
-                'G4 BIRU(DAF)',
-                '350 CHINA'
+                {code: '01', name: 'G3 White Fabric'},
+                {code: '02', name: 'G4 White Fabric'},
+                {code: '03', name: 'Air Filter Media blue'},
+                {code: '04', name: 'Paint Stop Filter'},
+                {code: '05', name: 'Washable media filter non woven FNI IDN TH-350'},
+                {code: '06', name: 'Washable media filter non woven 350 Sapta'},
+                {code: '07', name: 'Washable Ex-China 350 FABRIC'},
+                {code: '08', name: 'Washable 350G'},
+                {code: '09', name: 'Washable Filter media T.15/500'},
+                {code: '10', name: 'Washable Filter media 500 (sapta)'},
+                {code: '11', name: 'Washable GA.160 T.14/G4'},
+                {code: '12', name: 'G4 (ex china)'},
+                {code: '13', name: 'Sarant/saranet hitam (ex-China)'},
+                {code: '14', name: 'Washable IDN 600'},
+                {code: '15', name: 'Washable TH.150 T.11'},
+                {code: '16', name: 'Washable VF 560 G'},
+                {code: '17', name: 'Washable WF100 (Hight Temperature)'},
+                {code: '18', name: 'WF.100 W (Potongan) warna putih Hi-Temp/ceramic Filter'},
+                {code: '19', name: 'AW TN40/10 size: 710 mm wide rolls (G4) Tangerding'}
             ],
             '02': [ // Medium Filter
-                'Glassfiber AHLS/HV',
-                'F9 AHLS'
+                {code: '01', name: 'Air Filter Media / FibreGlass Paper F9 (China) Eff 98%'},
+                {code: '02', name: 'Air Filter Media / FibreGlass Paper F9EU (China RF) Eff.95%'},
+                {code: '03', name: 'Air filter Media hepa 90ASF9SP, ASHARE eff.98% (AHLSTROM)'},
+                {code: '04', name: 'Synthetic Media / FibreGlass Paper H-11 Hepa (China) 95%'},
+                {code: '05', name: 'Air Filter Media / FibreGlass Paper H-11 (China-RF) Eff 95%'},
+                {code: '06', name: 'Air Filter Media / FibreGlass Paper H10 (RF China) (Eff 95%'},
+                {code: '07', name: 'Air Filter Media / FibreGlass Paper H10 (RF China) Eff 95%'},
+                {code: '08', name: 'Air Filter Media / FibreGlass Paper H10 (China-Bashuo) Eff'},
+                {code: '09', name: 'Air Filter Media; 90ASF804 (AHLSTROM) ASF Eff.95%COL'},
+                {code: '10', name: 'Air Filter Media; 65ASF601 (AHLSTROM) ASF Eff.65%COL'},
+                {code: '11', name: 'Air Filter Media / FibreGlass Paper F8 (China) Eff 65%'},
+                {code: '12', name: 'Air Filter Media / FibreGlass Paper F8 (China) Eff 65%'},
+                {code: '13', name: 'Air Filter Media / FibreGlass Paper (Ahstrom) ADF Eff.65'},
+                {code: '14', name: 'Media Filter F6 Single layer (Orange) Eff.65%'},
+                {code: '15', name: 'Media Filter F7 Single layer (Pink)'},
+                {code: '16', name: 'Media Filter F8 Single layer (yellow) Eff.95%'},
+                {code: '17', name: 'Media Filter F.5 Double Layer (putih) eff.45%'},
+                {code: '18', name: 'Media Filter F6 Double layer (Orange)'},
+                {code: '19', name: 'Media Filter F7 Double layer (Pink) Eff.85%'},
+                {code: '20', name: 'Media Filter F8 Double layer (yellow) Eff.95%'},
+                {code: '21', name: 'Media Filter F.9 Double Layer (putih) Eff.98%'}
             ],
-            '03': [ // HEPA Filter
-                'GF China',
-                'PP China',
-                'GlassFiberAHLS/HVH13',
-                'GlassFiberAHLS/HVH14',
-                'GF China H13',
-                'GF China H14',
-                'PP China H13',
-                'GF China H13 + Carbon'
+            '03': [ // Hepa Filter
+                {code: '01', name: 'Air filter Media; HEPH1405 (AHLSTROM) 99,99%'},
+                {code: '02', name: 'Air Filter Media / FibreGlass Paper H-14 (China-RF) Eff'},
+                {code: '03', name: 'Air Filter Media / FibreGlass Paper H-14 (China-Bashuo) Eff'},
+                {code: '04', name: 'Air filter Media hepa 90ASF9SP, ASHARE eff.98% (AHLSTROM)'},
+                {code: '05', name: 'Synthetic Media / FibreGlass Paper H-11 Hepa (China) 95%'},
+                {code: '06', name: 'Air Filter Media / FibreGlass Paper H-11 (China-RF) Eff 95%'}
             ],
-            '04': [ // Cartridge Filter
-                'PST',
-                'PTA / Cylinder',
-                'PTB /',
-                'PTCone',
-                'PTD',
-                'TDCE',
-                'PTA+PTB',
-                'Filter Compresor',
-                'CYLIDRICAL + CONICAL'
+            '04': [ // Ulpa Filter
+                {code: '01', name: 'Air Filter Media Ulpa / FibreGlass Paper (Ahstrom) U15'},
+                {code: '02', name: 'Air Filter Media / FibreGlass Paper HA8603 (HAV)U15'},
+                {code: '03', name: 'Air Filter Media / FibreGlass Paper U 15 (China) 99,999%'}
             ],
-            '05': [ // Carbon Filter
-                'Carbon sheet granule'
+            '05': [ // Cartridge Filter Gasturbine
+                {code: '01', name: 'Filter paper Media SK7538 ADWRC'},
+                {code: '02', name: 'Filter Media Paper SK7538 ADWRC/HNV (Ex-China)'},
+                {code: '03', name: 'Filter Media Paper type. RF-3134 CWI (RF Ex-China)'},
+                {code: '04', name: 'G.2260-15 AXSTAR Japan Spunbond'}
             ]
         };
 
-        const sizeCodeMap = new Map();
-        let sizeCodeCounter = 1;
+        // Size code maps - now separate for each product
+        const sizeCodeMaps = {};
+        let sizeCodeCounters = {};
         
         // Data storage
         let partNumberData = [];
@@ -1020,7 +1077,7 @@
                     
                     // Only save if it's a valid material for this sub-category
                     const validMediaOptions = mediaOptionsBySubCategory[subCategory] || [];
-                    if (!validMediaOptions.includes(newMaterial)) {
+                    if (!validMediaOptions.some(m => m.name === newMaterial)) {
                         savedOptions.materials.push(newMaterial);
                     }
                     
@@ -1059,10 +1116,12 @@
             const materialSelect = document.getElementById('material');
             const materialGroup = document.getElementById('materialGroup');
             const materialAddBtn = document.getElementById('materialAddBtn');
+            const pocketInputGroup = document.getElementById('pocketInputGroup');
             
             subCategorySelect.innerHTML = '<option value="">-- Pilih Sub Kategori --</option>';
             productNameSelect.innerHTML = '<option value="">-- Pilih Nama Product --</option>';
             materialSelect.innerHTML = '<option value="">-- Pilih Bahan/Media --</option>';
+            pocketInputGroup.style.display = 'none';
             
             const selectedCategory = categorySelect.value;
             
@@ -1104,9 +1163,11 @@
             const productNameSelect = document.getElementById('productName');
             const materialSelect = document.getElementById('material');
             const materialAddBtn = document.getElementById('materialAddBtn');
+            const pocketInputGroup = document.getElementById('pocketInputGroup');
             
             productNameSelect.innerHTML = '<option value="">-- Pilih Nama Product --</option>';
             materialSelect.innerHTML = '<option value="">-- Pilih Bahan/Media --</option>';
+            pocketInputGroup.style.display = 'none';
             
             const selectedCategory = categorySelect.value;
             const selectedSubCategory = subCategorySelect.value;
@@ -1142,8 +1203,10 @@
             const productNameSelect = document.getElementById('productName');
             const materialSelect = document.getElementById('material');
             const materialAddBtn = document.getElementById('materialAddBtn');
+            const pocketInputGroup = document.getElementById('pocketInputGroup');
             
             materialSelect.innerHTML = '<option value="">-- Pilih Bahan/Media --</option>';
+            pocketInputGroup.style.display = 'none';
             
             if (categorySelect.value === '01' && subCategorySelect.value) {
                 materialSelect.disabled = false;
@@ -1153,16 +1216,16 @@
                 const mediaOptions = mediaOptionsBySubCategory[subCategory] || [];
                 
                 // Also include any saved materials that match the sub-category
-                const savedMaterials = savedOptions.materials.filter(mat => {
-                    return mediaOptions.some(opt => opt === mat);
+                const savedMaterials = savedOptions.materials.map(mat => {
+                    return {code: '00', name: mat}; // Saved materials get code '00'
                 });
                 
                 const allMaterials = [...mediaOptions, ...savedMaterials];
                 
                 allMaterials.forEach(material => {
                     const option = document.createElement('option');
-                    option.value = material;
-                    option.textContent = material;
+                    option.value = material.name;
+                    option.textContent = material.name;
                     materialSelect.appendChild(option);
                 });
                 
@@ -1174,27 +1237,47 @@
             }
         }
 
-        // Generate size code from dimensions
+        // Show/hide pocket input based on product selection
+        document.getElementById('productName').addEventListener('change', function() {
+            const pocketInputGroup = document.getElementById('pocketInputGroup');
+            const selectedProduct = this.options[this.selectedIndex].text;
+            
+            if (selectedProduct.includes('Multi Pocket Filter')) {
+                pocketInputGroup.style.display = 'block';
+            } else {
+                pocketInputGroup.style.display = 'none';
+            }
+        });
+
+        // Generate size code from dimensions - now product-specific
         function generateSizeCode() {
             const lengthInput = document.getElementById('length');
             const widthInput = document.getElementById('width');
             const heightInput = document.getElementById('height');
             const sizeCodeInput = document.getElementById('sizeCode');
+            const productNameSelect = document.getElementById('productName');
             
             const length = lengthInput.value;
             const width = widthInput.value;
             const height = heightInput.value;
+            const productName = productNameSelect.value ? productNameSelect.options[productNameSelect.selectedIndex].text : '';
             
-            if (length && width && height) {
-                const sizeKey = `${length}x${width}x${height}`;
+            if (length && width && height && productName) {
+                const sizeKey = `${productName}_${length}x${width}x${height}`;
                 
-                if (!sizeCodeMap.has(sizeKey)) {
-                    const code = 'A' + String(sizeCodeCounter).padStart(2, '0');
-                    sizeCodeMap.set(sizeKey, code);
-                    sizeCodeCounter++;
+                // Initialize size code map for this product if it doesn't exist
+                if (!sizeCodeMaps[productName]) {
+                    sizeCodeMaps[productName] = new Map();
+                    sizeCodeCounters[productName] = 1;
                 }
                 
-                sizeCodeInput.value = sizeCodeMap.get(sizeKey);
+                if (!sizeCodeMaps[productName].has(sizeKey)) {
+                    const code = 'A' + String(sizeCodeCounters[productName]).padStart(2, '0');
+                    sizeCodeMaps[productName].set(sizeKey, code);
+                    sizeCodeCounters[productName]++;
+                }
+                
+                sizeCodeInput.value = sizeCodeMaps[productName].get(sizeKey);
             } else {
                 sizeCodeInput.value = '';
             }
@@ -1211,6 +1294,7 @@
             const heightInput = document.getElementById('height');
             const sizeCodeInput = document.getElementById('sizeCode');
             const priceInput = document.getElementById('price');
+            const pocketCountInput = document.getElementById('pocketCount');
             
             const partNumberInput = document.getElementById('partNumber');
             const qrDataInput = document.getElementById('qrData');
@@ -1233,22 +1317,31 @@
             
             if (materialSelect.value && materialSelect.disabled === false) {
                 const material = materialSelect.value;
-                // Clean the material string by removing special characters that might cause issues
-                const cleanedMaterial = material.replace(/[^\w\s]/gi, '');
-                const firstWord = cleanedMaterial.split(' ')[0];
-                const digits = cleanedMaterial.match(/\d+/);
+                const subCategory = subCategorySelect.value;
+                const mediaOptions = mediaOptionsBySubCategory[subCategory] || [];
                 
-                let materialCode = firstWord.substring(0, 3).toUpperCase();
-                if (digits) {
-                    materialCode += digits[0].substring(0, 1);
+                // Find the media object by name
+                const selectedMedia = mediaOptions.find(m => m.name === material);
+                
+                if (selectedMedia) {
+                    partNumber += '-' + selectedMedia.code;
+                } else {
+                    // Fallback if media not found in predefined list
+                    partNumber += '-00';
                 }
-                partNumber += '-' + materialCode;
             }
             
             if (sizeCodeInput.value) {
                 partNumber += '-' + sizeCodeInput.value;
             } else if (lengthInput.value && widthInput.value && heightInput.value) {
                 partNumber += '-' + lengthInput.value + 'x' + widthInput.value + 'x' + heightInput.value;
+            }
+            
+            // Add pocket count if this is a Multi Pocket Filter
+            const productName = productNameSelect.options[productNameSelect.selectedIndex].text;
+            if (productName.includes('Multi Pocket Filter')) {
+                const pocketCount = pocketCountInput.value || '1';
+                partNumber += '-' + pocketCount.toString().padStart(2, '0');
             }
             
             partNumberInput.value = partNumber;
@@ -1272,6 +1365,9 @@
                             : null),
                     price: priceInput.value 
                         ? `Rp. ${new Intl.NumberFormat('id-ID').format(priceInput.value)}` 
+                        : null,
+                    pockets: productName.includes('Multi Pocket Filter') 
+                        ? pocketCountInput.value 
                         : null
                 };
                 
@@ -1295,6 +1391,10 @@
                     displayText += `Ukuran: ${qrData.size}\n`;
                 }
                 
+                if (qrData.pockets) {
+                    displayText += `Jumlah Kantong: ${qrData.pockets}\n`;
+                }
+                
                 if (qrData.price) {
                     displayText += `Harga: ${qrData.price}`;
                 }
@@ -1313,6 +1413,44 @@
             }
         }
 
+        // Generate QR code with improved error handling
+        function generateQRCode(data) {
+            const qrCodeElement = document.getElementById('qr-code');
+            qrCodeElement.innerHTML = '';
+            
+            try {
+                // Ensure data is a string and not empty
+                if (typeof data !== 'string' || data.trim() === '') {
+                    throw new Error("Invalid data for QR code");
+                }
+                
+                // Clean the data by removing problematic characters but preserve structure
+                const cleanedData = data.replace(/[^\x20-\x7E]/g, "");
+                
+                if (cleanedData.length === 0) {
+                    throw new Error("Data became empty after cleaning");
+                }
+                
+                new QRCode(qrCodeElement, {
+                    text: cleanedData,
+                    width: 200,
+                    height: 200,
+                    colorDark: "#000000",
+                    colorLight: "#ffffff",
+                    correctLevel: QRCode.CorrectLevel.H
+                });
+            } catch (error) {
+                console.error("QR Code generation error:", error);
+                qrCodeElement.innerHTML = `
+                    <div style="color:red; padding:10px;">
+                        Error generating QR code for:<br>
+                        ${data.substring(0, 100)}...<br><br>
+                        Please check your input data.
+                    </div>
+                `;
+            }
+        }
+
         // Save part number data
         function savePartNumberData(data) {
             const newData = {
@@ -1324,6 +1462,7 @@
                 material: data.material || '-',
                 size: data.size || '-',
                 price: data.price || '-',
+                pockets: data.pockets || null,
                 categoryCode: data.partNumber.substring(0, 2)
             };
             
@@ -1403,7 +1542,8 @@
                 product: item.product !== '-' ? item.product : null,
                 material: item.material !== '-' ? item.material : null,
                 size: item.size !== '-' ? item.size : null,
-                price: item.price !== '-' ? item.price : null
+                price: item.price !== '-' ? item.price : null,
+                pockets: item.pockets || null
             };
             
             const qrDataString = JSON.stringify(qrData, null, 2);
@@ -1423,6 +1563,10 @@
             
             if (qrData.size) {
                 displayText += `Ukuran: ${qrData.size}\n`;
+            }
+            
+            if (qrData.pockets) {
+                displayText += `Jumlah Kantong: ${qrData.pockets}\n`;
             }
             
             if (qrData.price) {
@@ -1448,34 +1592,6 @@
             }
         }
 
-        // Generate QR code
-        function generateQRCode(data) {
-            const qrCodeElement = document.getElementById('qr-code');
-            qrCodeElement.innerHTML = '';
-            
-            try {
-                // Ensure data is a string and not empty
-                if (typeof data !== 'string' || data.trim() === '') {
-                    throw new Error("Invalid data for QR code");
-                }
-                
-                // Clean the data by removing any problematic characters
-                const cleanedData = data.replace(/[^\x00-\x7F]/g, "");
-                
-                new QRCode(qrCodeElement, {
-                    text: cleanedData,
-                    width: 200,
-                    height: 200,
-                    colorDark: "#000000",
-                    colorLight: "#ffffff",
-                    correctLevel: QRCode.CorrectLevel.H
-                });
-            } catch (error) {
-                console.error("QR Code generation error:", error);
-                qrCodeElement.innerHTML = '<p style="color:red;">Error generating QR code. Please check your input data.</p>';
-            }
-        }
-
         // Save QR code as image
         function saveQRCode(format) {
             const qrElement = document.getElementById('qr-code');
@@ -1492,6 +1608,22 @@
                 console.error('Error saving QR code:', err);
                 alert('Error saving QR code. Please try again.');
             });
+        }
+
+        // Export to Excel function
+        function exportToExcel() {
+            // Create workbook
+            const wb = XLSX.utils.book_new();
+            
+            // Convert table data to worksheet
+            const ws = XLSX.utils.table_to_sheet(document.getElementById('dataTable'));
+            
+            // Add worksheet to workbook
+            XLSX.utils.book_append_sheet(wb, ws, "PartNumbers");
+            
+            // Generate Excel file and download
+            const date = new Date().toISOString().slice(0, 10);
+            XLSX.writeFile(wb, `PartNumbers_${date}.xlsx`);
         }
 
         // Copy to clipboard
