@@ -509,6 +509,57 @@
                     <div class="dropdown-with-add">
                         <select id="productName" onchange="updateMaterialOptions()" disabled>
                             <option value="">-- Pilih Nama Product --</option>
+                            <!-- Pre Filter Products -->
+                            <option value="01">01. NAF CR Pre Filter Washable Flange Type</option>
+                            <option value="02">02. NAF CR Pre Filter Washable Flat</option>
+                            <option value="03">03. NAF CR Pre Filter Washable Pleated Radial</option>
+                            <option value="04">04. Pre Filter Carbon Active Granular</option>
+                            <option value="05">05. Pre Filter NAF 30 (Disposable)</option>
+                            <option value="06">06. NAF CR Prefilter IU</option>
+                            <option value="07">07. Paint Stop Filter</option>
+                            <option value="08">08. Pre Filter Carbon Radial Pleated</option>
+                            <option value="09">09. Pre Filter Saranet Double Layer (Aluminium Frame)</option>
+                            <option value="10">10. Filter Loopseal Flange</option>
+                            
+                            <!-- Medium Filter Products -->
+                            <option value="11">11. NAF V-PAC (2V)</option>
+                            <option value="12">12. NAF V Bank Carbon Filter Active 3V</option>
+                            <option value="13">13. NAF V-PAC Carbon Filter</option>
+                            <option value="14">14. NAF V-PAC Medium Filter</option>
+                            <option value="15">15. NAF Rigid Flange Type Stainless Steel</option>
+                            <option value="16">16. NAF RIGID Medium Filter</option>
+                            <option value="17">17. NAF ECO PAC Seri Karton</option>
+                            <option value="18">18. NAF ECO PAC Seri Metal</option>
+                            <option value="19">19. NAF PAC</option>
+                            <option value="20">20. NAF PAC Wooden Frame</option>
+                            <option value="21">21. Medium Filter Carbon Multi Layer (3 Stage)</option>
+                            <option value="22">22. NAF Rigid Flange Type Stainless Steel (F9)</option>
+                            <option value="23">23. Filter Loopseal Flange</option>
+                            <option value="24">24. NAF Multi Pocket Filter / Medium Bag Filter</option>
+                            <option value="25">25. NAF Multi Pocket Airweb</option>
+                            
+                            <!-- HEPA Filter Products -->
+                            <option value="26">26. NAF Absolute MX</option>
+                            <option value="27">27. NAF Absolute HEPA Minipleat XL – Deep 12 Inch</option>
+                            <option value="28">28. NAF Absolute HEPA Minipleat XL – Deep 6 Inch</option>
+                            <option value="29">29. NAF Absolute XL | HEPA Filter High Capacity (Aluminium Separator)</option>
+                            <option value="30">30. NAF Absolute HEPA Filter Gel</option>
+                            <option value="31">31. NAF Absolute HEPA V-Type</option>
+                            
+                            <!-- ULPA Filter Products -->
+                            <option value="32">32. NAF ULPA Filter Minipleat U15-U16</option>
+                            <option value="33">33. NAF ULPA Filter Deepleat U15-U16</option>
+                            
+                            <!-- Cartridge Filter Gasturbine Products -->
+                            <option value="34">34. NAF V-PAC GT</option>
+                            <option value="35">35. NAF PAC GT</option>
+                            <option value="36">36. NAF HP GT</option>
+                            <option value="37">37. NAF 30 GT</option>
+                            <option value="38">38. NAF RIGID GT</option>
+                            <option value="39">39. NAF Profile Square End Cap Cartridge Filter</option>
+                            <option value="40">40. NAF Profile Cylindrical Cartridge Filter</option>
+                            <option value="41">41. NAF Profile Conical Cartridge Filter</option>
+                            <option value="42">42. NAF Profile Spunbond Cartridge Filter</option>
                         </select>
                         <button class="add-btn" onclick="showAddOptionModal('productName')">+</button>
                     </div>
@@ -711,57 +762,56 @@
         
         const defaultProductNames = {
             '01-01': [
-                {value: '01', text: 'NAF CR Pre Filter Washable Pleated Radial'},
+                {value: '01', text: 'NAF CR Pre Filter Washable Flange Type'},
                 {value: '02', text: 'NAF CR Pre Filter Washable Flat'},
-                {value: '03', text: 'Pre Filter NAF 30 (Disposable)'},
-                {value: '04', text: 'NAF CR Pre Filter Washable Flange Type'},
-                {value: '05', text: 'NAF CR Prefilter IU'},
-                {value: '06', text: 'NAF Multi Pocket Filter / Medium Bag Filter'},
+                {value: '03', text: 'NAF CR Pre Filter Washable Pleated Radial'},
+                {value: '04', text: 'Pre Filter Carbon Active Granular'},
+                {value: '05', text: 'Pre Filter NAF 30 (Disposable)'},
+                {value: '06', text: 'NAF CR Prefilter IU'},
                 {value: '07', text: 'Paint Stop Filter'},
                 {value: '08', text: 'Pre Filter Carbon Radial Pleated'},
                 {value: '09', text: 'Pre Filter Saranet Double Layer (Aluminium Frame)'},
-                {value: '10', text: 'Filter Loopseal Flange'},
-                {value: '11', text: 'Pre Filter Carbon Active Granular'}
+                {value: '10', text: 'Filter Loopseal Flange'}
             ],
             '01-02': [
-                {value: '01', text: 'NAF V-PAC (2V)'},
-                {value: '02', text: 'NAF V Bank Carbon Filter Active 3V'},
-                {value: '03', text: 'NAF V-PAC Carbon Filter'},
-                {value: '04', text: 'NAF V-PAC Medium Filter'},
-                {value: '05', text: 'NAF Rigid Flange Type Stainless Steel'},
-                {value: '06', text: 'NAF RIGID Medium Filter'},
-                {value: '07', text: 'NAF Multi Pocket Filter / Medium Bag Filter'},
-                {value: '08', text: 'NAF Multi Pocket Airweb'},
-                {value: '09', text: 'NAF ECO PAC Seri Karton'},
-                {value: '10', text: 'NAF ECO PAC Seri Metal'},
-                {value: '11', text: 'NAF PAC'},
-                {value: '12', text: 'NAF PAC Wooden Frame'},
-                {value: '13', text: 'Medium Filter Carbon Multi Layer (3 Stage)'},
-                {value: '14', text: 'NAF Rigid Flange Type Stainless Steel (F9)'},
-                {value: '15', text: 'Filter Loopseal Flange'}
+                {value: '11', text: 'NAF V-PAC (2V)'},
+                {value: '12', text: 'NAF V Bank Carbon Filter Active 3V'},
+                {value: '13', text: 'NAF V-PAC Carbon Filter'},
+                {value: '14', text: 'NAF V-PAC Medium Filter'},
+                {value: '15', text: 'NAF Rigid Flange Type Stainless Steel'},
+                {value: '16', text: 'NAF RIGID Medium Filter'},
+                {value: '17', text: 'NAF ECO PAC Seri Karton'},
+                {value: '18', text: 'NAF ECO PAC Seri Metal'},
+                {value: '19', text: 'NAF PAC'},
+                {value: '20', text: 'NAF PAC Wooden Frame'},
+                {value: '21', text: 'Medium Filter Carbon Multi Layer (3 Stage)'},
+                {value: '22', text: 'NAF Rigid Flange Type Stainless Steel (F9)'},
+                {value: '23', text: 'Filter Loopseal Flange'},
+                {value: '24', text: 'NAF Multi Pocket Filter / Medium Bag Filter'},
+                {value: '25', text: 'NAF Multi Pocket Airweb'}
             ],
             '01-03': [
-                {value: '01', text: 'NAF Absolute MX'},
-                {value: '02', text: 'NAF Absolute HEPA Minipleat XL – Deep 12 Inch'},
-                {value: '03', text: 'NAF Absolute HEPA Minipleat XL – Deep 6 Inch'},
-                {value: '04', text: 'NAF Absolute XL | HEPA Filter High Capacity (Aluminium Separator)'},
-                {value: '05', text: 'NAF Absolute HEPA Filter Gel'},
-                {value: '06', text: 'NAF Absolute HEPA V-Type'}
+                {value: '26', text: 'NAF Absolute MX'},
+                {value: '27', text: 'NAF Absolute HEPA Minipleat XL – Deep 12 Inch'},
+                {value: '28', text: 'NAF Absolute HEPA Minipleat XL – Deep 6 Inch'},
+                {value: '29', text: 'NAF Absolute XL | HEPA Filter High Capacity (Aluminium Separator)'},
+                {value: '30', text: 'NAF Absolute HEPA Filter Gel'},
+                {value: '31', text: 'NAF Absolute HEPA V-Type'}
             ],
             '01-04': [
-                {value: '01', text: 'NAF ULPA Filter Minipleat U15-U16'},
-                {value: '02', text: 'NAF ULPA Filter Deepleat U15-U16'}
+                {value: '32', text: 'NAF ULPA Filter Minipleat U15-U16'},
+                {value: '33', text: 'NAF ULPA Filter Deepleat U15-U16'}
             ],
             '01-05': [
-                {value: '01', text: 'NAF V-PAC GT'},
-                {value: '02', text: 'NAF PAC GT'},
-                {value: '03', text: 'NAF HP GT'},
-                {value: '04', text: 'NAF 30 GT'},
-                {value: '05', text: 'NAF RIGID GT'},
-                {value: '06', text: 'NAF Profile Square End Cap Cartridge Filter'},
-                {value: '07', text: 'NAF Profile Cylindrical Cartridge Filter'},
-                {value: '08', text: 'NAF Profile Conical Cartridge Filter'},
-                {value: '09', text: 'NAF Profile Spunbond Cartridge Filter'}
+                {value: '34', text: 'NAF V-PAC GT'},
+                {value: '35', text: 'NAF PAC GT'},
+                {value: '36', text: 'NAF HP GT'},
+                {value: '37', text: 'NAF 30 GT'},
+                {value: '38', text: 'NAF RIGID GT'},
+                {value: '39', text: 'NAF Profile Square End Cap Cartridge Filter'},
+                {value: '40', text: 'NAF Profile Cylindrical Cartridge Filter'},
+                {value: '41', text: 'NAF Profile Conical Cartridge Filter'},
+                {value: '42', text: 'NAF Profile Spunbond Cartridge Filter'}
             ],
             '02-01': [
                 {value: '01', text: 'Air Shower Cleanroom'},
@@ -800,527 +850,752 @@
             '06': []
         };
 
-        // Media options classified by product name with numeric codes
+        // Media options classified by product
         const mediaOptionsByProduct = {
-            // Pre Filter products
-            'NAF CR Pre Filter Washable Flange Type': [
-                {code: '05', name: 'Washable media filter non woven FNI IDN TH-350'},
-                {code: '06', name: 'Washable media filter non woven 350 Sapta'},
-                {code: '07', name: 'Washable Ex-China 350 FABRIC'},
-                {code: '08', name: 'Washable 350G'},
-                {code: '09', name: 'Washable Filter media T.15/500'},
-                {code: '10', name: 'Washable Filter media 500 (sapta)'},
-                {code: '11', name: 'Washable GA.160 T.14/G4'},
-                {code: '14', name: 'Washable IDN 600'},
-                {code: '15', name: 'Washable TH.150 T.11'},
-                {code: '16', name: 'Washable VF 560 G'},
-                {code: '17', name: 'Washable WF100 (Hight Temperature)'}
-            ],
-            'NAF CR Pre Filter Washable Flat': [
-                {code: '05', name: 'Washable media filter non woven FNI IDN TH-350'},
-                {code: '06', name: 'Washable media filter non woven 350 Sapta'},
-                {code: '07', name: 'Washable Ex-China 350 FABRIC'},
-                {code: '08', name: 'Washable 350G'},
-                {code: '09', name: 'Washable Filter media T.15/500'},
-                {code: '10', name: 'Washable Filter media 500 (sapta)'},
-                {code: '11', name: 'Washable GA.160 T.14/G4'},
-                {code: '14', name: 'Washable IDN 600'},
-                {code: '15', name: 'Washable TH.150 T.11'},
-                {code: '16', name: 'Washable VF 560 G'},
-                {code: '17', name: 'Washable WF100 (Hight Temperature)'}
-            ],
-            'NAF CR Pre Filter Washable Pleated Radial': [
-                {code: '05', name: 'Washable media filter non woven FNI IDN TH-350'},
-                {code: '06', name: 'Washable media filter non woven 350 Sapta'},
-                {code: '07', name: 'Washable Ex-China 350 FABRIC'},
-                {code: '08', name: 'Washable 350G'},
-                {code: '09', name: 'Washable Filter media T.15/500'},
-                {code: '10', name: 'Washable Filter media 500 (sapta)'},
-                {code: '11', name: 'Washable GA.160 T.14/G4'},
-                {code: '14', name: 'Washable IDN 600'},
-                {code: '15', name: 'Washable TH.150 T.11'},
-                {code: '16', name: 'Washable VF 560 G'},
-                {code: '17', name: 'Washable WF100 (Hight Temperature)'}
-            ],
-            'Pre Filter Carbon Active Granular': [
-                {code: '05', name: 'Washable media filter non woven FNI IDN TH-350'},
-                {code: '06', name: 'Washable media filter non woven 350 Sapta'},
-                {code: '07', name: 'Washable Ex-China 350 FABRIC'},
-                {code: '08', name: 'Washable 350G'},
-                {code: '09', name: 'Washable Filter media T.15/500'},
-                {code: '10', name: 'Washable Filter media 500 (sapta)'},
-                {code: '11', name: 'Washable GA.160 T.14/G4'},
-                {code: '14', name: 'Washable IDN 600'},
-                {code: '15', name: 'Washable TH.150 T.11'},
-                {code: '16', name: 'Washable VF 560 G'},
-                {code: '17', name: 'Washable WF100 (Hight Temperature)'}
-            ],
-            'Pre Filter NAF 30 (Disposable)': [
-                {code: '01', name: 'G3 White Fabric'},
-                {code: '02', name: 'G4 White Fabric'},
-                {code: '12', name: 'G4 (ex china)'},
-                {code: '19', name: 'AW TN40/10 size: 710 mm wide rolls (G4) Tangerding'}
-            ],
-            'NAF CR Prefilter IU': [
-                {code: '01', name: 'G3 White Fabric'},
-                {code: '02', name: 'G4 White Fabric'},
-                {code: '12', name: 'G4 (ex china)'},
-                {code: '19', name: 'AW TN40/10 size: 710 mm wide rolls (G4) Tangerding'}
-            ],
-            'Paint Stop Filter': [
-                {code: '04', name: 'Paint Stop Filter'}
-            ],
-            'Pre Filter Carbon Radial Pleated': [
-                {code: 'CS', name: 'Carbon Sheet'},
-                {code: 'CG', name: 'Carbon Granular'}
-            ],
-            'Pre Filter Saranet Double Layer (Aluminium Frame)': [
-                {code: 'CS', name: 'Carbon Sheet'},
-                {code: 'CG', name: 'Carbon Granular'} 
-            ],
-            'Filter Loopseal Flange': [
-                {code: '01', name: 'G3 White Fabric'},
-                {code: '02', name: 'G4 White Fabric'},
-                {code: '12', name: 'G4 (ex china)'},
-                {code: '19', name: 'AW TN40/10 size: 710 mm wide rolls (G4) Tangerding'}
-            ],
-            // Medium Filter products
-            'NAF V-PAC (2V)': [
-                {code: '01', name: 'Glass Fiber'},
-                {code: '02', name: 'Synthetic Fiber'}
-            ],
-            'NAF V Bank Carbon Filter Active 3V': [
-                {code: 'CS', name: 'Carbon Sheet'},
-                {code: 'CG', name: 'Carbon Granular'}
-            ],
-            'NAF V-PAC Carbon Filter': [
-                {code: 'CS', name: 'Carbon Sheet'},
-                {code: 'CG', name: 'Carbon Granular'}
-            ],
-            'NAF V-PAC Medium Filter': [
-                {code: '01', name: 'Glass Fiber'},
-                {code: '02', name: 'Synthetic Fiber'}
-            ],
-            'NAF Rigid Flange Type Stainless Steel': [
-                {code: '01', name: 'Glass Fiber'},
-                {code: '02', name: 'Synthetic Fiber'}
-            ],
-            'NAF RIGID Medium Filter': [
-                {code: '01', name: 'Glass Fiber'},
-                {code: '02', name: 'Synthetic Fiber'}
-            ],
-            'NAF Multi Pocket Filter / Medium Bag Filter': [
-                {code: '01', name: 'Glass Fiber'},
-                {code: '02', name: 'Synthetic Fiber'}
-            ],
-            'NAF Multi Pocket Airweb': [
-                {code: '01', name: 'Glass Fiber'},
-                {code: '02', name: 'Synthetic Fiber'}
-            ],
-            'NAF ECO PAC Seri Karton': [
-                {code: '01', name: 'Glass Fiber'},
-                {code: '02', name: 'Synthetic Fiber'}
-            ],
-            'NAF ECO PAC Seri Metal': [
-                {code: '01', name: 'Glass Fiber'},
-                {code: '02', name: 'Synthetic Fiber'}
-            ],
-            'NAF PAC': [
-                {code: '01', name: 'Glass Fiber'},
-                {code: '02', name: 'Synthetic Fiber'}
-            ],
-            'NAF PAC Wooden Frame': [
-                {code: '01', name: 'Glass Fiber'},
-                {code: '02', name: 'Synthetic Fiber'}
-            ],
-            'Medium Filter Carbon Multi Layer (3 Stage)': [
-                {code: 'CS', name: 'Carbon Sheet'},
-                {code: 'CG', name: 'Carbon Granular'}
-            ],
-            'NAF Rigid Flange Type Stainless Steel (F9)': [
-                {code: '01', name: 'Glass Fiber'},
-                {code: '02', name: 'Synthetic Fiber'}
-            ],
-            // HEPA Filter products
-            'NAF Absolute MX': [
-                {code: 'H13', name: 'HEPA H13'},
-                {code: 'H14', name: 'HEPA H14'}
-            ],
-            'NAF Absolute HEPA Minipleat XL – Deep 12 Inch': [
-                {code: 'H13', name: 'HEPA H13'},
-                {code: 'H14', name: 'HEPA H14'}
-            ],
-            'NAF Absolute HEPA Minipleat XL – Deep 6 Inch': [
-                {code: 'H13', name: 'HEPA H13'},
-                {code: 'H14', name: 'HEPA H14'}
-            ],
-            'NAF Absolute XL | HEPA Filter High Capacity (Aluminium Separator)': [
-                {code: 'H13', name: 'HEPA H13'},
-                {code: 'H14', name: 'HEPA H14'}
-            ],
-            'NAF Absolute HEPA Filter Gel': [
-                {code: 'H13', name: 'HEPA H13'},
-                {code: 'H14', name: 'HEPA H14'}
-            ],
-            'NAF Absolute HEPA V-Type': [
-                {code: 'H13', name: 'HEPA H13'},
-                {code: 'H14', name: 'HEPA H14'}
-            ],
-            // ULPA Filter products
-            'NAF ULPA Filter Minipleat U15-U16': [
-                {code: 'U15', name: 'ULPA U15'},
-                {code: 'U16', name: 'ULPA U16'}
-            ],
-            'NAF ULPA Filter Deepleat U15-U16': [
-                {code: 'U15', name: 'ULPA U15'},
-                {code: 'U16', name: 'ULPA U16'}
-            ],
-            // Gasturbine products
-            'NAF V-PAC GT': [
-                {code: '01', name: 'Glass Fiber'},
-                {code: '02', name: 'Synthetic Fiber'}
-            ],
-            'NAF PAC GT': [
-                {code: '01', name: 'Glass Fiber'},
-                {code: '02', name: 'Synthetic Fiber'}
-            ],
-            'NAF HP GT': [
-                {code: '01', name: 'Glass Fiber'},
-                {code: '02', name: 'Synthetic Fiber'}
-            ],
-            'NAF 30 GT': [
-                {code: '01', name: 'Glass Fiber'},
-                {code: '02', name: 'Synthetic Fiber'}
-            ],
-            'NAF RIGID GT': [
-                {code: '01', name: 'Glass Fiber'},
-                {code: '02', name: 'Synthetic Fiber'}
-            ],
-            'NAF Profile Square End Cap Cartridge Filter': [
-                {code: '01', name: 'Glass Fiber'},
-                {code: '02', name: 'Synthetic Fiber'}
-            ],
-            'NAF Profile Cylindrical Cartridge Filter': [
-                {code: '01', name: 'Glass Fiber'},
-                {code: '02', name: 'Synthetic Fiber'}
-            ],
-            'NAF Profile Conical Cartridge Filter': [
-                {code: '01', name: 'Glass Fiber'},
-                {code: '02', name: 'Synthetic Fiber'}
-            ],
-            'NAF Profile Spunbond Cartridge Filter': [
-                {code: '01', name: 'Glass Fiber'},
-                {code: '02', name: 'Synthetic Fiber'}
-            ]
+            // Pre Filter Washable products (01-04)
+            '01': ['Washable media filter non woven FNI IDN TH-350', 'Washable media filter non woven 350 Sapta', 'Washable Ex-China 350 FABRIC', 'Washable 350G', 'Washable Filter media T.15/500', 'Washable Filter media 500 (sapta)', 'Washable GA.160 T.14/G4', 'Washable IDN 600', 'Washable TH.150 T.11', 'Washable VF 560 G', 'Washable WF100 (Hight Temperature)'],
+            '02': ['Washable media filter non woven FNI IDN TH-350', 'Washable media filter non woven 350 Sapta', 'Washable Ex-China 350 FABRIC', 'Washable 350G', 'Washable Filter media T.15/500', 'Washable Filter media 500 (sapta)', 'Washable GA.160 T.14/G4', 'Washable IDN 600', 'Washable TH.150 T.11', 'Washable VF 560 G', 'Washable WF100 (Hight Temperature)'],
+            '03': ['Washable media filter non woven FNI IDN TH-350', 'Washable media filter non woven 350 Sapta', 'Washable Ex-China 350 FABRIC', 'Washable 350G', 'Washable Filter media T.15/500', 'Washable Filter media 500 (sapta)', 'Washable GA.160 T.14/G4', 'Washable IDN 600', 'Washable TH.150 T.11', 'Washable VF 560 G', 'Washable WF100 (Hight Temperature)'],
+            '04': ['Washable media filter non woven FNI IDN TH-350', 'Washable media filter non woven 350 Sapta', 'Washable Ex-China 350 FABRIC', 'Washable 350G', 'Washable Filter media T.15/500', 'Washable Filter media 500 (sapta)', 'Washable GA.160 T.14/G4', 'Washable IDN 600', 'Washable TH.150 T.11', 'Washable VF 560 G', 'Washable WF100 (Hight Temperature)'],
+            
+            // Pre Filter Disposable products (05-06)
+            '05': ['G3 White Fabric', 'G4 White Fabric', 'G4 (ex china)', 'AW TN40/10 size: 710 mm wide rolls (G4) Tangerding'],
+            '06': ['G3 White Fabric', 'G4 White Fabric', 'G4 (ex china)', 'AW TN40/10 size: 710 mm wide rolls (G4) Tangerding'],
+            
+            // Paint Stop Filter (07)
+            '07': ['Paint Stop Filter'],
+            
+            // Carbon Filter products (08-09)
+            '08': ['Carbon Sheet', 'Carbon Granular'],
+            '09': ['Carbon Sheet', 'Carbon Granular'],
+            
+            // Filter Loopseal Flange (10)
+            '10': ['Spunbond'],
+            
+            // Medium Filter products (11-23)
+            '11': ['Air Filter Media; 90ASF804 (AHLSTROM) ASF Eff.95%COL', 'Air Filter Media; 65ASF601 (AHLSTROM) ASF Eff.65%COL', 'Air Filter Media / FibreGlass Paper F8 (China) Eff 65%', 'Air Filter Media / FibreGlass Paper (Ahstrom) ADF Eff.65'],
+            '12': ['Air Filter Media; 90ASF804 (AHLSTROM) ASF Eff.95%COL', 'Air Filter Media; 65ASF601 (AHLSTROM) ASF Eff.65%COL', 'Air Filter Media / FibreGlass Paper F8 (China) Eff 65%', 'Air Filter Media / FibreGlass Paper (Ahstrom) ADF Eff.65'],
+            '13': ['Air Filter Media; 90ASF804 (AHLSTROM) ASF Eff.95%COL', 'Air Filter Media; 65ASF601 (AHLSTROM) ASF Eff.65%COL', 'Air Filter Media / FibreGlass Paper F8 (China) Eff 65%', 'Air Filter Media / FibreGlass Paper (Ahstrom) ADF Eff.65'],
+            '14': ['Air Filter Media; 90ASF804 (AHLSTROM) ASF Eff.95%COL', 'Air Filter Media; 65ASF601 (AHLSTROM) ASF Eff.65%COL', 'Air Filter Media / FibreGlass Paper F8 (China) Eff 65%', 'Air Filter Media / FibreGlass Paper (Ahstrom) ADF Eff.65'],
+            '15': ['Air Filter Media; 90ASF804 (AHLSTROM) ASF Eff.95%COL', 'Air Filter Media; 65ASF601 (AHLSTROM) ASF Eff.65%COL', 'Air Filter Media / FibreGlass Paper F8 (China) Eff 65%', 'Air Filter Media / FibreGlass Paper (Ahstrom) ADF Eff.65'],
+            '16': ['Air Filter Media; 90ASF804 (AHLSTROM) ASF Eff.95%COL', 'Air Filter Media; 65ASF601 (AHLSTROM) ASF Eff.65%COL', 'Air Filter Media / FibreGlass Paper F8 (China) Eff 65%', 'Air Filter Media / FibreGlass Paper (Ahstrom) ADF Eff.65'],
+            '17': ['Air Filter Media; 90ASF804 (AHLSTROM) ASF Eff.95%COL', 'Air Filter Media; 65ASF601 (AHLSTROM) ASF Eff.65%COL', 'Air Filter Media / FibreGlass Paper F8 (China) Eff 65%', 'Air Filter Media / FibreGlass Paper (Ahstrom) ADF Eff.65'],
+            '18': ['Air Filter Media; 90ASF804 (AHLSTROM) ASF Eff.95%COL', 'Air Filter Media; 65ASF601 (AHLSTROM) ASF Eff.65%COL', 'Air Filter Media / FibreGlass Paper F8 (China) Eff 65%', 'Air Filter Media / FibreGlass Paper (Ahstrom) ADF Eff.65'],
+            '19': ['Air Filter Media; 90ASF804 (AHLSTROM) ASF Eff.95%COL', 'Air Filter Media; 65ASF601 (AHLSTROM) ASF Eff.65%COL', 'Air Filter Media / FibreGlass Paper F8 (China) Eff 65%', 'Air Filter Media / FibreGlass Paper (Ahstrom) ADF Eff.65'],
+            '20': ['Air Filter Media; 90ASF804 (AHLSTROM) ASF Eff.95%COL', 'Air Filter Media; 65ASF601 (AHLSTROM) ASF Eff.65%COL', 'Air Filter Media / FibreGlass Paper F8 (China) Eff 65%', 'Air Filter Media / FibreGlass Paper (Ahstrom) ADF Eff.65'],
+            '21': ['Air Filter Media; 90ASF804 (AHLSTROM) ASF Eff.95%COL', 'Air Filter Media; 65ASF601 (AHLSTROM) ASF Eff.65%COL', 'Air Filter Media / FibreGlass Paper F8 (China) Eff 65%', 'Air Filter Media / FibreGlass Paper (Ahstrom) ADF Eff.65'],
+            '22': ['Air Filter Media; 90ASF804 (AHLSTROM) ASF Eff.95%COL', 'Air Filter Media; 65ASF601 (AHLSTROM) ASF Eff.65%COL', 'Air Filter Media / FibreGlass Paper F8 (China) Eff 65%', 'Air Filter Media / FibreGlass Paper (Ahstrom) ADF Eff.65'],
+            '23': ['Air Filter Media; 90ASF804 (AHLSTROM) ASF Eff.95%COL', 'Air Filter Media; 65ASF601 (AHLSTROM) ASF Eff.65%COL', 'Air Filter Media / FibreGlass Paper F8 (China) Eff 65%', 'Air Filter Media / FibreGlass Paper (Ahstrom) ADF Eff.65'],
+            
+            // Multi Pocket Filter products (24-25)
+            '24': ['Media Filter F6 Single layer (Orange) Eff.65%', 'Media Filter F7 Single layer (Pink)', 'Media Filter F8 Single layer (yellow) Eff.95%', 'Media Filter F.5 Double Layer (putih) eff.45%', 'Media Filter F6 Double layer (Orange)', 'Media Filter F7 Double layer (Pink) Eff.85%', 'Media Filter F8 Double layer (yellow) Eff.95%', 'Media Filter F.9 Double Layer (putih) Eff.98%'],
+            '25': ['Media Filter F6 Single layer (Orange) Eff.65%', 'Media Filter F7 Single layer (Pink)', 'Media Filter F8 Single layer (yellow) Eff.95%', 'Media Filter F.5 Double Layer (putih) eff.45%', 'Media Filter F6 Double layer (Orange)', 'Media Filter F7 Double layer (Pink) Eff.85%', 'Media Filter F8 Double layer (yellow) Eff.95%', 'Media Filter F.9 Double Layer (putih) Eff.98%'],
+            
+            // HEPA Filter products (26-31)
+            '26': ['Air filter Media; HEPH1405 (AHLSTROM) 99,99%', 'Air Filter Media / FibreGlass Paper H-14 (China-RF) Eff 99,996%', 'Air Filter Media / FibreGlass Paper H-14 (China-Bashuo) Eff 99,996%', 'Air filter Media hepa 90ASF9SP, ASHARE eff.98% (AHLSTROM)', 'Synthetic Media / FibreGlass Paper H-11 Hepa (China) 95% DOP', 'Air Filter Media / FibreGlass Paper H-11 (China-RF) Eff 95% DOP'],
+            '27': ['Air filter Media; HEPH1405 (AHLSTROM) 99,99%', 'Air Filter Media / FibreGlass Paper H-14 (China-RF) Eff 99,996%', 'Air Filter Media / FibreGlass Paper H-14 (China-Bashuo) Eff 99,996%', 'Air filter Media hepa 90ASF9SP, ASHARE eff.98% (AHLSTROM)', 'Synthetic Media / FibreGlass Paper H-11 Hepa (China) 95% DOP', 'Air Filter Media / FibreGlass Paper H-11 (China-RF) Eff 95% DOP'],
+            '28': ['Air filter Media; HEPH1405 (AHLSTROM) 99,99%', 'Air Filter Media / FibreGlass Paper H-14 (China-RF) Eff 99,996%', 'Air Filter Media / FibreGlass Paper H-14 (China-Bashuo) Eff 99,996%', 'Air filter Media hepa 90ASF9SP, ASHARE eff.98% (AHLSTROM)', 'Synthetic Media / FibreGlass Paper H-11 Hepa (China) 95% DOP', 'Air Filter Media / FibreGlass Paper H-11 (China-RF) Eff 95% DOP'],
+            '29': ['Air filter Media; HEPH1405 (AHLSTROM) 99,99%', 'Air Filter Media / FibreGlass Paper H-14 (China-RF) Eff 99,996%', 'Air Filter Media / FibreGlass Paper H-14 (China-Bashuo) Eff 99,996%', 'Air filter Media hepa 90ASF9SP, ASHARE eff.98% (AHLSTROM)', 'Synthetic Media / FibreGlass Paper H-11 Hepa (China) 95% DOP', 'Air Filter Media / FibreGlass Paper H-11 (China-RF) Eff 95% DOP'],
+            '30': ['Air filter Media; HEPH1405 (AHLSTROM) 99,99%', 'Air Filter Media / FibreGlass Paper H-14 (China-RF) Eff 99,996%', 'Air Filter Media / FibreGlass Paper H-14 (China-Bashuo) Eff 99,996%', 'Air filter Media hepa 90ASF9SP, ASHARE eff.98% (AHLSTROM)', 'Synthetic Media / FibreGlass Paper H-11 Hepa (China) 95% DOP', 'Air Filter Media / FibreGlass Paper H-11 (China-RF) Eff 95% DOP'],
+            '31': ['Air filter Media; HEPH1405 (AHLSTROM) 99,99%', 'Air Filter Media / FibreGlass Paper H-14 (China-RF) Eff 99,996%', 'Air Filter Media / FibreGlass Paper H-14 (China-Bashuo) Eff 99,996%', 'Air filter Media hepa 90ASF9SP, ASHARE eff.98% (AHLSTROM)', 'Synthetic Media / FibreGlass Paper H-11 Hepa (China) 95% DOP', 'Air Filter Media / FibreGlass Paper H-11 (China-RF) Eff 95% DOP'],
+            
+            // ULPA Filter products (32-33)
+            '32': ['Air Filter Media Ulpa / FibreGlass Paper (Ahlstrom) U15 99,999%', 'Air Filter Media / FibreGlass Paper HA8603 (H&V )U15 99,999%', 'Air Filter Media / FibreGlass Paper U 15 (China) 99,999%'],
+            '33': ['Air Filter Media Ulpa / FibreGlass Paper (Ahlstrom) U15 99,999%', 'Air Filter Media / FibreGlass Paper HA8603 (H&V )U15 99,999%', 'Air Filter Media / FibreGlass Paper U 15 (China) 99,999%'],
+            
+            // Cartridge Filter Gasturbine products (34-42)
+            '34': ['Filter paper Media SK7538 ADWRC', 'Filter Media Paper SK7538 ADWRC/HNV (Ex-China)', 'Filter Media Paper type. RF-3134 CWI (RF Ex-China)', 'G.2260-15 AXSTAR Japan Spunbond'],
+            '35': ['Filter paper Media SK7538 ADWRC', 'Filter Media Paper SK7538 ADWRC/HNV (Ex-China)', 'Filter Media Paper type. RF-3134 CWI (RF Ex-China)', 'G.2260-15 AXSTAR Japan Spunbond'],
+            '36': ['Filter paper Media SK7538 ADWRC', 'Filter Media Paper SK7538 ADWRC/HNV (Ex-China)', 'Filter Media Paper type. RF-3134 CWI (RF Ex-China)', 'G.2260-15 AXSTAR Japan Spunbond'],
+            '37': ['Filter paper Media SK7538 ADWRC', 'Filter Media Paper SK7538 ADWRC/HNV (Ex-China)', 'Filter Media Paper type. RF-3134 CWI (RF Ex-China)', 'G.2260-15 AXSTAR Japan Spunbond'],
+            '38': ['Filter paper Media SK7538 ADWRC', 'Filter Media Paper SK7538 ADWRC/HNV (Ex-China)', 'Filter Media Paper type. RF-3134 CWI (RF Ex-China)', 'G.2260-15 AXSTAR Japan Spunbond'],
+            '39': ['Filter paper Media SK7538 ADWRC', 'Filter Media Paper SK7538 ADWRC/HNV (Ex-China)', 'Filter Media Paper type. RF-3134 CWI (RF Ex-China)', 'G.2260-15 AXSTAR Japan Spunbond'],
+            '40': ['Filter paper Media SK7538 ADWRC', 'Filter Media Paper SK7538 ADWRC/HNV (Ex-China)', 'Filter Media Paper type. RF-3134 CWI (RF Ex-China)', 'G.2260-15 AXSTAR Japan Spunbond'],
+            '41': ['Filter paper Media SK7538 ADWRC', 'Filter Media Paper SK7538 ADWRC/HNV (Ex-China)', 'Filter Media Paper type. RF-3134 CWI (RF Ex-China)', 'G.2260-15 AXSTAR Japan Spunbond'],
+            '42': ['Filter paper Media SK7538 ADWRC', 'Filter Media Paper SK7538 ADWRC/HNV (Ex-China)', 'Filter Media Paper type. RF-3134 CWI (RF Ex-China)', 'G.2260-15 AXSTAR Japan Spunbond']
         };
+
+        // Size code maps - now separate for each product
+        const sizeCodeMaps = {};
+        let sizeCodeCounters = {};
+        
+        // Data storage
+        let partNumberData = [];
+        let currentDataId = 1;
+        
+        // Category descriptions
+        const categoryDescriptions = {
+            '01': 'Filter',
+            '02': 'Sheetmetal',
+            '03': 'Bahan baku',
+            '04': 'Barang jadi',
+            '05': 'Jasa',
+            '06': 'Subcount'
+        };
+
+        // Show login modal when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('loginModal').style.display = 'block';
+            loadSavedOptions();
+            loadPartNumberData();
+        });
+
+        // Login validation
+        function validateLogin() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const errorElement = document.getElementById('loginError');
+            
+            if (username === 'Farrindo' && password === 'Farrindo365') {
+                document.getElementById('loginModal').style.display = 'none';
+                document.getElementById('mainContent').style.display = 'block';
+                return false;
+            } else {
+                errorElement.style.display = 'block';
+                return false;
+            }
+        }
 
         // Load saved options from localStorage
         function loadSavedOptions() {
-            const saved = localStorage.getItem('savedOptions');
-            if (saved) {
-                savedOptions = JSON.parse(saved);
-            } else {
-                // Initialize with default categories
-                savedOptions.categories = [
-                    {value: '01', text: '01. Filter'},
-                    {value: '02', text: '02. Sheetmetal'},
-                    {value: '03', text: '03. Bahan baku'},
-                    {value: '04', text: '04. Barang jadi'},
-                    {value: '05', text: '05. Jasa'},
-                    {value: '06', text: '06. Subcount'}
-                ];
+            const savedData = localStorage.getItem('partNumberOptions');
+            if (savedData) {
+                savedOptions = JSON.parse(savedData);
                 
-                // Initialize with default subcategories
-                savedOptions.subCategories = defaultSubCategories;
+                // Add saved categories to the dropdown
+                savedOptions.categories.forEach(cat => {
+                    addOptionToSelect('category', cat.value, cat.text);
+                });
                 
-                // Initialize with default product names
-                savedOptions.productNames = defaultProductNames;
-                
-                // Initialize with empty materials
-                savedOptions.materials = [];
-                
-                saveOptionsToStorage();
+                // Add saved materials to the dropdown
+                savedOptions.materials.forEach(mat => {
+                    addOptionToSelect('material', mat, mat);
+                });
             }
-            
-            // Populate category dropdown
-            const categorySelect = document.getElementById('category');
-            categorySelect.innerHTML = '<option value="">-- Pilih Kategori --</option>';
-            savedOptions.categories.forEach(cat => {
-                categorySelect.add(new Option(cat.text, cat.value));
-            });
+        }
+
+        // Load part number data from localStorage
+        function loadPartNumberData() {
+            const savedData = localStorage.getItem('partNumberData');
+            if (savedData) {
+                partNumberData = JSON.parse(savedData);
+                if (partNumberData.length > 0) {
+                    currentDataId = Math.max(...partNumberData.map(item => item.id)) + 1;
+                }
+                updateDataTable();
+            }
         }
 
         // Save options to localStorage
         function saveOptionsToStorage() {
-            localStorage.setItem('savedOptions', JSON.stringify(savedOptions));
+            localStorage.setItem('partNumberOptions', JSON.stringify(savedOptions));
         }
 
-        // Update subcategories based on selected category
+        // Save part number data to localStorage
+        function savePartNumberDataToStorage() {
+            localStorage.setItem('partNumberData', JSON.stringify(partNumberData));
+        }
+
+        // Show add option modal
+        let currentAddOptionType = '';
+        function showAddOptionModal(type) {
+            currentAddOptionType = type;
+            const modal = document.getElementById('addOptionModal');
+            const title = document.getElementById('addOptionTitle');
+            const categorySelection = document.getElementById('categorySelection');
+            const subCategorySelection = document.getElementById('subCategorySelection');
+            const parentCategory = document.getElementById('parentCategory');
+            const parentSubCategory = document.getElementById('parentSubCategory');
+            const codeField = document.getElementById('newOptionCode');
+            const nameField = document.getElementById('newOptionName');
+            
+            // Reset fields
+            codeField.value = '';
+            nameField.value = '';
+            
+            switch(type) {
+                case 'category':
+                    title.textContent = 'Add New Category';
+                    categorySelection.style.display = 'none';
+                    subCategorySelection.style.display = 'none';
+                    codeField.style.display = 'block';
+                    codeField.previousElementSibling.style.display = 'block';
+                    break;
+                    
+                case 'subCategory':
+                    title.textContent = 'Add New Sub Category';
+                    categorySelection.style.display = 'block';
+                    subCategorySelection.style.display = 'none';
+                    codeField.style.display = 'block';
+                    codeField.previousElementSibling.style.display = 'block';
+                    
+                    parentCategory.innerHTML = '<option value="">-- Select Category --</option>';
+                    document.querySelectorAll('#category option').forEach(option => {
+                        if (option.value) {
+                            const newOption = document.createElement('option');
+                            newOption.value = option.value;
+                            newOption.textContent = option.text;
+                            parentCategory.appendChild(newOption);
+                        }
+                    });
+                    break;
+                    
+                case 'productName':
+                    title.textContent = 'Add New Product Name';
+                    categorySelection.style.display = 'block';
+                    subCategorySelection.style.display = 'block';
+                    codeField.style.display = 'block';
+                    codeField.previousElementSibling.style.display = 'block';
+                    
+                    parentCategory.innerHTML = '<option value="">-- Select Category --</option>';
+                    document.querySelectorAll('#category option').forEach(option => {
+                        if (option.value) {
+                            const newOption = document.createElement('option');
+                            newOption.value = option.value;
+                            newOption.textContent = option.text;
+                            parentCategory.appendChild(newOption);
+                        }
+                    });
+                    
+                    parentSubCategory.innerHTML = '<option value="">-- Select Sub Category --</option>';
+                    break;
+                    
+                case 'material':
+                    title.textContent = 'Add New Material';
+                    categorySelection.style.display = 'none';
+                    subCategorySelection.style.display = 'none';
+                    
+                    // For materials, we only need the name field
+                    codeField.style.display = 'none';
+                    codeField.previousElementSibling.style.display = 'none';
+                    
+                    // Set the current sub-category as context for the new material
+                    const currentSubCategory = document.getElementById('subCategory').value;
+                    if (currentSubCategory) {
+                        document.getElementById('parentSubCategory').value = currentSubCategory;
+                    }
+                    break;
+            }
+            
+            modal.style.display = 'block';
+        }
+
+        // Close add option modal
+        function closeAddOptionModal() {
+            document.getElementById('addOptionModal').style.display = 'none';
+        }
+
+        // Update subcategory dropdown when parent category changes in add modal
+        document.getElementById('parentCategory').addEventListener('change', function() {
+            if (currentAddOptionType === 'productName') {
+                const parentSubCategory = document.getElementById('parentSubCategory');
+                const category = this.value;
+                
+                parentSubCategory.innerHTML = '<option value="">-- Select Sub Category --</option>';
+                
+                if (category) {
+                    const defaultSubs = defaultSubCategories[category] || [];
+                    const savedSubs = savedOptions.subCategories[category] || [];
+                    const allSubs = [...defaultSubs, ...savedSubs];
+                    
+                    allSubs.forEach(sub => {
+                        const option = document.createElement('option');
+                        option.value = sub.value;
+                        option.textContent = sub.text;
+                        parentSubCategory.appendChild(option);
+                    });
+                }
+            }
+        });
+
+        // Save new option
+        function saveNewOption() {
+            const code = document.getElementById('newOptionCode').value;
+            const name = document.getElementById('newOptionName').value;
+            
+            if (currentAddOptionType === 'material' && !name) {
+                alert('Please fill in the material name');
+                return false;
+            }
+            
+            if (currentAddOptionType !== 'material' && (!code || !name)) {
+                alert('Please fill in both code and name');
+                return false;
+            }
+            
+            switch(currentAddOptionType) {
+                case 'category':
+                    const newCategory = {
+                        value: code,
+                        text: code + '. ' + name
+                    };
+                    savedOptions.categories.push(newCategory);
+                    addOptionToSelect('category', newCategory.value, newCategory.text);
+                    break;
+                    
+                case 'subCategory':
+                    const parentCategory = document.getElementById('parentCategory').value;
+                    if (!parentCategory) {
+                        alert('Please select a category');
+                        return false;
+                    }
+                    
+                    const newSubCategory = {
+                        value: code,
+                        text: code + '. ' + name
+                    };
+                    
+                    if (!savedOptions.subCategories[parentCategory]) {
+                        savedOptions.subCategories[parentCategory] = [];
+                    }
+                    
+                    savedOptions.subCategories[parentCategory].push(newSubCategory);
+                    
+                    if (document.getElementById('category').value === parentCategory) {
+                        addOptionToSelect('subCategory', newSubCategory.value, newSubCategory.text);
+                    }
+                    break;
+                    
+                case 'productName':
+                    const parentCategoryPN = document.getElementById('parentCategory').value;
+                    const parentSubCategoryPN = document.getElementById('parentSubCategory').value;
+                    
+                    if (!parentCategoryPN || !parentSubCategoryPN) {
+                        alert('Please select both category and subcategory');
+                        return false;
+                    }
+                    
+                    const newProductName = {
+                        value: code,
+                        text: name
+                    };
+                    
+                    const key = parentCategoryPN + '-' + parentSubCategoryPN;
+                    if (!savedOptions.productNames[key]) {
+                        savedOptions.productNames[key] = [];
+                    }
+                    
+                    savedOptions.productNames[key].push(newProductName);
+                    
+                    if (document.getElementById('category').value === parentCategoryPN && 
+                        document.getElementById('subCategory').value === parentSubCategoryPN) {
+                        addOptionToSelect('productName', newProductName.value, newProductName.text);
+                    }
+                    break;
+                    
+                case 'material':
+                    const newMaterial = name;
+                    const subCategory = document.getElementById('parentSubCategory').value;
+                    
+                    if (!subCategory) {
+                        alert('Please select a sub-category first');
+                        return false;
+                    }
+                    
+                    // Only save if it's a valid material for this sub-category
+                    const validMediaOptions = mediaOptionsByProduct[subCategory] || [];
+                    if (!validMediaOptions.some(m => m === newMaterial)) {
+                        savedOptions.materials.push(newMaterial);
+                    }
+                    
+                    // Update the material dropdown if we're currently viewing this sub-category
+                    const currentProduct = document.getElementById('productName').value;
+                    if (currentProduct) {
+                        addOptionToSelect('material', newMaterial, newMaterial);
+                    }
+                    break;
+            }
+            
+            saveOptionsToStorage();
+            closeAddOptionModal();
+            return false;
+        }
+
+        // Add option to select dropdown
+        function addOptionToSelect(selectId, value, text) {
+            const select = document.getElementById(selectId);
+            const option = document.createElement('option');
+            option.value = value;
+            option.textContent = text;
+            select.appendChild(option);
+            
+            if (select.disabled && selectId !== 'category') {
+                select.disabled = false;
+            }
+        }
+
+        // Update sub categories dropdown
         function updateSubCategories() {
-            const category = document.getElementById('category').value;
+            const categorySelect = document.getElementById('category');
+            const subCategorySelect = document.getElementById('subCategory');
+            const productNameSelect = document.getElementById('productName');
+            const productNameGroup = document.getElementById('productNameGroup');
+            const materialSelect = document.getElementById('material');
+            const materialGroup = document.getElementById('materialGroup');
+            const materialAddBtn = document.getElementById('materialAddBtn');
+            const pocketInputGroup = document.getElementById('pocketInputGroup');
+            
+            subCategorySelect.innerHTML = '<option value="">-- Pilih Sub Kategori --</option>';
+            productNameSelect.innerHTML = '<option value="">-- Pilih Nama Product --</option>';
+            materialSelect.innerHTML = '<option value="">-- Pilih Bahan/Media --</option>';
+            pocketInputGroup.style.display = 'none';
+            
+            const selectedCategory = categorySelect.value;
+            
+            if (selectedCategory) {
+                subCategorySelect.disabled = false;
+                
+                const defaultSubs = defaultSubCategories[selectedCategory] || [];
+                const savedSubs = savedOptions.subCategories[selectedCategory] || [];
+                const allSubs = [...defaultSubs, ...savedSubs];
+                
+                allSubs.forEach(sub => {
+                    const option = document.createElement('option');
+                    option.value = sub.value;
+                    option.textContent = sub.text;
+                    subCategorySelect.appendChild(option);
+                });
+                
+                if (['01', '02', '03', '04'].includes(selectedCategory)) {
+                    productNameGroup.style.display = 'block';
+                    materialGroup.style.display = 'block';
+                } else {
+                    productNameGroup.style.display = 'none';
+                    materialGroup.style.display = 'none';
+                }
+            } else {
+                subCategorySelect.disabled = true;
+                productNameSelect.disabled = true;
+                materialSelect.disabled = true;
+                materialAddBtn.disabled = true;
+                productNameGroup.style.display = 'none';
+                materialGroup.style.display = 'none';
+            }
+        }
+        
+        // Update product names dropdown
+        function updateProductNames() {
+            const categorySelect = document.getElementById('category');
             const subCategorySelect = document.getElementById('subCategory');
             const productNameSelect = document.getElementById('productName');
             const materialSelect = document.getElementById('material');
-            
-            // Reset dependent dropdowns
-            productNameSelect.innerHTML = '<option value="">-- Pilih Nama Product --</option>';
-            productNameSelect.disabled = true;
-            materialSelect.innerHTML = '<option value="">-- Pilih Bahan/Media --</option>';
-            materialSelect.disabled = true;
-            document.getElementById('materialAddBtn').disabled = true;
-            
-            if (!category) {
-                subCategorySelect.innerHTML = '<option value="">-- Pilih Sub Kategori --</option>';
-                subCategorySelect.disabled = true;
-                return;
-            }
-            
-            subCategorySelect.innerHTML = '<option value="">-- Pilih Sub Kategori --</option>';
-            const subCategories = savedOptions.subCategories[category] || [];
-            
-            subCategories.forEach(subCat => {
-                subCategorySelect.add(new Option(subCat.text, subCat.value));
-            });
-            
-            subCategorySelect.disabled = false;
-        }
-
-        // Update product names based on selected category and subcategory
-        function updateProductNames() {
-            const category = document.getElementById('category').value;
-            const subCategory = document.getElementById('subCategory').value;
-            const productNameSelect = document.getElementById('productName');
-            const materialSelect = document.getElementById('material');
-            
-            // Reset material dropdown
-            materialSelect.innerHTML = '<option value="">-- Pilih Bahan/Media --</option>';
-            materialSelect.disabled = true;
-            document.getElementById('materialAddBtn').disabled = true;
-            
-            if (!category || !subCategory) {
-                productNameSelect.innerHTML = '<option value="">-- Pilih Nama Product --</option>';
-                productNameSelect.disabled = true;
-                return;
-            }
-            
-            const key = `${category}-${subCategory}`;
-            const productNames = savedOptions.productNames[key] || [];
-            
-            productNameSelect.innerHTML = '<option value="">-- Pilih Nama Product --</option>';
-            productNames.forEach(product => {
-                productNameSelect.add(new Option(product.text, product.value));
-            });
-            
-            productNameSelect.disabled = false;
-            
-            // Show pocket input for Multi Pocket Filter
+            const materialAddBtn = document.getElementById('materialAddBtn');
             const pocketInputGroup = document.getElementById('pocketInputGroup');
-            if (productNameSelect.options[productNameSelect.selectedIndex]?.text.includes('Multi Pocket')) {
-                pocketInputGroup.style.display = 'block';
+            
+            productNameSelect.innerHTML = '<option value="">-- Pilih Nama Product --</option>';
+            materialSelect.innerHTML = '<option value="">-- Pilih Bahan/Media --</option>';
+            pocketInputGroup.style.display = 'none';
+            
+            const selectedCategory = categorySelect.value;
+            const selectedSubCategory = subCategorySelect.value;
+            
+            if (selectedCategory && selectedSubCategory) {
+                productNameSelect.disabled = false;
+                
+                const key = selectedCategory + '-' + selectedSubCategory;
+                const defaultProducts = defaultProductNames[key] || [];
+                const savedProducts = savedOptions.productNames[key] || [];
+                const allProducts = [...defaultProducts, ...savedProducts];
+                
+                allProducts.forEach(product => {
+                    const option = document.createElement('option');
+                    option.value = product.value;
+                    option.textContent = product.text;
+                    productNameSelect.appendChild(option);
+                });
+                
+                // Enable material add button only for Filter category (01)
+                materialAddBtn.disabled = selectedCategory !== '01';
             } else {
-                pocketInputGroup.style.display = 'none';
+                productNameSelect.disabled = true;
+                materialSelect.disabled = true;
+                materialAddBtn.disabled = true;
             }
         }
 
-        // Update material options based on selected product name
+        // Update material options dropdown based on selected product
         function updateMaterialOptions() {
             const productNameSelect = document.getElementById('productName');
             const materialSelect = document.getElementById('material');
-            const selectedProduct = productNameSelect.options[productNameSelect.selectedIndex]?.text;
+            const materialAddBtn = document.getElementById('materialAddBtn');
+            const pocketInputGroup = document.getElementById('pocketInputGroup');
             
             materialSelect.innerHTML = '<option value="">-- Pilih Bahan/Media --</option>';
+            pocketInputGroup.style.display = 'none';
             
-            if (!selectedProduct) {
-                materialSelect.disabled = true;
-                document.getElementById('materialAddBtn').disabled = true;
-                return;
-            }
+            const selectedProduct = productNameSelect.value;
             
-            // Check if this product has predefined media options
-            const mediaOptions = mediaOptionsByProduct[selectedProduct];
-            
-            if (mediaOptions && mediaOptions.length > 0) {
-                mediaOptions.forEach(media => {
-                    materialSelect.add(new Option(media.name, media.code));
-                });
-                document.getElementById('materialAddBtn').disabled = true;
-            } else {
-                // Load saved materials for this product
-                const savedMaterials = savedOptions.materials.filter(m => m.product === selectedProduct);
+            if (selectedProduct) {
+                materialSelect.disabled = false;
                 
-                if (savedMaterials.length > 0) {
-                    savedMaterials.forEach(material => {
-                        materialSelect.add(new Option(material.name, material.code));
-                    });
-                } else {
-                    materialSelect.add(new Option('-- No materials defined --', ''));
+                // Get the appropriate media options based on product
+                const mediaOptions = mediaOptionsByProduct[selectedProduct] || [];
+                
+                // Also include any saved materials
+                const savedMaterials = savedOptions.materials;
+                
+                // Add all available options to the dropdown
+                [...mediaOptions, ...savedMaterials].forEach(material => {
+                    const option = document.createElement('option');
+                    option.value = material;
+                    option.textContent = material;
+                    materialSelect.appendChild(option);
+                });
+                
+                // Show pocket input if this is a Multi Pocket Filter
+                const productName = productNameSelect.options[productNameSelect.selectedIndex].text;
+                if (productName.includes('Multi Pocket Filter')) {
+                    pocketInputGroup.style.display = 'block';
                 }
                 
-                document.getElementById('materialAddBtn').disabled = false;
+                // Enable the add button
+                materialAddBtn.disabled = false;
+            } else {
+                materialSelect.disabled = true;
+                materialAddBtn.disabled = true;
             }
-            
-            materialSelect.disabled = false;
         }
 
-        // Generate size code from dimensions
+        // Generate size code from dimensions - now product-specific
         function generateSizeCode() {
-            const length = document.getElementById('length').value;
-            const width = document.getElementById('width').value;
-            const height = document.getElementById('height').value;
+            const lengthInput = document.getElementById('length');
+            const widthInput = document.getElementById('width');
+            const heightInput = document.getElementById('height');
+            const sizeCodeInput = document.getElementById('sizeCode');
+            const productNameSelect = document.getElementById('productName');
             
-            let sizeCode = '';
+            const length = lengthInput.value;
+            const width = widthInput.value;
+            const height = heightInput.value;
+            const productName = productNameSelect.value ? productNameSelect.options[productNameSelect.selectedIndex].text : '';
             
-            if (length) sizeCode += `L${length.padStart(4, '0')}`;
-            if (width) sizeCode += `W${width.padStart(4, '0')}`;
-            if (height) sizeCode += `H${height.padStart(4, '0')}`;
-            
-            document.getElementById('sizeCode').value = sizeCode;
+            if (length && width && height && productName) {
+                const sizeKey = `${productName}_${length}x${width}x${height}`;
+                
+                // Initialize size code map for this product if it doesn't exist
+                if (!sizeCodeMaps[productName]) {
+                    sizeCodeMaps[productName] = new Map();
+                    sizeCodeCounters[productName] = 1; // Start from 1 for each product
+                }
+                
+                if (!sizeCodeMaps[productName].has(sizeKey)) {
+                    const code = 'A' + String(sizeCodeCounters[productName]).padStart(2, '0');
+                    sizeCodeMaps[productName].set(sizeKey, code);
+                    sizeCodeCounters[productName]++;
+                }
+                
+                sizeCodeInput.value = sizeCodeMaps[productName].get(sizeKey);
+            } else {
+                sizeCodeInput.value = '';
+            }
         }
-
+        
         // Generate part number
         function generatePartNumber() {
-            const category = document.getElementById('category').value;
-            const subCategory = document.getElementById('subCategory').value;
-            const productName = document.getElementById('productName').value;
-            const material = document.getElementById('material').value;
-            const sizeCode = document.getElementById('sizeCode').value;
-            const price = document.getElementById('price').value;
+            const categorySelect = document.getElementById('category');
+            const subCategorySelect = document.getElementById('subCategory');
+            const productNameSelect = document.getElementById('productName');
+            const materialSelect = document.getElementById('material');
+            const lengthInput = document.getElementById('length');
+            const widthInput = document.getElementById('width');
+            const heightInput = document.getElementById('height');
+            const sizeCodeInput = document.getElementById('sizeCode');
+            const priceInput = document.getElementById('price');
+            const pocketCountInput = document.getElementById('pocketCount');
             
-            // Validate required fields
-            if (!category || !subCategory || !productName || !material) {
-                alert('Please fill in all required fields: Kategori, Sub Kategori, Nama Product, and Bahan/Media');
+            const partNumberInput = document.getElementById('partNumber');
+            const qrDataInput = document.getElementById('qrData');
+            const resultDiv = document.getElementById('result');
+            
+            if (!categorySelect.value || !subCategorySelect.value || 
+                (['01', '02', '03', '04'].includes(categorySelect.value) && (!productNameSelect.value || !materialSelect.value)) ||
+                (!sizeCodeInput.value && (!lengthInput.value || !widthInput.value || !heightInput.value))) {
+                alert('Harap lengkapi semua field yang diperlukan!');
                 return;
             }
             
-            // Get selected text values for QR code
-            const categoryText = document.getElementById('category').options[document.getElementById('category').selectedIndex].text;
-            const subCategoryText = document.getElementById('subCategory').options[document.getElementById('subCategory').selectedIndex].text;
-            const productNameText = document.getElementById('productName').options[document.getElementById('productName').selectedIndex].text;
-            const materialText = document.getElementById('material').options[document.getElementById('material').selectedIndex].text;
+            let partNumber = '';
+            partNumber += categorySelect.options[categorySelect.selectedIndex].text.substring(0, 2);
+            partNumber += subCategorySelect.value;
             
-            // Check for pocket count if this is a Multi Pocket Filter
-            let pocketCount = '';
-            if (productNameText.includes('Multi Pocket')) {
-                pocketCount = document.getElementById('pocketCount').value;
-                if (!pocketCount || isNaN(pocketCount) {
-                    alert('Please enter a valid number of pockets for Multi Pocket Filter');
-                    return;
-                }
-                pocketCount = `P${pocketCount.padStart(2, '0')}`;
+            if (productNameSelect.value && productNameSelect.disabled === false) {
+                partNumber += productNameSelect.value;
             }
             
-            // Generate part number
-            let partNumber = `${category}${subCategory}${productName}${material}`;
-            if (pocketCount) partNumber += pocketCount;
-            if (sizeCode) partNumber += `-${sizeCode}`;
+            if (materialSelect.value && materialSelect.disabled === false) {
+                const material = materialSelect.value;
+                const product = productNameSelect.value;
+                let mediaOptions = [];
+                
+                if (categorySelect.value === '01') {
+                    mediaOptions = mediaOptionsByProduct[product] || [];
+                }
+                
+                // Find the index of the selected material
+                const materialIndex = mediaOptions.indexOf(material);
+                
+                if (materialIndex !== -1) {
+                    // Use the index + 1 (to start from 1) and pad with leading zero
+                    partNumber += '-' + String(materialIndex + 1).padStart(2, '0');
+                } else {
+                    // Fallback if material not found in predefined list
+                    partNumber += '-00';
+                }
+            }
             
-            // Generate QR data
-            let qrData = `Part Number: ${partNumber}\n`;
-            qrData += `Kategori: ${categoryText}\n`;
-            qrData += `Sub Kategori: ${subCategoryText}\n`;
-            qrData += `Produk: ${productNameText}\n`;
-            qrData += `Material: ${materialText}\n`;
-            if (sizeCode) qrData += `Ukuran: ${sizeCode}\n`;
-            if (price) qrData += `Harga: Rp ${parseInt(price).toLocaleString('id-ID')}\n`;
+            if (sizeCodeInput.value) {
+                partNumber += '-' + sizeCodeInput.value;
+            } else if (lengthInput.value && widthInput.value && heightInput.value) {
+                partNumber += '-' + lengthInput.value + 'x' + widthInput.value + 'x' + heightInput.value;
+            }
             
-            // Display results
-            document.getElementById('partNumber').value = partNumber;
-            document.getElementById('qrData').value = qrData;
-            document.getElementById('qr-text').textContent = qrData;
+            // Add pocket count if this is a Multi Pocket Filter
+            const productName = productNameSelect.options[productNameSelect.selectedIndex].text;
+            if (productName.includes('Multi Pocket Filter')) {
+                const pocketCount = pocketCountInput.value || '1';
+                partNumber += '-' + pocketCount.toString().padStart(2, '0');
+            }
             
-            // Generate QR code
-            const qrCodeDiv = document.getElementById('qr-code');
-            qrCodeDiv.innerHTML = '';
-            new QRCode(qrCodeDiv, {
-                text: qrData,
-                width: 200,
-                height: 200,
-                colorDark: "#000000",
-                colorLight: "#ffffff",
-                correctLevel: QRCode.CorrectLevel.H
-            });
+            partNumberInput.value = partNumber;
             
-            // Show result section
-            document.getElementById('result').style.display = 'block';
-            
-            // Save to data table
-            saveToDataTable(partNumber, categoryText, subCategoryText, productNameText, materialText, sizeCode, price);
+            // Create structured QR data in JSON format with proper error handling
+            try {
+                const qrData = {
+                    partNumber: partNumber,
+                    category: categorySelect.options[categorySelect.selectedIndex].text,
+                    subCategory: subCategorySelect.options[subCategorySelect.selectedIndex].text,
+                    product: productNameSelect.value && productNameSelect.disabled === false 
+                        ? productNameSelect.options[productNameSelect.selectedIndex].text 
+                        : null,
+                    material: materialSelect.value && materialSelect.disabled === false 
+                        ? materialSelect.options[materialSelect.selectedIndex].text 
+                        : null,
+                    size: sizeCodeInput.value 
+                        ? sizeCodeInput.value 
+                        : (lengthInput.value && widthInput.value && heightInput.value 
+                            ? `${lengthInput.value}x${widthInput.value}x${heightInput.value} mm` 
+                            : null),
+                    price: priceInput.value 
+                        ? `Rp. ${new Intl.NumberFormat('id-ID').format(priceInput.value)}` 
+                        : null,
+                    pockets: productName.includes('Multi Pocket Filter') 
+                        ? pocketCountInput.value 
+                        : null
+                };
+                
+                const qrDataString = JSON.stringify(qrData, null, 2);
+                qrDataInput.value = qrDataString;
+                
+                // Create display text
+                let displayText = '';
+                displayText += `Kategori: ${qrData.category}\n`;
+                displayText += `Sub Kategori: ${qrData.subCategory}\n`;
+                
+                if (qrData.product) {
+                    displayText += `Produk: ${qrData.product}\n`;
+                }
+                
+                if (qrData.material) {
+                    displayText += `Material: ${qrData.material}\n`;
+                }
+                
+                if (qrData.size) {
+                    displayText += `Ukuran: ${qrData.size}\n`;
+                }
+                
+                if (qrData.pockets) {
+                    displayText += `Jumlah Kantong: ${qrData.pockets}\n`;
+                }
+                
+                if (qrData.price) {
+                    displayText += `Harga: ${qrData.price}`;
+                }
+                
+                document.getElementById('qr-text').textContent = displayText;
+                
+                // Generate QR code with error handling
+                generateQRCode(qrDataString);
+                resultDiv.style.display = 'block';
+                
+                // Save the data to storage
+                savePartNumberData(qrData);
+            } catch (error) {
+                console.error("Error generating part number data:", error);
+                alert("Terjadi kesalahan saat menghasilkan data. Silakan coba lagi dengan input yang berbeda.");
+            }
         }
 
-        // Save generated part number to data table
-        function saveToDataTable(partNumber, category, subCategory, product, material, size, price) {
-            let savedData = JSON.parse(localStorage.getItem('partNumberData') || '[]');
+        // Generate QR code with improved error handling
+        function generateQRCode(data) {
+            const qrCodeElement = document.getElementById('qr-code');
+            qrCodeElement.innerHTML = '';
             
-            // Check if this part number already exists
-            const existingIndex = savedData.findIndex(item => item.partNumber === partNumber);
-            
-            const dataItem = {
-                partNumber,
-                category,
-                subCategory,
-                product,
-                material,
-                size: size || '-',
-                price: price ? `Rp ${parseInt(price).toLocaleString('id-ID')}` : '-',
-                timestamp: new Date().toISOString()
+            try {
+                // Ensure data is a string and not empty
+                if (typeof data !== 'string' || data.trim() === '') {
+                    throw new Error("Invalid data for QR code");
+                }
+                
+                // Clean the data by removing problematic characters but preserve structure
+                const cleanedData = data.replace(/[^\x20-\x7E]/g, "");
+                
+                if (cleanedData.length === 0) {
+                    throw new Error("Data became empty after cleaning");
+                }
+                
+                new QRCode(qrCodeElement, {
+                    text: cleanedData,
+                    width: 200,
+                    height: 200,
+                    colorDark: "#000000",
+                    colorLight: "#ffffff",
+                    correctLevel: QRCode.CorrectLevel.H
+                });
+            } catch (error) {
+                console.error("QR Code generation error:", error);
+                qrCodeElement.innerHTML = `
+                    <div style="color:red; padding:10px;">
+                        Error generating QR code for:<br>
+                        ${data.substring(0, 100)}...<br><br>
+                        Please check your input data.
+                    </div>
+                `;
+            }
+        }
+
+        // Save part number data
+        function savePartNumberData(data) {
+            const newData = {
+                id: currentDataId++,
+                partNumber: data.partNumber,
+                category: data.category,
+                subCategory: data.subCategory,
+                product: data.product || '-',
+                material: data.material || '-',
+                size: data.size || '-',
+                price: data.price || '-',
+                pockets: data.pockets || null,
+                categoryCode: data.partNumber.substring(0, 2)
             };
             
-            if (existingIndex >= 0) {
-                // Update existing entry
-                savedData[existingIndex] = dataItem;
-            } else {
-                // Add new entry
-                savedData.push(dataItem);
-            }
-            
-            localStorage.setItem('partNumberData', JSON.stringify(savedData));
+            partNumberData.push(newData);
+            savePartNumberDataToStorage();
             updateDataTable();
+            filterDataTable(newData.categoryCode);
         }
 
-        // Update data table with saved part numbers
-        function updateDataTable(filterCategory = 'all', searchTerm = '') {
-            const savedData = JSON.parse(localStorage.getItem('partNumberData') || '[]');
+        // Update data table
+        function updateDataTable(data = partNumberData) {
             const tableBody = document.getElementById('tableBody');
             
-            tableBody.innerHTML = '';
-            
-            if (savedData.length === 0) {
+            if (data.length === 0) {
                 tableBody.innerHTML = '<tr><td colspan="9" class="no-data">Belum ada data</td></tr>';
                 return;
             }
             
-            // Filter data by category if specified
-            let filteredData = savedData;
-            if (filterCategory !== 'all') {
-                filteredData = savedData.filter(item => 
-                    item.category.startsWith(filterCategory + '.') || 
-                    item.category.startsWith(filterCategory + ' ')
-                );
-            }
+            tableBody.innerHTML = '';
             
-            // Apply search filter if search term exists
-            if (searchTerm) {
-                const term = searchTerm.toLowerCase();
-                filteredData = filteredData.filter(item => 
-                    item.partNumber.toLowerCase().includes(term) ||
-                    item.category.toLowerCase().includes(term) ||
-                    item.subCategory.toLowerCase().includes(term) ||
-                    item.product.toLowerCase().includes(term) ||
-                    item.material.toLowerCase().includes(term) ||
-                    item.size.toLowerCase().includes(term)
-                );
-            }
-            
-            if (filteredData.length === 0) {
-                tableBody.innerHTML = '<tr><td colspan="9" class="no-data">Tidak ada data yang cocok</td></tr>';
-                return;
-            }
-            
-            // Sort by timestamp (newest first)
-            filteredData.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-            
-            // Populate table
-            filteredData.forEach((item, index) => {
+            data.forEach((item, index) => {
                 const row = document.createElement('tr');
                 
                 row.innerHTML = `
@@ -1332,9 +1607,11 @@
                     <td>${item.material}</td>
                     <td>${item.size}</td>
                     <td>${item.price}</td>
-                    <td class="action-buttons">
-                        <button class="action-btn view-btn" onclick="viewItem('${item.partNumber}')">View</button>
-                        <button class="action-btn delete-btn" onclick="deleteItem('${item.partNumber}')">Delete</button>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="action-btn view-btn" onclick="viewItem(${item.id})">Lihat</button>
+                            <button class="action-btn delete-btn" onclick="deleteItem(${item.id})">Hapus</button>
+                        </div>
                     </td>
                 `;
                 
@@ -1342,386 +1619,178 @@
             });
         }
 
-        // View item details
-        function viewItem(partNumber) {
-            const savedData = JSON.parse(localStorage.getItem('partNumberData') || '[]');
-            const item = savedData.find(i => i.partNumber === partNumber);
-            
-            if (!item) {
-                alert('Item not found');
+        // Search function for the data table
+        function searchTable() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            if (!searchTerm) {
+                updateDataTable(partNumberData);
                 return;
             }
             
-            // Display the item in the form
-            document.getElementById('partNumber').value = item.partNumber;
-            document.getElementById('qrData').value = `Part Number: ${item.partNumber}\nKategori: ${item.category}\nSub Kategori: ${item.subCategory}\nProduk: ${item.product}\nMaterial: ${item.material}\nUkuran: ${item.size}\nHarga: ${item.price}`;
-            document.getElementById('qr-text').textContent = `Part Number: ${item.partNumber}\nKategori: ${item.category}\nSub Kategori: ${item.subCategory}\nProduk: ${item.product}\nMaterial: ${item.material}\nUkuran: ${item.size}\nHarga: ${item.price}`;
-            
-            // Generate QR code
-            const qrCodeDiv = document.getElementById('qr-code');
-            qrCodeDiv.innerHTML = '';
-            new QRCode(qrCodeDiv, {
-                text: `Part Number: ${item.partNumber}\nKategori: ${item.category}\nSub Kategori: ${item.subCategory}\nProduk: ${item.product}\nMaterial: ${item.material}\nUkuran: ${item.size}\nHarga: ${item.price}`,
-                width: 200,
-                height: 200,
-                colorDark: "#000000",
-                colorLight: "#ffffff",
-                correctLevel: QRCode.CorrectLevel.H
+            const filteredData = partNumberData.filter(item => {
+                return (
+                    item.partNumber.toLowerCase().includes(searchTerm) ||
+                    item.category.toLowerCase().includes(searchTerm) ||
+                    item.subCategory.toLowerCase().includes(searchTerm) ||
+                    item.product.toLowerCase().includes(searchTerm) ||
+                    item.material.toLowerCase().includes(searchTerm) ||
+                    item.size.toLowerCase().includes(searchTerm) ||
+                    item.price.toLowerCase().includes(searchTerm)
+                );
             });
             
-            // Show result section
-            document.getElementById('result').style.display = 'block';
-            
-            // Scroll to result section
-            document.getElementById('result').scrollIntoView({ behavior: 'smooth' });
-        }
-
-        // Delete item from data table
-        function deleteItem(partNumber) {
-            if (!confirm('Are you sure you want to delete this item?')) {
-                return;
-            }
-            
-            let savedData = JSON.parse(localStorage.getItem('partNumberData') || '[]');
-            savedData = savedData.filter(item => item.partNumber !== partNumber);
-            
-            localStorage.setItem('partNumberData', JSON.stringify(savedData));
-            updateDataTable();
-        }
-
-        // Clear all data
-        function clearAllData() {
-            if (!confirm('Are you sure you want to delete ALL data? This cannot be undone.')) {
-                return;
-            }
-            
-            localStorage.removeItem('partNumberData');
-            updateDataTable();
-        }
-
-        // Export data to Excel
-        function exportToExcel() {
-            const savedData = JSON.parse(localStorage.getItem('partNumberData') || '[]');
-            
-            if (savedData.length === 0) {
-                alert('No data to export');
-                return;
-            }
-            
-            // Prepare worksheet
-            const wsData = [
-                ['No', 'Part Number', 'Kategori', 'Sub Kategori', 'Produk', 'Material', 'Ukuran', 'Harga', 'Tanggal Dibuat']
-            ];
-            
-            savedData.forEach((item, index) => {
-                wsData.push([
-                    index + 1,
-                    item.partNumber,
-                    item.category,
-                    item.subCategory,
-                    item.product,
-                    item.material,
-                    item.size,
-                    item.price,
-                    new Date(item.timestamp).toLocaleString('id-ID')
-                ]);
-            });
-            
-            const ws = XLSX.utils.aoa_to_sheet(wsData);
-            const wb = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(wb, ws, 'Part Numbers');
-            
-            // Generate file name with current date
-            const dateStr = new Date().toISOString().slice(0, 10);
-            XLSX.writeFile(wb, `PartNumbers_${dateStr}.xlsx`);
+            updateDataTable(filteredData);
         }
 
         // Filter data table by category
-        function filterDataTable(category) {
-            // Update active tab
+        function filterDataTable(categoryCode) {
             const tabs = document.querySelectorAll('.category-tab');
-            tabs.forEach(tab => tab.classList.remove('active'));
-            event.target.classList.add('active');
+            tabs.forEach(tab => {
+                tab.classList.remove('active');
+                if ((tab.textContent === 'Semua' && categoryCode === 'all') || 
+                    (tab.textContent.includes(categoryDescriptions[categoryCode]))) {
+                    tab.classList.add('active');
+                }
+            });
             
-            // Update table
-            const searchTerm = document.getElementById('searchInput').value;
-            updateDataTable(category, searchTerm);
+            let filteredData = [];
+            if (categoryCode === 'all') {
+                filteredData = partNumberData;
+            } else {
+                filteredData = partNumberData.filter(item => item.categoryCode === categoryCode);
+            }
+            
+            updateDataTable(filteredData);
         }
 
-        // Search table
-        function searchTable() {
-            const searchTerm = document.getElementById('searchInput').value;
-            const activeTab = document.querySelector('.category-tab.active');
-            const category = activeTab ? activeTab.getAttribute('onclick').match(/'([^']+)'/)[1] : 'all';
+        // View item details
+        function viewItem(id) {
+            const item = partNumberData.find(item => item.id === id);
+            if (!item) return;
             
-            updateDataTable(category, searchTerm);
+            document.getElementById('partNumber').value = item.partNumber;
+            
+            const qrData = {
+                partNumber: item.partNumber,
+                category: item.category,
+                subCategory: item.subCategory,
+                product: item.product !== '-' ? item.product : null,
+                material: item.material !== '-' ? item.material : null,
+                size: item.size !== '-' ? item.size : null,
+                price: item.price !== '-' ? item.price : null,
+                pockets: item.pockets || null
+            };
+            
+            const qrDataString = JSON.stringify(qrData, null, 2);
+            document.getElementById('qrData').value = qrDataString;
+            
+            let displayText = '';
+            displayText += `Kategori: ${qrData.category}\n`;
+            displayText += `Sub Kategori: ${qrData.subCategory}\n`;
+            
+            if (qrData.product) {
+                displayText += `Produk: ${qrData.product}\n`;
+            }
+            
+            if (qrData.material) {
+                displayText += `Material: ${qrData.material}\n`;
+            }
+            
+            if (qrData.size) {
+                displayText += `Ukuran: ${qrData.size}\n`;
+            }
+            
+            if (qrData.pockets) {
+                displayText += `Jumlah Kantong: ${qrData.pockets}\n`;
+            }
+            
+            if (qrData.price) {
+                displayText += `Harga: ${qrData.price}`;
+            }
+            
+            document.getElementById('qr-text').textContent = displayText;
+            generateQRCode(qrDataString);
+            document.getElementById('result').style.display = 'block';
+            document.getElementById('result').scrollIntoView({ behavior: 'smooth' });
         }
 
-        // Copy text to clipboard
-        function copyToClipboard(elementId) {
-            const element = document.getElementById(elementId);
-            element.select();
-            document.execCommand('copy');
-            
-            // Show temporary tooltip
-            const originalText = event.target.textContent;
-            event.target.textContent = 'Copied!';
-            setTimeout(() => {
-                event.target.textContent = originalText;
-            }, 2000);
+        // Delete item
+        function deleteItem(id) {
+            if (confirm('Apakah Anda yakin ingin menghapus data ini?')) {
+                partNumberData = partNumberData.filter(item => item.id !== id);
+                savePartNumberDataToStorage();
+                updateDataTable();
+                
+                if (partNumberData.length === 0) {
+                    document.getElementById('tableBody').innerHTML = '<tr><td colspan="9" class="no-data">Belum ada data</td></tr>';
+                }
+            }
         }
 
         // Save QR code as image
         function saveQRCode(format) {
-            const qrCodeDiv = document.getElementById('qr-code');
+            const qrElement = document.getElementById('qr-code');
+            const partNumber = document.getElementById('partNumber').value || 'QRCode';
             
-            html2canvas(qrCodeDiv).then(canvas => {
+            html2canvas(qrElement).then(canvas => {
                 const link = document.createElement('a');
-                link.download = `QRCode_${document.getElementById('partNumber').value}.${format}`;
+                link.download = `QR_${partNumber}.${format}`;
                 link.href = canvas.toDataURL(`image/${format}`);
+                document.body.appendChild(link);
                 link.click();
+                document.body.removeChild(link);
+            }).catch(err => {
+                console.error('Error saving QR code:', err);
+                alert('Error saving QR code. Please try again.');
             });
         }
 
-        // Show add option modal
-        function showAddOptionModal(fieldType) {
-            const modal = document.getElementById('addOptionModal');
-            const title = document.getElementById('addOptionTitle');
-            const categorySelection = document.getElementById('categorySelection');
-            const subCategorySelection = document.getElementById('subCategorySelection');
-            const codeFieldGroup = document.getElementById('codeFieldGroup');
+        // Export to Excel function
+        function exportToExcel() {
+            // Create workbook
+            const wb = XLSX.utils.book_new();
             
-            // Reset form
-            document.getElementById('newOptionCode').value = '';
-            document.getElementById('newOptionName').value = '';
+            // Convert table data to worksheet
+            const ws = XLSX.utils.table_to_sheet(document.getElementById('dataTable'));
             
-            // Set modal title and fields based on field type
-            if (fieldType === 'subCategory') {
-                title.textContent = 'Add New Sub Category';
-                categorySelection.style.display = 'block';
-                subCategorySelection.style.display = 'none';
-                codeFieldGroup.style.display = 'block';
-                
-                // Populate parent category dropdown
-                const parentCategory = document.getElementById('parentCategory');
-                parentCategory.innerHTML = '<option value="">-- Select Category --</option>';
-                savedOptions.categories.forEach(cat => {
-                    parentCategory.add(new Option(cat.text, cat.value));
-                });
-            } 
-            else if (fieldType === 'productName') {
-                title.textContent = 'Add New Product Name';
-                categorySelection.style.display = 'block';
-                subCategorySelection.style.display = 'block';
-                codeFieldGroup.style.display = 'block';
-                
-                // Populate parent category dropdown
-                const parentCategory = document.getElementById('parentCategory');
-                parentCategory.innerHTML = '<option value="">-- Select Category --</option>';
-                savedOptions.categories.forEach(cat => {
-                    parentCategory.add(new Option(cat.text, cat.value));
-                });
-                
-                // Update subcategories when category changes
-                parentCategory.onchange = function() {
-                    const parentSubCategory = document.getElementById('parentSubCategory');
-                    parentSubCategory.innerHTML = '<option value="">-- Select Sub Category --</option>';
-                    
-                    if (!this.value) return;
-                    
-                    const subCategories = savedOptions.subCategories[this.value] || [];
-                    subCategories.forEach(subCat => {
-                        parentSubCategory.add(new Option(subCat.text, subCat.value));
-                    });
-                };
-            } 
-            else if (fieldType === 'material') {
-                title.textContent = 'Add New Material';
-                categorySelection.style.display = 'none';
-                subCategorySelection.style.display = 'none';
-                codeFieldGroup.style.display = 'block';
-            }
+            // Add worksheet to workbook
+            XLSX.utils.book_append_sheet(wb, ws, "PartNumbers");
             
-            // Store field type in modal for later use
-            modal.dataset.fieldType = fieldType;
-            
-            // Show modal
-            modal.style.display = 'block';
+            // Generate Excel file and download
+            const date = new Date().toISOString().slice(0, 10);
+            XLSX.writeFile(wb, `PartNumbers_${date}.xlsx`);
         }
 
-        // Close add option modal
-        function closeAddOptionModal() {
-            document.getElementById('addOptionModal').style.display = 'none';
+        // Copy to clipboard
+        function copyToClipboard(elementId) {
+            const element = document.getElementById(elementId);
+            element.select();
+            document.execCommand('copy');
+            alert('Copied to clipboard: ' + element.value);
         }
 
-        // Save new option
-        function saveNewOption() {
-            const modal = document.getElementById('addOptionModal');
-            const fieldType = modal.dataset.fieldType;
-            const code = document.getElementById('newOptionCode').value;
-            const name = document.getElementById('newOptionName').value;
-            
-            if (!name) {
-                alert('Name is required');
-                return false;
-            }
-            
-            if (fieldType === 'subCategory') {
-                const parentCategory = document.getElementById('parentCategory').value;
-                if (!parentCategory) {
-                    alert('Please select a category');
-                    return false;
-                }
-                
-                // Check if code is provided and unique for this category
-                if (!code) {
-                    alert('Code is required for sub category');
-                    return false;
-                }
-                
-                const existingSubCat = (savedOptions.subCategories[parentCategory] || []).find(sc => sc.value === code);
-                if (existingSubCat) {
-                    alert('A sub category with this code already exists for the selected category');
-                    return false;
-                }
-                
-                // Add new sub category
-                if (!savedOptions.subCategories[parentCategory]) {
-                    savedOptions.subCategories[parentCategory] = [];
-                }
-                
-                savedOptions.subCategories[parentCategory].push({
-                    value: code,
-                    text: `${code.padStart(2, '0')}. ${name}`
-                });
-                
-                // Sort subcategories by code
-                savedOptions.subCategories[parentCategory].sort((a, b) => a.value.localeCompare(b.value));
-                
-                // If this is a new category-subcategory combination, initialize product names array
-                const key = `${parentCategory}-${code}`;
-                if (!savedOptions.productNames[key]) {
-                    savedOptions.productNames[key] = [];
-                }
-            } 
-            else if (fieldType === 'productName') {
-                const parentCategory = document.getElementById('parentCategory').value;
-                const parentSubCategory = document.getElementById('parentSubCategory').value;
-                
-                if (!parentCategory || !parentSubCategory) {
-                    alert('Please select category and sub category');
-                    return false;
-                }
-                
-                // Check if code is provided and unique for this sub category
-                if (!code) {
-                    alert('Code is required for product name');
-                    return false;
-                }
-                
-                const key = `${parentCategory}-${parentSubCategory}`;
-                const existingProduct = (savedOptions.productNames[key] || []).find(p => p.value === code);
-                if (existingProduct) {
-                    alert('A product with this code already exists for the selected sub category');
-                    return false;
-                }
-                
-                // Add new product name
-                if (!savedOptions.productNames[key]) {
-                    savedOptions.productNames[key] = [];
-                }
-                
-                savedOptions.productNames[key].push({
-                    value: code,
-                    text: name
-                });
-                
-                // Sort products by code
-                savedOptions.productNames[key].sort((a, b) => a.value.localeCompare(b.value));
-            } 
-            else if (fieldType === 'material') {
-                const productNameSelect = document.getElementById('productName');
-                const productName = productNameSelect.options[productNameSelect.selectedIndex]?.text;
-                
-                if (!productName) {
-                    alert('Please select a product first');
-                    return false;
-                }
-                
-                // Check if code is provided
-                if (!code) {
-                    alert('Code is required for material');
-                    return false;
-                }
-                
-                // Check if this material already exists for this product
-                const existingMaterial = savedOptions.materials.find(m => 
-                    m.product === productName && (m.code === code || m.name === name)
-                );
-                
-                if (existingMaterial) {
-                    alert('A material with this code or name already exists for the selected product');
-                    return false;
-                }
-                
-                // Add new material
-                savedOptions.materials.push({
-                    product: productName,
-                    code: code,
-                    name: name
-                });
-            }
-            
-            // Save to storage and update UI
-            saveOptionsToStorage();
-            
-            if (fieldType === 'subCategory') {
-                updateSubCategories();
-            } 
-            else if (fieldType === 'productName') {
-                updateProductNames();
-            } 
-            else if (fieldType === 'material') {
-                updateMaterialOptions();
-            }
-            
-            // Close modal
-            closeAddOptionModal();
-            return false;
-        }
-
-        // Login functions
-        function showLoginModal() {
-            document.getElementById('loginModal').style.display = 'block';
-        }
-
-        function validateLogin() {
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
-            
-            // Simple validation (in a real app, this would be server-side)
-            if (username === 'admin' && password === 'admin123') {
-                document.getElementById('loginModal').style.display = 'none';
-                document.getElementById('mainContent').style.display = 'block';
-                return false;
-            } else {
-                document.getElementById('loginError').style.display = 'block';
-                return false;
+        // Clear all data
+        function clearAllData() {
+            if (confirm('Are you sure you want to clear ALL data? This cannot be undone!')) {
+                partNumberData = [];
+                currentDataId = 1;
+                localStorage.removeItem('partNumberData');
+                updateDataTable();
+                document.getElementById('tableBody').innerHTML = '<tr><td colspan="9" class="no-data">Belum ada data</td></tr>';
             }
         }
 
-        // Initialize application
-        window.onload = function() {
-            showLoginModal();
-            loadSavedOptions();
-            
-            // Set up event listeners
-            document.getElementById('searchInput').addEventListener('keyup', function(event) {
-                if (event.key === 'Enter') {
-                    searchTable();
-                }
-            });
-        };
+        // Add event listener for product name change to update material options
+        document.getElementById('productName').addEventListener('change', function() {
+            updateMaterialOptions();
+        });
+
+        // Add event listener for Enter key in search input
+        document.getElementById('searchInput').addEventListener('keyup', function(event) {
+            if (event.key === 'Enter') {
+                searchTable();
+            }
+        });
     </script>
 </body>
 </html>
