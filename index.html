@@ -190,7 +190,7 @@
         body {
             font-family: Arial, sans-serif;
             margin: 20px;
-            padding-top: 40px; /* Added to prevent content from being hidden under clock */
+            padding-top: 40px;
         }
         .container {
             display: flex;
@@ -235,8 +235,20 @@
         .dimensions {
             display: flex;
             gap: 10px;
+            margin-bottom: 10px;
         }
         .dimension-input {
+            flex: 1;
+        }
+        .cartridge-dimensions {
+            display: none;
+        }
+        .cartridge-dimension-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        .cartridge-dimension-input {
             flex: 1;
         }
         .generate-section {
@@ -582,9 +594,9 @@
                 </div>
             </div>
             
-            <div class="section">
+            <!-- Regular Dimensions Section -->
+            <div class="section" id="regularDimensions">
                 <div class="section-title">Ukuran (mm)</div>
-                
                 <div class="form-group">
                     <div class="dimensions">
                         <div class="dimension-input">
@@ -601,16 +613,52 @@
                         </div>
                     </div>
                 </div>
-                
                 <div class="form-group">
                     <label for="sizeCode">Kode Ukuran</label>
                     <input type="text" id="sizeCode" readonly>
                 </div>
-                
+            </div>
+            
+            <!-- Cartridge Dimensions Section -->
+            <div class="section cartridge-dimensions" id="cartridgeDimensions">
+                <div class="section-title">Dimensi Cartridge (mm)</div>
                 <div class="form-group">
-                    <label for="price">Harga Rp.</label>
-                    <input type="number" id="price" min="0">
+                    <div class="cartridge-dimension-group">
+                        <div class="cartridge-dimension-input">
+                            <label for="internalTop">Internal Dimension Top</label>
+                            <input type="number" id="internalTop" min="0" onchange="generateSizeCode()">
+                        </div>
+                        <div class="cartridge-dimension-input">
+                            <label for="internalBottom">Internal Dimension Bottom</label>
+                            <input type="number" id="internalBottom" min="0" onchange="generateSizeCode()">
+                        </div>
+                    </div>
+                    <div class="cartridge-dimension-group">
+                        <div class="cartridge-dimension-input">
+                            <label for="externalTop">External Dimension Top</label>
+                            <input type="number" id="externalTop" min="0" onchange="generateSizeCode()">
+                        </div>
+                        <div class="cartridge-dimension-input">
+                            <label for="externalBottom">External Dimension Bottom</label>
+                            <input type="number" id="externalBottom" min="0" onchange="generateSizeCode()">
+                        </div>
+                    </div>
+                    <div class="cartridge-dimension-group">
+                        <div class="cartridge-dimension-input">
+                            <label for="cartridgeLength">Length (Top to Bottom)</label>
+                            <input type="number" id="cartridgeLength" min="0" onchange="generateSizeCode()">
+                        </div>
+                    </div>
                 </div>
+                <div class="form-group">
+                    <label for="cartridgeSizeCode">Kode Ukuran</label>
+                    <input type="text" id="cartridgeSizeCode" readonly>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="price">Harga Rp.</label>
+                <input type="number" id="price" min="0">
             </div>
             
             <div class="generate-section">
@@ -903,17 +951,51 @@
             '32': ['Air Filter Media Ulpa / FibreGlass Paper (Ahlstrom) U15 99,999%', 'Air Filter Media / FibreGlass Paper HA8603 (H&V )U15 99,999%', 'Air Filter Media / FibreGlass Paper U 15 (China) 99,999%'],
             '33': ['Air Filter Media Ulpa / FibreGlass Paper (Ahlstrom) U15 99,999%', 'Air Filter Media / FibreGlass Paper HA8603 (H&V )U15 99,999%', 'Air Filter Media / FibreGlass Paper U 15 (China) 99,999%'],
             
-            // Cartridge Filter Gasturbine products (34-42)
-            '34': ['Filter paper Media SK7538 ADWRC', 'Filter Media Paper SK7538 ADWRC/HNV (Ex-China)', 'Filter Media Paper type. RF-3134 CWI (RF Ex-China)', 'G.2260-15 AXSTAR Japan Spunbond'],
-            '35': ['Filter paper Media SK7538 ADWRC', 'Filter Media Paper SK7538 ADWRC/HNV (Ex-China)', 'Filter Media Paper type. RF-3134 CWI (RF Ex-China)', 'G.2260-15 AXSTAR Japan Spunbond'],
-            '36': ['Filter paper Media SK7538 ADWRC', 'Filter Media Paper SK7538 ADWRC/HNV (Ex-China)', 'Filter Media Paper type. RF-3134 CWI (RF Ex-China)', 'G.2260-15 AXSTAR Japan Spunbond'],
-            '37': ['Filter paper Media SK7538 ADWRC', 'Filter Media Paper SK7538 ADWRC/HNV (Ex-China)', 'Filter Media Paper type. RF-3134 CWI (RF Ex-China)', 'G.2260-15 AXSTAR Japan Spunbond'],
-            '38': ['Filter paper Media SK7538 ADWRC', 'Filter Media Paper SK7538 ADWRC/HNV (Ex-China)', 'Filter Media Paper type. RF-3134 CWI (RF Ex-China)', 'G.2260-15 AXSTAR Japan Spunbond'],
+            // Cartridge Filter Gasturbine products (39-42)
             '39': ['Filter paper Media SK7538 ADWRC', 'Filter Media Paper SK7538 ADWRC/HNV (Ex-China)', 'Filter Media Paper type. RF-3134 CWI (RF Ex-China)', 'G.2260-15 AXSTAR Japan Spunbond'],
             '40': ['Filter paper Media SK7538 ADWRC', 'Filter Media Paper SK7538 ADWRC/HNV (Ex-China)', 'Filter Media Paper type. RF-3134 CWI (RF Ex-China)', 'G.2260-15 AXSTAR Japan Spunbond'],
             '41': ['Filter paper Media SK7538 ADWRC', 'Filter Media Paper SK7538 ADWRC/HNV (Ex-China)', 'Filter Media Paper type. RF-3134 CWI (RF Ex-China)', 'G.2260-15 AXSTAR Japan Spunbond'],
             '42': ['Filter paper Media SK7538 ADWRC', 'Filter Media Paper SK7538 ADWRC/HNV (Ex-China)', 'Filter Media Paper type. RF-3134 CWI (RF Ex-China)', 'G.2260-15 AXSTAR Japan Spunbond']
         };
+
+        // Sheet metal materials with numbered codes
+        const sheetMetalMaterials = [
+            {code: '01', name: "PLAT MR SS304 #0.6MM 4' X 8'"},
+            {code: '02', name: "PLAT MR SS304 #0.8MM 4' X 8'"},
+            {code: '03', name: "PLAT MR SS304 #1MM 4' X 8'"},
+            {code: '04', name: "PLAT MR SS304 #1.2MM 4' X 8'"},
+            {code: '05', name: "PLAT MR SS304 #1.5MM 4' X 8'"},
+            {code: '06', name: "PLAT MR SS304 #2MM 4' X 8'"},
+            {code: '07', name: "PLAT MR SS304 #3MM 4' X 8'"},
+            {code: '08', name: "PLAT HL SS304 #0.8MM 4' X 8'"},
+            {code: '09', name: "PLAT HL SS304 #1MM 4' X 8'"},
+            {code: '10', name: "PLAT HL SS304 #1.2MM 4' X 8'"},
+            {code: '11', name: "PLAT HL SS304 #1.5MM 4' X 8'"},
+            {code: '12', name: "PLAT HL SS304 #2MM 4' X 8'"},
+            {code: '13', name: "PLAT HL SS304 #3MM 4' X 8'"},
+            {code: '14', name: "PLAT 2B SS304 #0.8MM 4' X 8'"},
+            {code: '15', name: "PLAT 2B SS304 #1MM 4' X 8'"},
+            {code: '16', name: "PLAT 2B SS304 #1.2MM 4' X 8'"},
+            {code: '17', name: "PLAT 2B SS304 #1.5MM 4' X 8'"},
+            {code: '18', name: "PLAT 2B SS304 #2MM 4' X 8'"},
+            {code: '19', name: "PLAT 2B SS304 #3MM 4' X 8'"},
+            {code: '20', name: "PLAT 2B SS304 #4MM 4' X 8'"},
+            {code: '21', name: "PLAT 2B SS201 #0.6MM 4' X 8'"},
+            {code: '22', name: "PLAT 2B SS201 #0.8MM 4' X 8'"},
+            {code: '23', name: "PLAT 2B SS201 #1MM 4' X 8'"},
+            {code: '24', name: "PLAT 2B SS201 #1.2MM 4' X 8'"},
+            {code: '25', name: "PLAT 2B SS201 #1.5MM 4' X 8'"},
+            {code: '26', name: "PLAT 2B SS201 #2MM 4' X 8'"},
+            {code: '27', name: "PLAT LUBANG SS304 DIAMETER 0.8 #0.8MM 4' X 8'"},
+            {code: '28', name: "PLAT LUBANG SS304 DIAMETER 8MM #0.8MM 4' X 8'"},
+            {code: '29', name: "PLAT LUBANG SS304 DIAMETER 8MM #1.2MM 4' X 8'"},
+            {code: '30', name: "Plat Besi Hitam 1.2mm x 4ft x 8ft (STD)"},
+            {code: '31', name: "Plat Besi Hitam 1.4mm x 4ft x 8ft (S)"},
+            {code: '32', name: "Plat Besi Hitam 1.5mm x 4ft x 8ft (S)"},
+            {code: '33', name: "Plat Besi Hitam 1.6mm x 4ft x 8ft (S)"},
+            {code: '34', name: "Plat Besi Hitam 1.8mm x 4ft x 8ft (STD)"},
+            {code: '35', name: "Plat Besi Hitam 2.0mm x 4ft x 8ft (STD)"}
+        ];
 
         // Size code maps - now separate for each product
         const sizeCodeMaps = {};
@@ -1234,11 +1316,15 @@
             const materialGroup = document.getElementById('materialGroup');
             const materialAddBtn = document.getElementById('materialAddBtn');
             const pocketInputGroup = document.getElementById('pocketInputGroup');
+            const regularDimensions = document.getElementById('regularDimensions');
+            const cartridgeDimensions = document.getElementById('cartridgeDimensions');
             
             subCategorySelect.innerHTML = '<option value="">-- Pilih Sub Kategori --</option>';
             productNameSelect.innerHTML = '<option value="">-- Pilih Nama Product --</option>';
             materialSelect.innerHTML = '<option value="">-- Pilih Bahan/Media --</option>';
             pocketInputGroup.style.display = 'none';
+            regularDimensions.style.display = 'block';
+            cartridgeDimensions.style.display = 'none';
             
             const selectedCategory = categorySelect.value;
             
@@ -1281,10 +1367,14 @@
             const materialSelect = document.getElementById('material');
             const materialAddBtn = document.getElementById('materialAddBtn');
             const pocketInputGroup = document.getElementById('pocketInputGroup');
+            const regularDimensions = document.getElementById('regularDimensions');
+            const cartridgeDimensions = document.getElementById('cartridgeDimensions');
             
             productNameSelect.innerHTML = '<option value="">-- Pilih Nama Product --</option>';
             materialSelect.innerHTML = '<option value="">-- Pilih Bahan/Media --</option>';
             pocketInputGroup.style.display = 'none';
+            regularDimensions.style.display = 'block';
+            cartridgeDimensions.style.display = 'none';
             
             const selectedCategory = categorySelect.value;
             const selectedSubCategory = subCategorySelect.value;
@@ -1319,283 +1409,334 @@
             const materialSelect = document.getElementById('material');
             const materialAddBtn = document.getElementById('materialAddBtn');
             const pocketInputGroup = document.getElementById('pocketInputGroup');
+            const regularDimensions = document.getElementById('regularDimensions');
+            const cartridgeDimensions = document.getElementById('cartridgeDimensions');
             
             materialSelect.innerHTML = '<option value="">-- Pilih Bahan/Media --</option>';
             pocketInputGroup.style.display = 'none';
+            regularDimensions.style.display = 'block';
+            cartridgeDimensions.style.display = 'none';
             
             const selectedProduct = productNameSelect.value;
+            const selectedCategory = document.getElementById('category').value;
             
             if (selectedProduct) {
                 materialSelect.disabled = false;
                 
-                // Get the appropriate media options based on product
-                const mediaOptions = mediaOptionsByProduct[selectedProduct] || [];
-                
-                // Also include any saved materials
-                const savedMaterials = savedOptions.materials;
-                
-                // Add all available options to the dropdown
-                [...mediaOptions, ...savedMaterials].forEach(material => {
-                    const option = document.createElement('option');
-                    option.value = material;
-                    option.textContent = material;
-                    materialSelect.appendChild(option);
-                });
-                
-                // Show pocket input if this is a Multi Pocket Filter
-                const productName = productNameSelect.options[productNameSelect.selectedIndex].text;
-                if (productName.includes('Multi Pocket Filter')) {
-                    pocketInputGroup.style.display = 'block';
+                // Check if this is a cartridge filter product
+                const cartridgeProducts = ['39', '40', '41', '42'];
+                if (cartridgeProducts.includes(selectedProduct)) {
+                    regularDimensions.style.display = 'none';
+                    cartridgeDimensions.style.display = 'block';
                 }
                 
-                // Enable the add button
-                materialAddBtn.disabled = false;
+                // Handle sheet metal materials differently
+                if (selectedCategory === '02') {
+                    sheetMetalMaterials.forEach(material => {
+                        const option = document.createElement('option');
+                        option.value = material.code;
+                        option.textContent = material.name;
+                        materialSelect.appendChild(option);
+                    });
+                    materialAddBtn.disabled = true;
+                } else {
+                    // Get the appropriate media options based on product
+                    const mediaOptions = mediaOptionsByProduct[selectedProduct] || [];
+                    
+                    // Also include any saved materials
+                    const savedMaterials = savedOptions.materials;
+                    
+                    // Add all available options to the dropdown
+                    [...mediaOptions, ...savedMaterials].forEach(material => {
+                        const option = document.createElement('option');
+                        option.value = material;
+                        option.textContent = material;
+                        materialSelect.appendChild(option);
+                    });
+                    
+                    // Show pocket input if this is a Multi Pocket Filter
+                    const productName = productNameSelect.options[productNameSelect.selectedIndex].text;
+                    if (productName.includes('Multi Pocket Filter')) {
+                        pocketInputGroup.style.display = 'block';
+                    }
+                    
+                    // Enable the add button
+                    materialAddBtn.disabled = false;
+                }
             } else {
                 materialSelect.disabled = true;
                 materialAddBtn.disabled = true;
             }
         }
 
-        // Generate size code from dimensions - now product-specific
+        // Generate size code based on dimensions
         function generateSizeCode() {
-            const lengthInput = document.getElementById('length');
-            const widthInput = document.getElementById('width');
-            const heightInput = document.getElementById('height');
+            const category = document.getElementById('category').value;
+            const regularDimensions = document.getElementById('regularDimensions');
+            const cartridgeDimensions = document.getElementById('cartridgeDimensions');
             const sizeCodeInput = document.getElementById('sizeCode');
-            const productNameSelect = document.getElementById('productName');
+            const cartridgeSizeCodeInput = document.getElementById('cartridgeSizeCode');
             
-            const length = lengthInput.value;
-            const width = widthInput.value;
-            const height = heightInput.value;
-            const productName = productNameSelect.value ? productNameSelect.options[productNameSelect.selectedIndex].text : '';
-            
-            if (length && width && height && productName) {
-                const sizeKey = `${productName}_${length}x${width}x${height}`;
-                
-                // Initialize size code map for this product if it doesn't exist
-                if (!sizeCodeMaps[productName]) {
-                    sizeCodeMaps[productName] = new Map();
-                    sizeCodeCounters[productName] = 1; // Start from 1 for each product
+            if (category === '01') {
+                // Check if we're dealing with cartridge dimensions
+                if (cartridgeDimensions.style.display === 'block') {
+                    const internalTop = document.getElementById('internalTop').value;
+                    const internalBottom = document.getElementById('internalBottom').value;
+                    const externalTop = document.getElementById('externalTop').value;
+                    const externalBottom = document.getElementById('externalBottom').value;
+                    const cartridgeLength = document.getElementById('cartridgeLength').value;
+                    
+                    if (internalTop && internalBottom && externalTop && externalBottom && cartridgeLength) {
+                        const key = `${internalTop}x${internalBottom}x${externalTop}x${externalBottom}x${cartridgeLength}`;
+                        
+                        if (!sizeCodeMaps['cartridge']) {
+                            sizeCodeMaps['cartridge'] = {};
+                            sizeCodeCounters['cartridge'] = 1;
+                        }
+                        
+                        if (!sizeCodeMaps['cartridge'][key]) {
+                            sizeCodeMaps['cartridge'][key] = sizeCodeCounters['cartridge']++;
+                        }
+                        
+                        cartridgeSizeCodeInput.value = `CR${String(sizeCodeMaps['cartridge'][key]).padStart(3, '0')}`;
+                    } else {
+                        cartridgeSizeCodeInput.value = '';
+                    }
+                } else {
+                    // Regular dimensions for filters
+                    const length = document.getElementById('length').value;
+                    const width = document.getElementById('width').value;
+                    const height = document.getElementById('height').value;
+                    
+                    if (length && width && height) {
+                        const key = `${length}x${width}x${height}`;
+                        
+                        if (!sizeCodeMaps['filter']) {
+                            sizeCodeMaps['filter'] = {};
+                            sizeCodeCounters['filter'] = 1;
+                        }
+                        
+                        if (!sizeCodeMaps['filter'][key]) {
+                            sizeCodeMaps['filter'][key] = sizeCodeCounters['filter']++;
+                        }
+                        
+                        sizeCodeInput.value = `FL${String(sizeCodeMaps['filter'][key]).padStart(3, '0')}`;
+                    } else {
+                        sizeCodeInput.value = '';
+                    }
                 }
+            } else if (category === '02') {
+                // Sheet metal dimensions
+                const length = document.getElementById('length').value;
+                const width = document.getElementById('width').value;
+                const height = document.getElementById('height').value;
                 
-                if (!sizeCodeMaps[productName].has(sizeKey)) {
-                    const code = 'A' + String(sizeCodeCounters[productName]).padStart(2, '0');
-                    sizeCodeMaps[productName].set(sizeKey, code);
-                    sizeCodeCounters[productName]++;
+                if (length && width && height) {
+                    const key = `${length}x${width}x${height}`;
+                    
+                    if (!sizeCodeMaps['sheetmetal']) {
+                        sizeCodeMaps['sheetmetal'] = {};
+                        sizeCodeCounters['sheetmetal'] = 1;
+                    }
+                    
+                    if (!sizeCodeMaps['sheetmetal'][key]) {
+                        sizeCodeMaps['sheetmetal'][key] = sizeCodeCounters['sheetmetal']++;
+                    }
+                    
+                    sizeCodeInput.value = `SM${String(sizeCodeMaps['sheetmetal'][key]).padStart(3, '0')}`;
+                } else {
+                    sizeCodeInput.value = '';
                 }
-                
-                sizeCodeInput.value = sizeCodeMaps[productName].get(sizeKey);
             } else {
-                sizeCodeInput.value = '';
+                // Other categories
+                const length = document.getElementById('length').value;
+                const width = document.getElementById('width').value;
+                const height = document.getElementById('height').value;
+                
+                if (length && width && height) {
+                    const key = `${length}x${width}x${height}`;
+                    const categoryPrefix = categoryDescriptions[category].substring(0, 2).toUpperCase();
+                    
+                    if (!sizeCodeMaps[category]) {
+                        sizeCodeMaps[category] = {};
+                        sizeCodeCounters[category] = 1;
+                    }
+                    
+                    if (!sizeCodeMaps[category][key]) {
+                        sizeCodeMaps[category][key] = sizeCodeCounters[category]++;
+                    }
+                    
+                    sizeCodeInput.value = `${categoryPrefix}${String(sizeCodeMaps[category][key]).padStart(3, '0')}`;
+                } else {
+                    sizeCodeInput.value = '';
+                }
             }
         }
-        
-        // Generate part number
+
+        // Generate the part number
         function generatePartNumber() {
-            const categorySelect = document.getElementById('category');
-            const subCategorySelect = document.getElementById('subCategory');
-            const productNameSelect = document.getElementById('productName');
-            const materialSelect = document.getElementById('material');
-            const lengthInput = document.getElementById('length');
-            const widthInput = document.getElementById('width');
-            const heightInput = document.getElementById('height');
-            const sizeCodeInput = document.getElementById('sizeCode');
-            const priceInput = document.getElementById('price');
-            const pocketCountInput = document.getElementById('pocketCount');
+            const category = document.getElementById('category').value;
+            const subCategory = document.getElementById('subCategory').value;
+            const productName = document.getElementById('productName').value;
+            const material = document.getElementById('material').value;
+            const sizeCode = document.getElementById('sizeCode').value;
+            const cartridgeSizeCode = document.getElementById('cartridgeSizeCode').value;
+            const price = document.getElementById('price').value;
+            const pocketCount = document.getElementById('pocketCount').value;
             
-            const partNumberInput = document.getElementById('partNumber');
-            const qrDataInput = document.getElementById('qrData');
-            const resultDiv = document.getElementById('result');
-            
-            if (!categorySelect.value || !subCategorySelect.value || 
-                (['01', '02', '03', '04'].includes(categorySelect.value) && (!productNameSelect.value || !materialSelect.value)) ||
-                (!sizeCodeInput.value && (!lengthInput.value || !widthInput.value || !heightInput.value))) {
-                alert('Harap lengkapi semua field yang diperlukan!');
+            if (!category) {
+                alert('Please select a category');
                 return;
             }
             
             let partNumber = '';
-            partNumber += categorySelect.options[categorySelect.selectedIndex].text.substring(0, 2);
-            partNumber += subCategorySelect.value;
+            let qrData = '';
             
-            if (productNameSelect.value && productNameSelect.disabled === false) {
-                partNumber += productNameSelect.value;
+            // Build the part number based on category
+            if (category === '01') {
+                // Filter category
+                if (!subCategory || !productName || !material || (!sizeCode && !cartridgeSizeCode)) {
+                    alert('Please fill in all required fields for Filter category');
+                    return;
+                }
+                
+                const sizeCodeToUse = cartridgeSizeCode || sizeCode;
+                
+                partNumber = `FAR-${category}${subCategory.padStart(2, '0')}-${productName.padStart(2, '0')}-${material.substring(0, 3).toUpperCase()}-${sizeCodeToUse}`;
+                
+                // Add pocket count if this is a Multi Pocket Filter
+                const productNameText = document.getElementById('productName').options[document.getElementById('productName').selectedIndex].text;
+                if (productNameText.includes('Multi Pocket Filter') && pocketCount) {
+                    partNumber += `-PK${pocketCount.padStart(2, '0')}`;
+                }
+                
+                qrData = `Category: ${categoryDescriptions[category]}\nSub Category: ${document.getElementById('subCategory').options[document.getElementById('subCategory').selectedIndex].text}\nProduct: ${productNameText}\nMaterial: ${material}\nSize: ${sizeCodeToUse}`;
+                
+                if (productNameText.includes('Multi Pocket Filter') && pocketCount) {
+                    qrData += `\nPockets: ${pocketCount}`;
+                }
+            } else if (category === '02') {
+                // Sheet metal category
+                if (!subCategory || !productName || !material || !sizeCode) {
+                    alert('Please fill in all required fields for Sheetmetal category');
+                    return;
+                }
+                
+                partNumber = `FAR-${category}${subCategory.padStart(2, '0')}-${productName.padStart(2, '0')}-${material.padStart(2, '0')}-${sizeCode}`;
+                
+                qrData = `Category: ${categoryDescriptions[category]}\nSub Category: ${document.getElementById('subCategory').options[document.getElementById('subCategory').selectedIndex].text}\nProduct: ${document.getElementById('productName').options[document.getElementById('productName').selectedIndex].text}\nMaterial: ${document.getElementById('material').options[document.getElementById('material').selectedIndex].text}\nSize: ${sizeCode}`;
+            } else {
+                // Other categories
+                if (!sizeCode) {
+                    alert('Please fill in all required fields');
+                    return;
+                }
+                
+                partNumber = `FAR-${category}${subCategory ? subCategory.padStart(2, '0') : '00'}-${productName ? productName.padStart(2, '0') : '00'}-${material ? material.substring(0, 3).toUpperCase() : 'XXX'}-${sizeCode}`;
+                
+                qrData = `Category: ${categoryDescriptions[category]}`;
+                if (subCategory) {
+                    qrData += `\nSub Category: ${document.getElementById('subCategory').options[document.getElementById('subCategory').selectedIndex].text}`;
+                }
+                if (productName) {
+                    qrData += `\nProduct: ${document.getElementById('productName').options[document.getElementById('productName').selectedIndex].text}`;
+                }
+                if (material) {
+                    qrData += `\nMaterial: ${material}`;
+                }
+                qrData += `\nSize: ${sizeCode}`;
             }
             
-            if (materialSelect.value && materialSelect.disabled === false) {
-                const material = materialSelect.value;
-                const product = productNameSelect.value;
-                let mediaOptions = [];
-                
-                if (categorySelect.value === '01') {
-                    mediaOptions = mediaOptionsByProduct[product] || [];
-                }
-                
-                // Find the index of the selected material
-                const materialIndex = mediaOptions.indexOf(material);
-                
-                if (materialIndex !== -1) {
-                    // Use the index + 1 (to start from 1) and pad with leading zero
-                    partNumber += '-' + String(materialIndex + 1).padStart(2, '0');
-                } else {
-                    // Fallback if material not found in predefined list
-                    partNumber += '-00';
-                }
+            if (price) {
+                qrData += `\nPrice: Rp ${parseInt(price).toLocaleString('id-ID')}`;
             }
             
-            if (sizeCodeInput.value) {
-                partNumber += '-' + sizeCodeInput.value;
-            } else if (lengthInput.value && widthInput.value && heightInput.value) {
-                partNumber += '-' + lengthInput.value + 'x' + widthInput.value + 'x' + heightInput.value;
-            }
+            // Display the results
+            document.getElementById('partNumber').value = partNumber;
+            document.getElementById('qrData').value = qrData;
+            document.getElementById('qr-text').textContent = qrData;
+            document.getElementById('result').style.display = 'block';
             
-            // Add pocket count if this is a Multi Pocket Filter
-            const productName = productNameSelect.options[productNameSelect.selectedIndex].text;
-            if (productName.includes('Multi Pocket Filter')) {
-                const pocketCount = pocketCountInput.value || '1';
-                partNumber += '-' + pocketCount.toString().padStart(2, '0');
-            }
-            
-            partNumberInput.value = partNumber;
-            
-            // Create structured QR data in JSON format with proper error handling
-            try {
-                const qrData = {
-                    partNumber: partNumber,
-                    category: categorySelect.options[categorySelect.selectedIndex].text,
-                    subCategory: subCategorySelect.options[subCategorySelect.selectedIndex].text,
-                    product: productNameSelect.value && productNameSelect.disabled === false 
-                        ? productNameSelect.options[productNameSelect.selectedIndex].text 
-                        : null,
-                    material: materialSelect.value && materialSelect.disabled === false 
-                        ? materialSelect.options[materialSelect.selectedIndex].text 
-                        : null,
-                    size: sizeCodeInput.value 
-                        ? sizeCodeInput.value 
-                        : (lengthInput.value && widthInput.value && heightInput.value 
-                            ? `${lengthInput.value}x${widthInput.value}x${heightInput.value} mm` 
-                            : null),
-                    price: priceInput.value 
-                        ? `Rp. ${new Intl.NumberFormat('id-ID').format(priceInput.value)}` 
-                        : null,
-                    pockets: productName.includes('Multi Pocket Filter') 
-                        ? pocketCountInput.value 
-                        : null
-                };
-                
-                const qrDataString = JSON.stringify(qrData, null, 2);
-                qrDataInput.value = qrDataString;
-                
-                // Create display text
-                let displayText = '';
-                displayText += `Kategori: ${qrData.category}\n`;
-                displayText += `Sub Kategori: ${qrData.subCategory}\n`;
-                
-                if (qrData.product) {
-                    displayText += `Produk: ${qrData.product}\n`;
-                }
-                
-                if (qrData.material) {
-                    displayText += `Material: ${qrData.material}\n`;
-                }
-                
-                if (qrData.size) {
-                    displayText += `Ukuran: ${qrData.size}\n`;
-                }
-                
-                if (qrData.pockets) {
-                    displayText += `Jumlah Kantong: ${qrData.pockets}\n`;
-                }
-                
-                if (qrData.price) {
-                    displayText += `Harga: ${qrData.price}`;
-                }
-                
-                document.getElementById('qr-text').textContent = displayText;
-                
-                // Generate QR code with error handling
-                generateQRCode(qrDataString);
-                resultDiv.style.display = 'block';
-                
-                // Save the data to storage
-                savePartNumberData(qrData);
-            } catch (error) {
-                console.error("Error generating part number data:", error);
-                alert("Terjadi kesalahan saat menghasilkan data. Silakan coba lagi dengan input yang berbeda.");
-            }
-        }
-
-        // Generate QR code with improved error handling
-        function generateQRCode(data) {
+            // Generate QR code
             const qrCodeElement = document.getElementById('qr-code');
             qrCodeElement.innerHTML = '';
+            new QRCode(qrCodeElement, {
+                text: qrData,
+                width: 200,
+                height: 200,
+                colorDark: "#000000",
+                colorLight: "#ffffff",
+                correctLevel: QRCode.CorrectLevel.H
+            });
             
-            try {
-                // Ensure data is a string and not empty
-                if (typeof data !== 'string' || data.trim() === '') {
-                    throw new Error("Invalid data for QR code");
-                }
-                
-                // Clean the data by removing problematic characters but preserve structure
-                const cleanedData = data.replace(/[^\x20-\x7E]/g, "");
-                
-                if (cleanedData.length === 0) {
-                    throw new Error("Data became empty after cleaning");
-                }
-                
-                new QRCode(qrCodeElement, {
-                    text: cleanedData,
-                    width: 200,
-                    height: 200,
-                    colorDark: "#000000",
-                    colorLight: "#ffffff",
-                    correctLevel: QRCode.CorrectLevel.H
-                });
-            } catch (error) {
-                console.error("QR Code generation error:", error);
-                qrCodeElement.innerHTML = `
-                    <div style="color:red; padding:10px;">
-                        Error generating QR code for:<br>
-                        ${data.substring(0, 100)}...<br><br>
-                        Please check your input data.
-                    </div>
-                `;
-            }
-        }
-
-        // Save part number data
-        function savePartNumberData(data) {
-            const newData = {
+            // Save to data storage
+            const dataItem = {
                 id: currentDataId++,
-                partNumber: data.partNumber,
-                category: data.category,
-                subCategory: data.subCategory,
-                product: data.product || '-',
-                material: data.material || '-',
-                size: data.size || '-',
-                price: data.price || '-',
-                pockets: data.pockets || null,
-                categoryCode: data.partNumber.substring(0, 2)
+                partNumber: partNumber,
+                category: categoryDescriptions[category],
+                subCategory: subCategory ? document.getElementById('subCategory').options[document.getElementById('subCategory').selectedIndex].text : '',
+                product: productName ? document.getElementById('productName').options[document.getElementById('productName').selectedIndex].text : '',
+                material: material || '',
+                size: sizeCode || cartridgeSizeCode,
+                price: price ? parseInt(price) : 0,
+                timestamp: new Date().toISOString()
             };
             
-            partNumberData.push(newData);
+            partNumberData.unshift(dataItem);
             savePartNumberDataToStorage();
             updateDataTable();
-            filterDataTable(newData.categoryCode);
+            
+            // Scroll to result
+            document.getElementById('result').scrollIntoView({ behavior: 'smooth' });
         }
 
-        // Update data table
-        function updateDataTable(data = partNumberData) {
+        // Copy text to clipboard
+        function copyToClipboard(elementId) {
+            const element = document.getElementById(elementId);
+            element.select();
+            document.execCommand('copy');
+            
+            // Show a temporary tooltip
+            const originalText = element.nextElementSibling.textContent;
+            element.nextElementSibling.textContent = 'Copied!';
+            setTimeout(() => {
+                element.nextElementSibling.textContent = originalText;
+            }, 2000);
+        }
+
+        // Save QR code as image
+        function saveQRCode(format) {
+            const qrCodeElement = document.getElementById('qr-code');
+            
+            html2canvas(qrCodeElement).then(canvas => {
+                const link = document.createElement('a');
+                link.download = `QR_${document.getElementById('partNumber').value}.${format}`;
+                link.href = canvas.toDataURL(`image/${format}`);
+                link.click();
+            });
+        }
+
+        // Update the data table
+        function updateDataTable(filterCategory = 'all') {
             const tableBody = document.getElementById('tableBody');
             
-            if (data.length === 0) {
+            if (partNumberData.length === 0) {
                 tableBody.innerHTML = '<tr><td colspan="9" class="no-data">Belum ada data</td></tr>';
                 return;
             }
             
             tableBody.innerHTML = '';
             
-            data.forEach((item, index) => {
+            const filteredData = filterCategory === 'all' 
+                ? partNumberData 
+                : partNumberData.filter(item => item.partNumber.startsWith(`FAR-${filterCategory}`));
+            
+            if (filteredData.length === 0) {
+                tableBody.innerHTML = '<tr><td colspan="9" class="no-data">Tidak ada data untuk kategori ini</td></tr>';
+                return;
+            }
+            
+            filteredData.forEach((item, index) => {
                 const row = document.createElement('tr');
                 
                 row.innerHTML = `
@@ -1606,12 +1747,10 @@
                     <td>${item.product}</td>
                     <td>${item.material}</td>
                     <td>${item.size}</td>
-                    <td>${item.price}</td>
-                    <td>
-                        <div class="action-buttons">
-                            <button class="action-btn view-btn" onclick="viewItem(${item.id})">Lihat</button>
-                            <button class="action-btn delete-btn" onclick="deleteItem(${item.id})">Hapus</button>
-                        </div>
+                    <td>${item.price ? 'Rp ' + item.price.toLocaleString('id-ID') : '-'}</td>
+                    <td class="action-buttons">
+                        <button class="action-btn view-btn" onclick="viewItem(${item.id})">View</button>
+                        <button class="action-btn delete-btn" onclick="deleteItem(${item.id})">Delete</button>
                     </td>
                 `;
                 
@@ -1619,48 +1758,15 @@
             });
         }
 
-        // Search function for the data table
-        function searchTable() {
-            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-            if (!searchTerm) {
-                updateDataTable(partNumberData);
-                return;
-            }
-            
-            const filteredData = partNumberData.filter(item => {
-                return (
-                    item.partNumber.toLowerCase().includes(searchTerm) ||
-                    item.category.toLowerCase().includes(searchTerm) ||
-                    item.subCategory.toLowerCase().includes(searchTerm) ||
-                    item.product.toLowerCase().includes(searchTerm) ||
-                    item.material.toLowerCase().includes(searchTerm) ||
-                    item.size.toLowerCase().includes(searchTerm) ||
-                    item.price.toLowerCase().includes(searchTerm)
-                );
-            });
-            
-            updateDataTable(filteredData);
-        }
-
         // Filter data table by category
-        function filterDataTable(categoryCode) {
-            const tabs = document.querySelectorAll('.category-tab');
-            tabs.forEach(tab => {
+        function filterDataTable(category) {
+            // Update active tab
+            document.querySelectorAll('.category-tab').forEach(tab => {
                 tab.classList.remove('active');
-                if ((tab.textContent === 'Semua' && categoryCode === 'all') || 
-                    (tab.textContent.includes(categoryDescriptions[categoryCode]))) {
-                    tab.classList.add('active');
-                }
             });
+            event.target.classList.add('active');
             
-            let filteredData = [];
-            if (categoryCode === 'all') {
-                filteredData = partNumberData;
-            } else {
-                filteredData = partNumberData.filter(item => item.categoryCode === categoryCode);
-            }
-            
-            updateDataTable(filteredData);
+            updateDataTable(category);
         }
 
         // View item details
@@ -1668,129 +1774,94 @@
             const item = partNumberData.find(item => item.id === id);
             if (!item) return;
             
+            // Display the item details in the form
+            // This would need to parse the part number and set all the form fields accordingly
+            // For now, we'll just show the QR data
             document.getElementById('partNumber').value = item.partNumber;
-            
-            const qrData = {
-                partNumber: item.partNumber,
-                category: item.category,
-                subCategory: item.subCategory,
-                product: item.product !== '-' ? item.product : null,
-                material: item.material !== '-' ? item.material : null,
-                size: item.size !== '-' ? item.size : null,
-                price: item.price !== '-' ? item.price : null,
-                pockets: item.pockets || null
-            };
-            
-            const qrDataString = JSON.stringify(qrData, null, 2);
-            document.getElementById('qrData').value = qrDataString;
-            
-            let displayText = '';
-            displayText += `Kategori: ${qrData.category}\n`;
-            displayText += `Sub Kategori: ${qrData.subCategory}\n`;
-            
-            if (qrData.product) {
-                displayText += `Produk: ${qrData.product}\n`;
-            }
-            
-            if (qrData.material) {
-                displayText += `Material: ${qrData.material}\n`;
-            }
-            
-            if (qrData.size) {
-                displayText += `Ukuran: ${qrData.size}\n`;
-            }
-            
-            if (qrData.pockets) {
-                displayText += `Jumlah Kantong: ${qrData.pockets}\n`;
-            }
-            
-            if (qrData.price) {
-                displayText += `Harga: ${qrData.price}`;
-            }
-            
-            document.getElementById('qr-text').textContent = displayText;
-            generateQRCode(qrDataString);
+            document.getElementById('qrData').value = item.qrData;
+            document.getElementById('qr-text').textContent = item.qrData;
             document.getElementById('result').style.display = 'block';
+            
+            // Generate QR code
+            const qrCodeElement = document.getElementById('qr-code');
+            qrCodeElement.innerHTML = '';
+            new QRCode(qrCodeElement, {
+                text: item.qrData,
+                width: 200,
+                height: 200,
+                colorDark: "#000000",
+                colorLight: "#ffffff",
+                correctLevel: QRCode.CorrectLevel.H
+            });
+            
+            // Scroll to result
             document.getElementById('result').scrollIntoView({ behavior: 'smooth' });
         }
 
         // Delete item
         function deleteItem(id) {
-            if (confirm('Apakah Anda yakin ingin menghapus data ini?')) {
+            if (confirm('Are you sure you want to delete this item?')) {
                 partNumberData = partNumberData.filter(item => item.id !== id);
                 savePartNumberDataToStorage();
                 updateDataTable();
-                
-                if (partNumberData.length === 0) {
-                    document.getElementById('tableBody').innerHTML = '<tr><td colspan="9" class="no-data">Belum ada data</td></tr>';
-                }
             }
-        }
-
-        // Save QR code as image
-        function saveQRCode(format) {
-            const qrElement = document.getElementById('qr-code');
-            const partNumber = document.getElementById('partNumber').value || 'QRCode';
-            
-            html2canvas(qrElement).then(canvas => {
-                const link = document.createElement('a');
-                link.download = `QR_${partNumber}.${format}`;
-                link.href = canvas.toDataURL(`image/${format}`);
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-            }).catch(err => {
-                console.error('Error saving QR code:', err);
-                alert('Error saving QR code. Please try again.');
-            });
-        }
-
-        // Export to Excel function
-        function exportToExcel() {
-            // Create workbook
-            const wb = XLSX.utils.book_new();
-            
-            // Convert table data to worksheet
-            const ws = XLSX.utils.table_to_sheet(document.getElementById('dataTable'));
-            
-            // Add worksheet to workbook
-            XLSX.utils.book_append_sheet(wb, ws, "PartNumbers");
-            
-            // Generate Excel file and download
-            const date = new Date().toISOString().slice(0, 10);
-            XLSX.writeFile(wb, `PartNumbers_${date}.xlsx`);
-        }
-
-        // Copy to clipboard
-        function copyToClipboard(elementId) {
-            const element = document.getElementById(elementId);
-            element.select();
-            document.execCommand('copy');
-            alert('Copied to clipboard: ' + element.value);
         }
 
         // Clear all data
         function clearAllData() {
-            if (confirm('Are you sure you want to clear ALL data? This cannot be undone!')) {
+            if (confirm('Are you sure you want to delete ALL data? This cannot be undone.')) {
                 partNumberData = [];
                 currentDataId = 1;
-                localStorage.removeItem('partNumberData');
+                savePartNumberDataToStorage();
                 updateDataTable();
-                document.getElementById('tableBody').innerHTML = '<tr><td colspan="9" class="no-data">Belum ada data</td></tr>';
             }
         }
 
-        // Add event listener for product name change to update material options
-        document.getElementById('productName').addEventListener('change', function() {
-            updateMaterialOptions();
-        });
-
-        // Add event listener for Enter key in search input
-        document.getElementById('searchInput').addEventListener('keyup', function(event) {
-            if (event.key === 'Enter') {
-                searchTable();
+        // Export to Excel
+        function exportToExcel() {
+            if (partNumberData.length === 0) {
+                alert('No data to export');
+                return;
             }
-        });
+            
+            // Prepare the data
+            const data = partNumberData.map(item => ({
+                'Part Number': item.partNumber,
+                'Kategori': item.category,
+                'Sub Kategori': item.subCategory,
+                'Produk': item.product,
+                'Material': item.material,
+                'Ukuran': item.size,
+                'Harga': item.price ? 'Rp ' + item.price.toLocaleString('id-ID') : '-',
+                'Tanggal': new Date(item.timestamp).toLocaleString('id-ID')
+            }));
+            
+            // Create worksheet
+            const ws = XLSX.utils.json_to_sheet(data);
+            
+            // Create workbook
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, 'PartNumbers');
+            
+            // Export to file
+            XLSX.writeFile(wb, `Farrindo_Part_Numbers_${new Date().toISOString().slice(0, 10)}.xlsx`);
+        }
+
+        // Search table
+        function searchTable() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const rows = document.querySelectorAll('#tableBody tr');
+            
+            if (!searchTerm) {
+                rows.forEach(row => row.style.display = '');
+                return;
+            }
+            
+            rows.forEach(row => {
+                const rowText = row.textContent.toLowerCase();
+                row.style.display = rowText.includes(searchTerm) ? '' : 'none';
+            });
+        }
     </script>
 </body>
 </html>
