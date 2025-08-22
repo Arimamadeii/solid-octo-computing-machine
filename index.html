@@ -1672,13 +1672,38 @@
             }
             
             // Display the results
-            document.getElementById('partNumber').value = partNumber;
-            document.getElementById('qrData').value = qrData;
-            document.getElementById('qr-text').textContent = qrData;
-            document.getElementById('result').style.display = 'block';
+        document.getElementById('partNumber').value = partNumber;
+
+// Format qrData baru sesuai kebutuhan
+        qrData = `PART NUMBER: ${partNumber}
+`;
+        qrData += `CATEGORY: ${categoryInfo.name}
+`;
+        if (subCategory) {
+            qrData += `SUB CATEGORY: ${document.getElementById('subCategory').options[document.getElementById('subCategory').selectedIndex].text}
+`;
+        }
+        if (productName) {
+            qrData += `PRODUCT: ${document.getElementById('productName').options[document.getElementById('productName').selectedIndex].text}
+`;
+        }
+        if (material) {
+            qrData += `MATERIAL: ${material}
+`;
+        }
+        qrData += `DIMENSIONS: ${getDimensionsString()}
+`;
+        if (price) {
+            qrData += `PRICE: Rp ${parseInt(price).toLocaleString('id-ID')}`;
+        }
+
+        document.getElementById('qrData').value = qrData;
+        document.getElementById('qr-text').textContent = qrData;
+        document.getElementById('result').style.display = 'block';
+
             
             // Generate QR code
-            generateAndStoreQRCode(qrData);
+            generateAndStoreQRCode(partNumber);
             
             // Save to data storage
             const dataItem = {
