@@ -1016,6 +1016,7 @@
         
         // Data storage
         let partNumberData = [];
+let productSizeTracker = {};
         let currentDataId = 1;
         
         // Show login modal when page loads
@@ -1598,8 +1599,26 @@
 
         // Generate the part number
         function generatePartNumber() {
-  	    let selectedCategory = document.getElementById('category').value;
- 	    const categoryInfo = categoryMappings[selectedCategory];
+  let selectedCategory = document.getElementById('category').value;
+  const categoryInfo = categoryMappings[selectedCategory];
+  const subCategory = document.getElementById('subCategory').value;
+  const productName = document.getElementById('productName');
+  const productText = productName.options[productName.selectedIndex].text;
+  const material = document.getElementById('material').value;
+  const length = document.getElementById('length').value;
+  const width = document.getElementById('width').value;
+  const height = document.getElementById('height').value;
+  const price = document.getElementById('price').value;
+
+  // ✅ Auto Size Code per produk
+  if (!productSizeTracker[productText]) {
+    productSizeTracker[productText] = 1;
+  } else {
+    productSizeTracker[productText]++;
+  }
+  let sizeCode = "A" + productSizeTracker[productText].toString().padStart(3, "0");
+
+            const category = document.getElementById('category').value;
             const subCategory = document.getElementById('subCategory').value;
             const productName = document.getElementById('productName').value;
             const material = document.getElementById('material').value;
