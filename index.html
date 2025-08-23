@@ -1598,19 +1598,18 @@ let productSizeTracker = {};
         }
 
         // Generate the part number
-        function generatePartNumber() {
+function generatePartNumber() {
   let selectedCategory = document.getElementById('category').value;
-  const categoryInfo = categoryMappings[selectedCategory];
-  const subCategory = document.getElementById('subCategory').value;
-  const productName = document.getElementById('productName');
-  const productText = productName.options[productName.selectedIndex].text;
-  const material = document.getElementById('material').value;
-  const length = document.getElementById('length').value;
-  const width = document.getElementById('width').value;
-  const height = document.getElementById('height').value;
-  const price = document.getElementById('price').value;
-
-  // ✅ Auto Size Code per produk
+  let subCategory = document.getElementById('subCategory').value;
+  let productName = document.getElementById('productName');
+  let productText = productName.options[productName.selectedIndex].text;
+  let material = document.getElementById('material').value;
+  let length = document.getElementById('length').value;
+  let width = document.getElementById('width').value;
+  let height = document.getElementById('height').value;
+  let price = document.getElementById('price').value;
+  
+// ✅ Auto Size Code per produk
   if (!productSizeTracker[productText]) {
     productSizeTracker[productText] = 1;
   } else {
