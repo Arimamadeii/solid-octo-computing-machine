@@ -1075,7 +1075,7 @@
         // Function to update size counter in Sheets
         async function updateSizeCounter(type, newValue) {
             try {
-                await fetch(APPS_SCRIPT_URL, {
+                await fetch("https://script.google.com/macros/s/AKfycbxjs9DrsKnhq8r9vZRetKRSnwkaYBZZ6icReM4rko5QGRjDx1GyXRpnTcEDUW4XGWrk5g/exec", {
                     method: 'POST',
                     body: JSON.stringify({ action: 'updateCounter', type, value: newValue })
                 });
@@ -1729,7 +1729,7 @@
                 savePartNumberDataToStorage();
                 updateDataTable();
                 
-                fetch(APPS_SCRIPT_URL, {
+                fetch("https://script.google.com/macros/s/AKfycbxjs9DrsKnhq8r9vZRetKRSnwkaYBZZ6icReM4rko5QGRjDx1GyXRpnTcEDUW4XGWrk5g/exec", {
                     method: "POST",
                     body: JSON.stringify(dataItem)
                 }).then(res => res.text())
@@ -1957,3 +1957,4 @@
     </script>
 </body>
 </html>
+
