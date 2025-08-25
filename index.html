@@ -428,54 +428,7 @@
             z-index: 1001;
         }
     </style>
-    <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js">
-    // === Tambahan integrasi Google Sheets ===
-    const scriptUrl = "https://script.google.com/macros/s/AKfycbxjs9DrsKnhq8r9vZRetKRSnwkaYBZZ6icReM4rko5QGRjDx1GyXRpnTcEDUW4XGWrk5g/exec";
-
-    async function loadDataFromSheet() {
-      try {
-        let res = await fetch(scriptUrl);
-        let data = await res.json();
-        const tbody = document.getElementById("dataTableBody");
-        if (!tbody) return;
-        tbody.innerHTML = "";
-        data.forEach((item, idx) => {
-          const row = document.createElement("tr");
-          row.innerHTML = `
-            <td>${idx+1}</td>
-            <td>${item.partNumber}</td>
-            <td>${item.category}</td>
-            <td>${item.subCategory}</td>
-            <td>${item.product}</td>
-            <td>${item.material}</td>
-            <td>${item.size}</td>
-            <td>${item.dimensions}</td>
-            <td>${item.price}</td>
-            <td><button onclick="lihatData('${item.partNumber}')">Lihat</button></td>
-          `;
-          tbody.appendChild(row);
-        });
-      } catch (err) {
-        console.error("Error fetch sheet:", err);
-      }
-    }
-
-    function lihatData(partNumber) {
-      fetch(scriptUrl)
-        .then(res => res.json())
-        .then(data => {
-          const item = data.find(d => d.partNumber === partNumber);
-          if (item) {
-            document.getElementById("qr-text").textContent = item.qrData;
-            document.getElementById("qr-code").innerHTML = `<img src="${item.qrImage}">`;
-            document.getElementById("result").style.display = "block";
-            document.getElementById("partNumber").value = item.partNumber;
-            document.getElementById("qrData").value = item.qrData;
-          }
-        });
-    }
-
-</script>
+    <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     <script src="https://cdn.sheetjs.com/xlsx-0.19.3/package/dist/xlsx.full.min.js"></script>
 </head>
@@ -1016,7 +969,6 @@
         
         // Data storage
         let partNumberData = [];
-let productSizeTracker = {};
         let currentDataId = 1;
         
         // Show login modal when page loads
@@ -1598,25 +1550,7 @@ let productSizeTracker = {};
         }
 
         // Generate the part number
-function generatePartNumber() {
-  let selectedCategory = document.getElementById('category').value;
-  let subCategory = document.getElementById('subCategory').value;
-  let productName = document.getElementById('productName');
-  let productText = productName.options[productName.selectedIndex].text;
-  let material = document.getElementById('material').value;
-  let length = document.getElementById('length').value;
-  let width = document.getElementById('width').value;
-  let height = document.getElementById('height').value;
-  let price = document.getElementById('price').value;
-  
-// ✅ Auto Size Code per produk
-  if (!productSizeTracker[productText]) {
-    productSizeTracker[productText] = 1;
-  } else {
-    productSizeTracker[productText]++;
-  }
-  let sizeCode = "A" + productSizeTracker[productText].toString().padStart(3, "0");
-
+        function generatePartNumber() {
             const category = document.getElementById('category').value;
             const subCategory = document.getElementById('subCategory').value;
             const productName = document.getElementById('productName').value;
