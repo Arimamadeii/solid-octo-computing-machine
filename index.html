@@ -162,8 +162,8 @@
             margin-top: 10px;
         }
         
-        /* Header Type Input Styles */
-        .header-type-input {
+        /* Header Type Styles */
+        .header-type {
             display: none;
             margin-top: 10px;
         }
@@ -204,50 +204,6 @@
         }
         .search-container button:hover {
             background-color: #2980b9;
-        }
-        
-        /* Unit Converter Styles */
-        .unit-converter {
-            position: fixed;
-            top: 60px;
-            right: 10px;
-            background-color: rgba(255, 255, 255, 0.95);
-            border: 1px solid #ddd;
-            padding: 10px;
-            border-radius: 5px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            z-index: 1000;
-            width: 250px;
-        }
-        .unit-converter h3 {
-            margin: 0 0 10px 0;
-            font-size: 14px;
-            color: #2c3e50;
-            text-align: center;
-        }
-        .converter-input {
-            display: flex;
-            margin-bottom: 8px;
-        }
-        .converter-input input {
-            flex: 1;
-            padding: 5px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-        }
-        .converter-input select {
-            width: 70px;
-            margin-left: 5px;
-            padding: 5px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-        }
-        .converter-result {
-            margin-top: 8px;
-            padding: 8px;
-            background-color: #f9f9f9;
-            border-radius: 4px;
-            font-size: 12px;
         }
         
         /* Main Application Styles */
@@ -477,6 +433,37 @@
             right: 10px;
             z-index: 1001;
         }
+        /* Unit Converter Styles */
+        .unit-converter {
+            position: fixed;
+            top: 60px;
+            right: 10px;
+            background-color: #f9f9f9;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            z-index: 1000;
+            width: 250px;
+        }
+        .unit-converter h3 {
+            margin-top: 0;
+            font-size: 16px;
+        }
+        .converter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .converter-input {
+            display: flex;
+            gap: 5px;
+        }
+        .converter-input input {
+            flex: 1;
+        }
+        .converter-input select {
+            width: auto;
+        }
     </style>
     <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
@@ -488,33 +475,36 @@
         <img src="https://www.farrindo.co.id/wp-content/uploads/2025/01/300x39-logofarrindo2025bawahbanget.webp" alt="Farrindo Logo" width="150" height="20">
     </div>
 
+    <!-- Unit Converter -->
+    <div class="unit-converter">
+        <h3>Unit Converter</h3>
+        <div class="converter-group">
+            <label>Value to Convert</label>
+            <div class="converter-input">
+                <input type="number" id="convertValue" placeholder="Enter value" oninput="convertUnits()">
+                <select id="fromUnit" onchange="convertUnits()">
+                    <option value="mm">mm</option>
+                    <option value="cm">cm</option>
+                    <option value="inch">inch</option>
+                </select>
+            </div>
+            <div class="converter-input">
+                <input type="text" id="toMm" readonly placeholder="in mm">
+            </div>
+            <div class="converter-input">
+                <input type="text" id="toCm" readonly placeholder="in cm">
+            </div>
+            <div class="converter-input">
+                <input type="text" id="toInch" readonly placeholder="in inch">
+            </div>
+        </div>
+    </div>
+
     <!-- Jakarta Clock -->
     <div class="jakarta-clock">
         <div>Jakarta, Indonesia</div>
         <div class="clock-time" id="jakarta-time"></div>
         <div class="clock-date" id="jakarta-date"></div>
-    </div>
-
-    <!-- Unit Converter -->
-    <div class="unit-converter">
-        <h3>Unit Converter</h3>
-        <div class="converter-input">
-            <input type="number" id="converterValue" placeholder="Value" value="1">
-            <select id="converterFrom">
-                <option value="mm">mm</option>
-                <option value="cm">cm</option>
-                <option value="inch">inch</option>
-            </select>
-        </div>
-        <div class="converter-input">
-            <input type="number" id="converterResult" placeholder="Result" readonly>
-            <select id="converterTo">
-                <option value="mm">mm</option>
-                <option value="cm" selected>cm</option>
-                <option value="inch">inch</option>
-            </select>
-        </div>
-        <div class="converter-result" id="converterFormula"></div>
     </div>
 
     <!-- Login Modal -->
@@ -603,7 +593,7 @@
                 </div>
                 
                 <div class="form-group" id="productNameGroup">
-                    <label for="productName">Nama Product</label>
+                    <label for="productName" id="productNameLabel">Nama Product</label>
                     <div class="dropdown-with-add">
                         <select id="productName" onchange="updateMaterialOptions()" disabled>
                             <option value="">-- Pilih Nama Product --</option>
@@ -612,18 +602,18 @@
                     </div>
                 </div>
                 
-                <!-- Header Type Input -->
-                <div class="form-group header-type-input" id="headerTypeGroup">
-                    <label for="headerType">Tipe Header</label>
+                <div class="form-group header-type" id="headerTypeGroup">
+                    <label for="headerType">Header Type</label>
                     <select id="headerType">
-                        <option value="1">1. Non Header</option>
-                        <option value="2">2. Single Header</option>
-                        <option value="3">3. Double Header</option>
+                        <option value="">-- Select Header Type --</option>
+                        <option value="Non Header">Non Header</option>
+                        <option value="Single Header">Single Header</option>
+                        <option value="Double Header">Double Header</option>
                     </select>
                 </div>
                 
                 <div class="form-group" id="materialGroup">
-                    <label for="material">Bahan/Media Utama</label>
+                    <label for="material" id="materialLabel">Bahan/Media Utama</label>
                     <div class="dropdown-with-add">
                         <select id="material" disabled>
                             <option value="">-- Pilih Bahan/Media --</option>
@@ -641,7 +631,7 @@
             
             <!-- Regular Dimensions Section -->
             <div class="section" id="regularDimensions">
-                <div class="section-title">Ukuran (mm)</div>
+                <div class="section-title" id="dimensionsTitle">Ukuran (mm)</div>
                 <div class="form-group">
                     <div class="dimensions">
                         <div class="dimension-input">
@@ -700,15 +690,6 @@
                 <div class="form-group">
                     <label for="cartridgeSizeCode">Kode Ukuran</label>
                     <input type="text" id="cartridgeSizeCode" readonly>
-                </div>
-            </div>
-            
-            <!-- Order Number Section for Raw Materials -->
-            <div class="section" id="orderNumberSection" style="display: none;">
-                <div class="section-title">Nomor Order (PO)</div>
-                <div class="form-group">
-                    <label for="orderNumber">Nomor Order</label>
-                    <input type="text" id="orderNumber">
                 </div>
             </div>
             
@@ -778,13 +759,12 @@
                                 <th>Material</th>
                                 <th>Ukuran</th>
                                 <th>Harga</th>
-                                <th>Header Type</th>
                                 <th>Aksi</th>
                             </tr>
                         </thead>
                         <tbody id="tableBody">
                             <tr>
-                                <td colspan="10" class="no-data">Belum ada data</td>
+                                <td colspan="9" class="no-data">Belum ada data</td>
                             </tr>
                         </tbody>
                     </table>
@@ -975,9 +955,6 @@
             '06': []
         };
 
-        // Products that require header type selection
-        const headerTypeProducts = ['06', '11', '04', '02', '03', '04', '02', '05'];
-
         // Media options classified by subcategory with codes
         const mediaOptionsBySubCategory = {
             '01': [ // Pre Filter
@@ -1072,108 +1049,47 @@
             {code: '35', name: "Plat Besi Hitam 2.0mm x 4ft x 8ft (STD)"}
         ];
 
-        // Size code maps loaded from Google Sheets
-        let sizeCodeMaps = {};
+        // Size code maps
+        const sizeCodeMaps = {};
         let sizeCodeCounters = {};
         
         // Data storage
         let partNumberData = [];
         let currentDataId = 1;
         
+        // Apps Script URL - Ganti dengan URL Apps Script Anda yang sebenarnya
+        const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxjs9DrsKnhq8r9vZRetKRSnwkaYBZZ6icReM4rko5QGRjDx1GyXRpnTcEDUW4XGWrk5g/exec";
+        
+        // Function to fetch size counter from Sheets
+        async function fetchSizeCounter(type) {
+            try {
+                const response = await fetch(`${APPS_SCRIPT_URL}?action=getCounter&type=${type}`);
+                const data = await response.json();
+                return data.counter || 1;
+            } catch (err) {
+                console.error('Error fetching counter:', err);
+                return 1;
+            }
+        }
+        
+        // Function to update size counter in Sheets
+        async function updateSizeCounter(type, newValue) {
+            try {
+                await fetch(APPS_SCRIPT_URL, {
+                    method: 'POST',
+                    body: JSON.stringify({ action: 'updateCounter', type, value: newValue })
+                });
+            } catch (err) {
+                console.error('Error updating counter:', err);
+            }
+        }
+
         // Show login modal when page loads
         document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('loginModal').style.display = 'block';
             loadSavedOptions();
             loadPartNumberData();
-            loadSizeCodesFromSheets();
-            setupUnitConverter();
         });
-
-        // Setup unit converter
-        function setupUnitConverter() {
-            const converterValue = document.getElementById('converterValue');
-            const converterFrom = document.getElementById('converterFrom');
-            const converterTo = document.getElementById('converterTo');
-            
-            const updateConversion = () => {
-                const value = parseFloat(converterValue.value) || 0;
-                const fromUnit = converterFrom.value;
-                const toUnit = converterTo.value;
-                
-                // Convert to mm first
-                let valueInMm;
-                switch(fromUnit) {
-                    case 'mm': valueInMm = value; break;
-                    case 'cm': valueInMm = value * 10; break;
-                    case 'inch': valueInMm = value * 25.4; break;
-                }
-                
-                // Convert from mm to target unit
-                let result;
-                switch(toUnit) {
-                    case 'mm': result = valueInMm; break;
-                    case 'cm': result = valueInMm / 10; break;
-                    case 'inch': result = valueInMm / 25.4; break;
-                }
-                
-                document.getElementById('converterResult').value = result.toFixed(4);
-                
-                // Show conversion formula
-                let formula = '';
-                if (fromUnit !== toUnit) {
-                    formula = `${value} ${fromUnit} = ${result.toFixed(4)} ${toUnit}`;
-                    if (fromUnit === 'inch' && toUnit === 'mm') formula += ` (×25.4)`;
-                    if (fromUnit === 'mm' && toUnit === 'inch') formula += ` (÷25.4)`;
-                    if (fromUnit === 'cm' && toUnit === 'mm') formula += ` (×10)`;
-                    if (fromUnit === 'mm' && toUnit === 'cm') formula += ` (÷10)`;
-                }
-                document.getElementById('converterFormula').textContent = formula;
-            };
-            
-            converterValue.addEventListener('input', updateConversion);
-            converterFrom.addEventListener('change', updateConversion);
-            converterTo.addEventListener('change', updateConversion);
-            
-            // Initial calculation
-            updateConversion();
-        }
-
-        // Load size codes from Google Sheets
-        function loadSizeCodesFromSheets() {
-            // In a real implementation, this would fetch from Google Sheets
-            // For now, we'll simulate with localStorage
-            const savedSizeCodes = localStorage.getItem('sizeCodeData');
-            if (savedSizeCodes) {
-                const data = JSON.parse(savedSizeCodes);
-                sizeCodeMaps = data.maps || {};
-                sizeCodeCounters = data.counters || {};
-            } else {
-                // Initialize with default values
-                sizeCodeMaps = {
-                    'filter': {},
-                    'sheetmetal': {},
-                    'cartridge': {}
-                };
-                sizeCodeCounters = {
-                    'filter': 1,
-                    'sheetmetal': 1,
-                    'cartridge': 1
-                };
-            }
-        }
-
-        // Save size codes to Google Sheets (simulated with localStorage)
-        function saveSizeCodesToSheets() {
-            const data = {
-                maps: sizeCodeMaps,
-                counters: sizeCodeCounters,
-                timestamp: new Date().toISOString()
-            };
-            localStorage.setItem('sizeCodeData', JSON.stringify(data));
-            
-            // In a real implementation, this would send to Google Sheets
-            console.log("Size codes saved (would send to Google Sheets in production)");
-        }
 
         // Login validation
         function validateLogin() {
@@ -1243,6 +1159,7 @@
             const parentSubCategory = document.getElementById('parentSubCategory');
             const codeField = document.getElementById('newOptionCode');
             const nameField = document.getElementById('newOptionName');
+            const codeFieldGroup = document.getElementById('codeFieldGroup');
             
             // Reset fields
             codeField.value = '';
@@ -1253,16 +1170,14 @@
                     title.textContent = 'Add New Category';
                     categorySelection.style.display = 'none';
                     subCategorySelection.style.display = 'none';
-                    codeField.style.display = 'block';
-                    codeField.previousElementSibling.style.display = 'block';
+                    codeFieldGroup.style.display = 'block';
                     break;
                     
                 case 'subCategory':
                     title.textContent = 'Add New Sub Category';
                     categorySelection.style.display = 'block';
                     subCategorySelection.style.display = 'none';
-                    codeField.style.display = 'block';
-                    codeField.previousElementSibling.style.display = 'block';
+                    codeFieldGroup.style.display = 'block';
                     
                     parentCategory.innerHTML = '<option value="">-- Select Category --</option>';
                     document.querySelectorAll('#category option').forEach(option => {
@@ -1279,8 +1194,7 @@
                     title.textContent = 'Add New Product Name';
                     categorySelection.style.display = 'block';
                     subCategorySelection.style.display = 'block';
-                    codeField.style.display = 'block';
-                    codeField.previousElementSibling.style.display = 'block';
+                    codeFieldGroup.style.display = 'block';
                     
                     parentCategory.innerHTML = '<option value="">-- Select Category --</option>';
                     document.querySelectorAll('#category option').forEach(option => {
@@ -1299,16 +1213,7 @@
                     title.textContent = 'Add New Material';
                     categorySelection.style.display = 'none';
                     subCategorySelection.style.display = 'none';
-                    
-                    // For materials, we only need the name field
-                    codeField.style.display = 'none';
-                    codeField.previousElementSibling.style.display = 'none';
-                    
-                    // Set the current sub-category as context for the new material
-                    const currentSubCategory = document.getElementById('subCategory').value;
-                    if (currentSubCategory) {
-                        document.getElementById('parentSubCategory').value = currentSubCategory;
-                    }
+                    codeFieldGroup.style.display = 'none';
                     break;
             }
             
@@ -1348,22 +1253,19 @@
             const code = document.getElementById('newOptionCode').value;
             const name = document.getElementById('newOptionName').value;
             
-            if (currentAddOptionType === 'material' && !name) {
-                alert('Please fill in the material name');
+            if (!name) {
+                alert('Please fill in the name');
                 return false;
             }
             
-            if (currentAddOptionType !== 'material' && (!code || !name)) {
-                alert('Please fill in both code and name');
+            if (currentAddOptionType !== 'material' && !code) {
+                alert('Please fill in the code');
                 return false;
             }
             
             switch(currentAddOptionType) {
                 case 'category':
-                    const newCategory = {
-                        value: code,
-                        text: code + '. ' + name
-                    };
+                    const newCategory = {value: code, text: code + '. ' + name};
                     savedOptions.categories.push(newCategory);
                     addOptionToSelect('category', newCategory.value, newCategory.text);
                     break;
@@ -1375,10 +1277,7 @@
                         return false;
                     }
                     
-                    const newSubCategory = {
-                        value: code,
-                        text: code + '. ' + name
-                    };
+                    const newSubCategory = {value: code, text: code + '. ' + name};
                     
                     if (!savedOptions.subCategories[parentCategory]) {
                         savedOptions.subCategories[parentCategory] = [];
@@ -1400,10 +1299,7 @@
                         return false;
                     }
                     
-                    const newProductName = {
-                        value: code,
-                        text: name
-                    };
+                    const newProductName = {value: code, text: name};
                     
                     const key = parentCategoryPN + '-' + parentSubCategoryPN;
                     if (!savedOptions.productNames[key]) {
@@ -1420,24 +1316,8 @@
                     
                 case 'material':
                     const newMaterial = name;
-                    const subCategory = document.getElementById('parentSubCategory').value;
-                    
-                    if (!subCategory) {
-                        alert('Please select a sub-category first');
-                        return false;
-                    }
-                    
-                    // Only save if it's a valid material for this sub-category
-                    const validMediaOptions = mediaOptionsBySubCategory[subCategory] || [];
-                    if (!validMediaOptions.some(m => m.name === newMaterial)) {
-                        savedOptions.materials.push(newMaterial);
-                    }
-                    
-                    // Update the material dropdown if we're currently viewing this sub-category
-                    const currentProduct = document.getElementById('productName').value;
-                    if (currentProduct) {
-                        addOptionToSelect('material', newMaterial, newMaterial);
-                    }
+                    savedOptions.materials.push(newMaterial);
+                    addOptionToSelect('material', newMaterial, newMaterial);
                     break;
             }
             
@@ -1465,14 +1345,16 @@
             const subCategorySelect = document.getElementById('subCategory');
             const productNameSelect = document.getElementById('productName');
             const productNameGroup = document.getElementById('productNameGroup');
+            const productNameLabel = document.getElementById('productNameLabel');
             const materialSelect = document.getElementById('material');
             const materialGroup = document.getElementById('materialGroup');
+            const materialLabel = document.getElementById('materialLabel');
             const materialAddBtn = document.getElementById('materialAddBtn');
             const pocketInputGroup = document.getElementById('pocketInputGroup');
             const headerTypeGroup = document.getElementById('headerTypeGroup');
             const regularDimensions = document.getElementById('regularDimensions');
+            const dimensionsTitle = document.getElementById('dimensionsTitle');
             const cartridgeDimensions = document.getElementById('cartridgeDimensions');
-            const orderNumberSection = document.getElementById('orderNumberSection');
             
             subCategorySelect.innerHTML = '<option value="">-- Pilih Sub Kategori --</option>';
             productNameSelect.innerHTML = '<option value="">-- Pilih Nama Product --</option>';
@@ -1481,7 +1363,6 @@
             headerTypeGroup.style.display = 'none';
             regularDimensions.style.display = 'block';
             cartridgeDimensions.style.display = 'none';
-            orderNumberSection.style.display = 'none';
             
             const selectedCategory = categorySelect.value;
             
@@ -1493,35 +1374,39 @@
                 const allSubs = [...defaultSubs, ...savedSubs];
                 
                 allSubs.forEach(sub => {
-                    const option = document.createElement('option');
-                    option.value = sub.value;
-                    option.textContent = sub.text;
-                    subCategorySelect.appendChild(option);
+                    addOptionToSelect('subCategory', sub.value, sub.text);
                 });
                 
-                if (['01', '02', '03', '04'].includes(selectedCategory)) {
-                    productNameGroup.style.display = 'block';
-                    materialGroup.style.display = 'block';
-                } else {
-                    productNameGroup.style.display = 'none';
-                    materialGroup.style.display = 'none';
-                }
-                
-                // Show order number section for raw materials
                 if (selectedCategory === '03') {
-                    orderNumberSection.style.display = 'block';
-                    regularDimensions.style.display = 'none';
+                    productNameLabel.textContent = 'Jenis Bahan Baku';
+                    materialLabel.textContent = 'Nama Bahan';
+                    document.getElementById('material').outerHTML = '<input type="text" id="material">';
+                    materialAddBtn.style.display = 'none';
+                    dimensionsTitle.textContent = 'Nomor Order (PO)';
+                    document.getElementById('length').outerHTML = '<input type="text" id="length">';
+                    document.getElementById('width').style.display = 'none';
+                    document.getElementById('height').style.display = 'none';
+                    document.querySelector('.generate-size-btn').style.display = 'none';
+                    document.getElementById('sizeCode').outerHTML = '<input type="text" id="sizeCode" readonly style="display:none;">';
+                } else {
+                    productNameLabel.textContent = 'Nama Product';
+                    materialLabel.textContent = 'Bahan/Media Utama';
+                    document.getElementById('material').outerHTML = '<select id="material" disabled><option value="">-- Pilih Bahan/Media --</option></select>';
+                    materialAddBtn.style.display = 'inline-block';
+                    dimensionsTitle.textContent = 'Ukuran (mm)';
+                    document.getElementById('length').outerHTML = '<input type="number" id="length" min="0">';
+                    document.getElementById('width').style.display = 'block';
+                    document.getElementById('height').style.display = 'block';
+                    document.querySelector('.generate-size-btn').style.display = 'block';
+                    document.getElementById('sizeCode').outerHTML = '<input type="text" id="sizeCode" readonly>';
                 }
             } else {
                 subCategorySelect.disabled = true;
-                productNameSelect.disabled = true;
-                materialSelect.disabled = true;
-                materialAddBtn.disabled = true;
-                productNameGroup.style.display = 'none';
-                materialGroup.style.display = 'none';
             }
+            
+            updateProductNames();
         }
-        
+
         // Update product names dropdown
         function updateProductNames() {
             const categorySelect = document.getElementById('category');
@@ -1553,20 +1438,10 @@
                 const allProducts = [...defaultProducts, ...savedProducts];
                 
                 allProducts.forEach(product => {
-                    const option = document.createElement('option');
-                    option.value = product.value;
-                    option.textContent = product.text;
-                    productNameSelect.appendChild(option);
+                    addOptionToSelect('productName', product.value, product.text);
                 });
                 
-                // Enable material add button only for Filter category (01)
                 materialAddBtn.disabled = selectedCategory !== '01';
-                
-                // Show header type dropdown for specific products
-                const selectedProduct = productNameSelect.value;
-                if (headerTypeProducts.includes(selectedProduct)) {
-                    headerTypeGroup.style.display = 'block';
-                }
             } else {
                 productNameSelect.disabled = true;
                 materialSelect.disabled = true;
@@ -1597,75 +1472,53 @@
             if (selectedProduct) {
                 materialSelect.disabled = false;
                 
-                // Show header type dropdown for specific products
-                if (headerTypeProducts.includes(selectedProduct)) {
-                    headerTypeGroup.style.display = 'block';
-                }
-                
                 // Check if this is a cartridge filter product
                 const cartridgeProducts = ['06', '07', '08', '09'];
-                if (cartridgeProducts.includes(selectedProduct) && selectedSubCategory === '05') {
+                if (selectedCategory === '01' && selectedSubCategory === '05' && cartridgeProducts.includes(selectedProduct)) {
                     regularDimensions.style.display = 'none';
                     cartridgeDimensions.style.display = 'block';
                 }
                 
-                // Handle sheet metal materials differently
+                // Check for header type products
+                const headerProducts = {
+                    '02-06': true, // NAF RIGID Medium Filter
+                    '02-11': true, // NAF PAC
+                    '03-04': true, // NAF Absolute XL | HEPA Filter High Capacity
+                    '03-02': true, // NAF Absolute HEPA Minipleat XL – Deep 12 Inch
+                    '03-03': true, // NAF Absolute HEPA Minipleat XL – Deep 6 Inch
+                    '04-02': true, // NAF PAC GT
+                    '04-05': true  // NAF RIGID GT
+                };
+                
+                const subKey = selectedSubCategory + '-' + selectedProduct;
+                if (headerProducts[subKey] && selectedCategory === '01') {
+                    headerTypeGroup.style.display = 'block';
+                }
+                
+                // Handle materials
                 if (selectedCategory === '02') {
                     sheetMetalMaterials.forEach(material => {
-                        const option = document.createElement('option');
-                        option.value = material.code;
-                        option.textContent = material.name;
-                        materialSelect.appendChild(option);
+                        addOptionToSelect('material', material.code, material.name);
                     });
                     materialAddBtn.disabled = true;
                 } else if (selectedCategory === '01') {
-                    // Get the appropriate media options based on subcategory
                     const mediaOptions = mediaOptionsBySubCategory[selectedSubCategory] || [];
-                    
-                    // Also include any saved materials
-                    const savedMaterials = savedOptions.materials;
-                    
-                    // Add all available options to the dropdown
                     mediaOptions.forEach(material => {
-                        const option = document.createElement('option');
-                        option.value = material.name;
-                        option.textContent = material.name;
-                        materialSelect.appendChild(option);
+                        addOptionToSelect('material', material.name, material.name);
+                    });
+                    savedOptions.materials.forEach(material => {
+                        addOptionToSelect('material', material, material);
                     });
                     
-                    savedMaterials.forEach(material => {
-                        const option = document.createElement('option');
-                        option.value = material;
-                        option.textContent = material;
-                        materialSelect.appendChild(option);
-                    });
-                    
-                    // Show pocket input if this is a Multi Pocket Filter
-                    const productName = productNameSelect.options[productNameSelect.selectedIndex].text;
-                    if (productName.includes('Multi Pocket Filter')) {
+                    const productText = productNameSelect.options[productNameSelect.selectedIndex].text;
+                    if (productText.includes('Multi Pocket Filter')) {
                         pocketInputGroup.style.display = 'block';
                     }
                     
-                    // Enable the add button
                     materialAddBtn.disabled = false;
                 } else if (selectedCategory === '03') {
-                    // For raw materials, change to text input
-                    materialSelect.innerHTML = '';
-                    materialSelect.disabled = true;
-                    materialAddBtn.disabled = true;
-                    
-                    // Create a text input for raw materials
-                    const materialInput = document.createElement('input');
-                    materialInput.type = 'text';
-                    materialInput.id = 'materialText';
-                    materialInput.placeholder = 'Masukkan nama bahan';
-                    
-                    // Replace the select with input
-                    const materialContainer = materialSelect.parentNode;
-                    materialSelect.style.display = 'none';
-                    materialContainer.appendChild(materialInput);
+                    // For Bahan baku, material is text input, already handled in updateSubCategories
                 } else {
-                    // For other categories, enable material add button
                     materialAddBtn.disabled = false;
                 }
             } else {
@@ -1675,345 +1528,314 @@
         }
 
         // Generate size code based on dimensions
-        function generateSizeCode() {
+        async function generateSizeCode() {
             const category = document.getElementById('category').value;
             const regularDimensions = document.getElementById('regularDimensions');
             const cartridgeDimensions = document.getElementById('cartridgeDimensions');
             const sizeCodeInput = document.getElementById('sizeCode');
             const cartridgeSizeCodeInput = document.getElementById('cartridgeSizeCode');
             
-            if (category === '01') {
-                // Check if we're dealing with cartridge dimensions
-                if (cartridgeDimensions.style.display === 'block') {
-                    const internalTop = document.getElementById('internalTop').value;
-                    const internalBottom = document.getElementById('internalBottom').value;
-                    const externalTop = document.getElementById('externalTop').value;
-                    const externalBottom = document.getElementById('externalBottom').value;
-                    const cartridgeLength = document.getElementById('cartridgeLength').value;
-                    
-                    if (internalTop && internalBottom && externalTop && externalBottom && cartridgeLength) {
-                        const key = `${internalTop}x${internalBottom}x${externalTop}x${externalBottom}x${cartridgeLength}`;
-                        
-                        if (!sizeCodeMaps['cartridge']) {
-                            sizeCodeMaps['cartridge'] = {};
-                            sizeCodeCounters['cartridge'] = 1;
-                        }
-                        
-                        if (!sizeCodeMaps['cartridge'][key]) {
-                            sizeCodeMaps['cartridge'][key] = sizeCodeCounters['cartridge']++;
-                        }
-                        
-                        cartridgeSizeCodeInput.value = `A${String(sizeCodeMaps['cartridge'][key]).padStart(3, '0')}`;
-                    } else {
-                        cartridgeSizeCodeInput.value = '';
-                    }
-                } else {
-                    // Regular dimensions for filters
-                    const length = document.getElementById('length').value;
-                    const width = document.getElementById('width').value;
-                    const height = document.getElementById('height').value;
-                    
-                    if (length && width && height) {
-                        const key = `${length}x${width}x${height}`;
-                        
-                        if (!sizeCodeMaps['filter']) {
-                            sizeCodeMaps['filter'] = {};
-                            sizeCodeCounters['filter'] = 1;
-                        }
-                        
-                        if (!sizeCodeMaps['filter'][key]) {
-                            sizeCodeMaps['filter'][key] = sizeCodeCounters['filter']++;
-                        }
-                        
-                        sizeCodeInput.value = `A${String(sizeCodeMaps['filter'][key]).padStart(3, '0')}`;
-                    } else {
-                        sizeCodeInput.value = '';
-                    }
-                }
-            } else if (category === '02') {
-                // Sheet metal dimensions
-                const length = document.getElementById('length').value;
-                const width = document.getElementById('width').value;
-                const height = document.getElementById('height').value;
+            let type, key;
+            
+            if (category === '03') {
+                sizeCodeInput.value = document.getElementById('length').value || '';
+                return;
+            }
+            
+            if (cartridgeDimensions.style.display === 'block') {
+                const internalTop = document.getElementById('internalTop').value;
+                const internalBottom = document.getElementById('internalBottom').value;
+                const externalTop = document.getElementById('externalTop').value;
+                const externalBottom = document.getElementById('externalBottom').value;
+                const cartridgeLength = document.getElementById('cartridgeLength').value;
                 
-                if (length && width && height) {
-                    const key = `${length}x${width}x${height}`;
-                    
-                    if (!sizeCodeMaps['sheetmetal']) {
-                        sizeCodeMaps['sheetmetal'] = {};
-                        sizeCodeCounters['sheetmetal'] = 1;
-                    }
-                    
-                    if (!sizeCodeMaps['sheetmetal'][key]) {
-                        sizeCodeMaps['sheetmetal'][key] = sizeCodeCounters['sheetmetal']++;
-                    }
-                    
-                    sizeCodeInput.value = `A${String(sizeCodeMaps['sheetmetal'][key]).padStart(3, '0')}`;
+                if (internalTop && internalBottom && externalTop && externalBottom && cartridgeLength) {
+                    key = `${internalTop}x${internalBottom}x${externalTop}x${externalBottom}x${cartridgeLength}`;
+                    type = 'cartridge';
                 } else {
-                    sizeCodeInput.value = '';
+                    cartridgeSizeCodeInput.value = '';
+                    return;
                 }
             } else {
-                // Other categories
                 const length = document.getElementById('length').value;
                 const width = document.getElementById('width').value;
                 const height = document.getElementById('height').value;
                 
                 if (length && width && height) {
-                    const key = `${length}x${width}x${height}`;
-                    const categoryPrefix = categoryMappings[category].prefix.substring(1);
-                    
-                    if (!sizeCodeMaps[category]) {
-                        sizeCodeMaps[category] = {};
-                        sizeCodeCounters[category] = 1;
-                    }
-                    
-                    if (!sizeCodeMaps[category][key]) {
-                        sizeCodeMaps[category][key] = sizeCodeCounters[category]++;
-                    }
-                    
-                    sizeCodeInput.value = `A${String(sizeCodeMaps[category][key]).padStart(3, '0')}`;
+                    key = `${length}x${width}x${height}`;
+                    type = category === '01' ? 'filter' : category === '02' ? 'sheetmetal' : category;
                 } else {
                     sizeCodeInput.value = '';
+                    return;
                 }
             }
             
-            // Save size codes to Google Sheets
-            saveSizeCodesToSheets();
+            if (!sizeCodeMaps[type]) {
+                sizeCodeMaps[type] = {};
+            }
+            
+            if (!sizeCodeMaps[type][key]) {
+                sizeCodeCounters[type] = await fetchSizeCounter(type);
+                sizeCodeMaps[type][key] = sizeCodeCounters[type]++;
+                await updateSizeCounter(type, sizeCodeCounters[type]);
+            }
+            
+            const code = `A${String(sizeCodeMaps[type][key]).padStart(3, '0')}`;
+            
+            if (cartridgeDimensions.style.display === 'block') {
+                cartridgeSizeCodeInput.value = code;
+            } else {
+                sizeCodeInput.value = code;
+            }
         }
 
         // Generate the part number
-        function generatePartNumber() {
-            const category = document.getElementById('category').value;
-            const subCategory = document.getElementById('subCategory').value;
-            const productName = document.getElementById('productName').value;
-            const material = document.getElementById('material').value;
-            const materialText = document.getElementById('materialText') ? document.getElementById('materialText').value : '';
-            const sizeCode = document.getElementById('sizeCode').value;
-            const cartridgeSizeCode = document.getElementById('cartridgeSizeCode').value;
-            const headerType = document.getElementById('headerType').value;
-            const pocketCount = document.getElementById('pocketCount').value;
-            const price = document.getElementById('price').value;
-            const orderNumber = document.getElementById('orderNumber').value;
+        function generatePartNumber(isView = false, existingItem = null) {
+            let category, subCategory, productName, material, sizeCode, cartridgeSizeCode, price, pocketCount, headerType;
             
-            // Validate required fields
-            if (!category) {
-                alert('Please select a category');
-                return;
-            }
-            
-            if (!subCategory) {
-                alert('Please select a sub category');
-                return;
-            }
-            
-            // For categories 01-02, 04, product name is required
-            if (['01', '02', '04'].includes(category) && !productName) {
-                alert('Please select a product name');
-                return;
-            }
-            
-            // For category 01, material is required
-            if (category === '01' && !material && !materialText) {
-                alert('Please select or enter a material');
-                return;
-            }
-            
-            // For category 03, material text is required
-            if (category === '03' && !materialText) {
-                alert('Please enter a material name');
-                return;
-            }
-            
-            // For categories 01-02, size code is required
-            if (['01', '02'].includes(category) && !sizeCode && !cartridgeSizeCode) {
-                alert('Please generate a size code');
-                return;
-            }
-            
-            // For category 03, order number is required
-            if (category === '03' && !orderNumber) {
-                alert('Please enter an order number');
-                return;
-            }
-            
-            // Build the part number
-            let partNumber = '';
-            
-            // Category prefix
-            partNumber += categoryMappings[category].prefix;
-            
-            // Sub category
-            partNumber += '-' + subCategory;
-            
-            // Product name
-            if (productName) {
-                partNumber += '-' + productName.padStart(2, '0');
+            if (isView && existingItem) {
+                // For view, use existing data to regenerate
+                category = Object.keys(categoryMappings).find(key => categoryMappings[key].name === existingItem.category);
+                subCategory = existingItem.subCategory.split('.')[0].trim();
+                productName = existingItem.product ? existingItem.product.split(' ')[0] : '';
+                material = existingItem.material;
+                sizeCode = existingItem.size;
+                price = existingItem.price;
+                headerType = existingItem.headerType || ''; // Assume we stored headerType
+                // Parse dimensions back if needed, but since we're regenerating QR, we can use existing qrData
             } else {
-                partNumber += '-00';
+                category = document.getElementById('category').value;
+                subCategory = document.getElementById('subCategory').value;
+                productName = document.getElementById('productName').value;
+                material = document.getElementById('material').value;
+                sizeCode = document.getElementById('sizeCode').value;
+                cartridgeSizeCode = document.getElementById('cartridgeSizeCode').value;
+                price = document.getElementById('price').value;
+                pocketCount = document.getElementById('pocketCount').value;
+                headerType = document.getElementById('headerType').value;
             }
             
-            // Material code (handle different approaches for different categories)
+            if (!category) {
+                if (!isView) alert('Please select a category');
+                return;
+            }
+            
+            const categoryInfo = categoryMappings[category];
+            if (!categoryInfo) {
+                if (!isView) alert('Invalid category selected');
+                return;
+            }
+            
+            let partNumber = '';
+            let qrData = '';
+            
+            // Build the part number based on category
             if (category === '01') {
-                // For filters, use the material code from the predefined list
-                const subCatMedia = mediaOptionsBySubCategory[subCategory] || [];
-                const materialObj = subCatMedia.find(m => m.name === material);
+                if (!subCategory || !productName || !material || (!sizeCode && !cartridgeSizeCode)) {
+                    if (!isView) alert('Please fill in all required fields for Filter category');
+                    return;
+                }
                 
-                if (materialObj) {
-                    partNumber += '-' + materialObj.code.padStart(2, '0');
-                } else {
-                    // For custom materials, use a generic code
-                    partNumber += '-99';
+                const sizeCodeToUse = cartridgeSizeCode || sizeCode;
+                
+                const mediaOptions = mediaOptionsBySubCategory[subCategory] || [];
+                const mediaInfo = mediaOptions.find(m => m.name === material);
+                const mediaCode = mediaInfo ? mediaInfo.code : '00';
+                
+                partNumber = `${categoryInfo.prefix}${subCategory}${productName.padStart(2, '0')}-${mediaCode}${sizeCodeToUse}`;
+                
+                qrData = `Category: ${categoryInfo.name}\n`;
+                qrData += `Sub Category: ${isView ? existingItem.subCategory : document.getElementById('subCategory').options[document.getElementById('subCategory').selectedIndex].text}\n`;
+                qrData += `Product: ${isView ? existingItem.product : document.getElementById('productName').options[document.getElementById('productName').selectedIndex].text}\n`;
+                qrData += `Material: ${material}\n`;
+                
+                qrData += `Dimensions: ${isView ? existingItem.dimensions : getDimensionsString()}\n`;
+                
+                const productNameText = isView ? existingItem.product : document.getElementById('productName').options[document.getElementById('productName').selectedIndex].text;
+                if (productNameText.includes('Multi Pocket Filter') && pocketCount) {
+                    qrData += `Pockets: ${pocketCount}\n`;
+                }
+                
+                if (headerType) {
+                    qrData += `Header Type: ${headerType}\n`;
                 }
             } else if (category === '02') {
-                // For sheet metal, use the material code directly
-                partNumber += '-' + material.padStart(2, '0');
+                if (!subCategory || !productName || !material || !sizeCode) {
+                    if (!isView) alert('Please fill in all required fields for Sheetmetal category');
+                    return;
+                }
+                
+                partNumber = `${categoryInfo.prefix}${subCategory}${productName.padStart(2, '0')}-${material}${sizeCode}`;
+                
+                qrData = `Category: ${categoryInfo.name}\n`;
+                qrData += `Sub Category: ${isView ? existingItem.subCategory : document.getElementById('subCategory').options[document.getElementById('subCategory').selectedIndex].text}\n`;
+                qrData += `Product: ${isView ? existingItem.product : document.getElementById('productName').options[document.getElementById('productName').selectedIndex].text}\n`;
+                
+                const materialInfo = sheetMetalMaterials.find(m => m.code === material);
+                qrData += `Material: ${materialInfo ? materialInfo.name : material}\n`;
+                
+                qrData += `Dimensions: ${isView ? existingItem.dimensions : getDimensionsString()}\n`;
             } else if (category === '03') {
-                // For raw materials, use a fixed code based on subcategory
-                partNumber += '-' + '01'; // Default code for raw materials
+                if (!subCategory || !productName || !material || !sizeCode) {
+                    if (!isView) alert('Please fill in all required fields for Bahan baku');
+                    return;
+                }
+                
+                partNumber = `${categoryInfo.prefix}${subCategory}${productName.padStart(2, '0')}-${sizeCode}`;
+                
+                qrData = `Category: ${categoryInfo.name}\n`;
+                qrData += `Sub Category: ${isView ? existingItem.subCategory : document.getElementById('subCategory').options[document.getElementById('subCategory').selectedIndex].text}\n`;
+                qrData += `Jenis Bahan Baku: ${isView ? existingItem.product : document.getElementById('productName').options[document.getElementById('productName').selectedIndex].text}\n`;
+                qrData += `Nama Bahan: ${material}\n`;
+                qrData += `Nomor Order (PO): ${sizeCode}\n`;
             } else {
-                // For other categories, use a fixed code
-                partNumber += '-' + '01';
-            }
-            
-            // Size code
-            if (cartridgeSizeCode) {
-                partNumber += '-' + cartridgeSizeCode;
-            } else if (sizeCode) {
-                partNumber += '-' + sizeCode;
-            } else {
-                partNumber += '-A000';
-            }
-            
-            // Header type (if applicable)
-            const productSelect = document.getElementById('productName');
-            const selectedProduct = productSelect.options[productSelect.selectedIndex].value;
-            
-            if (headerTypeProducts.includes(selectedProduct)) {
-                partNumber += '-' + headerType;
-            }
-            
-            // Pocket count (if applicable)
-            const productNameText = productSelect.options[productSelect.selectedIndex].text;
-            if (productNameText.includes('Multi Pocket Filter')) {
-                partNumber += '-' + pocketCount.padStart(2, '0');
-            }
-            
-            // For raw materials, add order number
-            if (category === '03') {
-                partNumber += '-' + orderNumber;
-            }
-            
-            // Display the part number
-            document.getElementById('partNumber').value = partNumber;
-            document.getElementById('result').style.display = 'block';
-            
-            // Generate QR data
-            const categoryName = document.getElementById('category').options[document.getElementById('category').selectedIndex].text;
-            const subCategoryName = document.getElementById('subCategory').options[document.getElementById('subCategory').selectedIndex].text;
-            const productNameText = document.getElementById('productName').options[document.getElementById('productName').selectedIndex]?.text || '';
-            const materialName = category === '03' ? materialText : document.getElementById('material').options[document.getElementById('material').selectedIndex]?.text || '';
-            
-            let qrData = `Part Number: ${partNumber}\n`;
-            qrData += `Category: ${categoryName}\n`;
-            qrData += `Sub Category: ${subCategoryName}\n`;
-            
-            if (productNameText) {
-                qrData += `Product: ${productNameText}\n`;
-            }
-            
-            if (materialName) {
-                qrData += `Material: ${materialName}\n`;
-            }
-            
-            // Add dimensions to QR data
-            if (category === '01' && document.getElementById('cartridgeDimensions').style.display === 'block') {
-                qrData += `Internal Top: ${document.getElementById('internalTop').value}mm\n`;
-                qrData += `Internal Bottom: ${document.getElementById('internalBottom').value}mm\n`;
-                qrData += `External Top: ${document.getElementById('externalTop').value}mm\n`;
-                qrData += `External Bottom: ${document.getElementById('externalBottom').value}mm\n`;
-                qrData += `Length: ${document.getElementById('cartridgeLength').value}mm\n`;
-            } else if (['01', '02'].includes(category)) {
-                qrData += `Length: ${document.getElementById('length').value}mm\n`;
-                qrData += `Width: ${document.getElementById('width').value}mm\n`;
-                qrData += `Height: ${document.getElementById('height').value}mm\n`;
+                partNumber = `${categoryInfo.prefix}${subCategory ? subCategory.padStart(2, '0') : '00'}${productName ? productName.padStart(2, '0') : '00'}-${material ? material.padStart(2, '0') : '00'}${sizeCode}`;
+                
+                qrData = `Category: ${categoryInfo.name}\n`;
+                if (subCategory) qrData += `Sub Category: ${isView ? existingItem.subCategory : document.getElementById('subCategory').options[document.getElementById('subCategory').selectedIndex].text}\n`;
+                if (productName) qrData += `Product: ${isView ? existingItem.product : document.getElementById('productName').options[document.getElementById('productName').selectedIndex].text}\n`;
+                if (material) qrData += `Material: ${material}\n`;
+                qrData += `Dimensions: ${isView ? existingItem.dimensions : getDimensionsString()}\n`;
             }
             
             if (price) {
-                qrData += `Price: Rp. ${parseInt(price).toLocaleString('id-ID')}\n`;
+                qrData += `Price: Rp ${parseInt(price).toLocaleString('id-ID')}`;
             }
             
-            if (category === '03' && orderNumber) {
-                qrData += `Order Number: ${orderNumber}\n`;
-            }
-            
-            qrData += `Generated: ${new Date().toLocaleString('id-ID')}`;
-            
+            document.getElementById('partNumber').value = partNumber;
             document.getElementById('qrData').value = qrData;
             document.getElementById('qr-text').textContent = qrData;
+            document.getElementById('result').style.display = 'block';
             
-            // Generate QR code
-            const qrContainer = document.getElementById('qr-code');
-            qrContainer.innerHTML = '';
-            new QRCode(qrContainer, {
-                text: qrData,
+            generateAndStoreQRCode(partNumber);
+            
+            if (!isView) {
+                const dataItem = {
+                    id: currentDataId++,
+                    partNumber: partNumber,
+                    category: categoryInfo.name,
+                    subCategory: document.getElementById('subCategory').options[document.getElementById('subCategory').selectedIndex].text,
+                    product: category === '03' ? document.getElementById('productName').options[document.getElementById('productName').selectedIndex].text : document.getElementById('productName').options[document.getElementById('productName').selectedIndex].text,
+                    material: material,
+                    size: sizeCode || cartridgeSizeCode,
+                    dimensions: getDimensionsString(),
+                    price: price ? parseInt(price) : 0,
+                    headerType: headerType || '',
+                    qrData: qrData,
+                    timestamp: new Date().toISOString()
+                };
+                
+                partNumberData.unshift(dataItem);
+                savePartNumberDataToStorage();
+                updateDataTable();
+                
+                fetch(APPS_SCRIPT_URL, {
+                    method: "POST",
+                    body: JSON.stringify(dataItem)
+                }).then(res => res.text())
+                  .then(msg => console.log("Google Sheets response:", msg))
+                  .catch(err => console.error("Error sending to Sheets:", err));
+            }
+            
+            document.getElementById('result').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function getDimensionsString() {
+            const category = document.getElementById('category').value;
+            if (category === '03') {
+                return document.getElementById('length').value;
+            }
+            
+            const cartridgeDimensions = document.getElementById('cartridgeDimensions');
+            if (cartridgeDimensions.style.display === 'block') {
+                const internalTop = document.getElementById('internalTop').value;
+                const internalBottom = document.getElementById('internalBottom').value;
+                const externalTop = document.getElementById('externalTop').value;
+                const externalBottom = document.getElementById('externalBottom').value;
+                const cartridgeLength = document.getElementById('cartridgeLength').value;
+                return `IT${internalTop}×IB${internalBottom}×ET${externalTop}×EB${externalBottom}×L${cartridgeLength}mm`;
+            } else {
+                const length = document.getElementById('length').value;
+                const width = document.getElementById('width').value;
+                const height = document.getElementById('height').value;
+                return `${length}×${width}×${height}mm`;
+            }
+        }
+
+        function generateAndStoreQRCode(data) {
+            const qrCodeElement = document.getElementById('qr-code');
+            qrCodeElement.innerHTML = '';
+            new QRCode(qrCodeElement, {
+                text: data,
                 width: 200,
                 height: 200,
-                colorDark: '#000000',
-                colorLight: '#ffffff',
+                colorDark: "#000000",
+                colorLight: "#ffffff",
                 correctLevel: QRCode.CorrectLevel.H
             });
-            
-            // Save the part number data
-            savePartNumberData(partNumber, categoryName, subCategoryName, productNameText, materialName, 
-                              sizeCode || cartridgeSizeCode, price, headerType);
         }
 
-        // Save part number data to storage and update table
-        function savePartNumberData(partNumber, category, subCategory, product, material, size, price, headerType) {
-            const newData = {
-                id: currentDataId++,
-                partNumber: partNumber,
-                category: category,
-                subCategory: subCategory,
-                product: product,
-                material: material,
-                size: size,
-                price: price ? `Rp. ${parseInt(price).toLocaleString('id-ID')}` : '-',
-                headerType: headerType || '-',
-                timestamp: new Date().toISOString()
-            };
+        // Copy text to clipboard
+        function copyToClipboard(elementId) {
+            const element = document.getElementById(elementId);
+            element.select();
+            document.execCommand('copy');
             
-            partNumberData.push(newData);
-            savePartNumberDataToStorage();
-            updateDataTable();
+            // Show a temporary tooltip
+            const originalText = element.nextElementSibling.textContent;
+            element.nextElementSibling.textContent = 'Copied!';
+            setTimeout(() => {
+                element.nextElementSibling.textContent = originalText;
+            }, 2000);
         }
 
-        // Update data table with all part numbers
-        function updateDataTable() {
+        // Save QR code as image
+        function saveQRCode(format) {
+            const qrCodeElement = document.getElementById('qr-code');
+            
+            html2canvas(qrCodeElement).then(canvas => {
+                const link = document.createElement('a');
+                link.download = `QR_${document.getElementById('partNumber').value}.${format}`;
+                link.href = canvas.toDataURL(`image/${format}`);
+                link.click();
+            });
+        }
+
+        // Update the data table
+        function updateDataTable(filterCategory = 'all') {
             const tableBody = document.getElementById('tableBody');
-            tableBody.innerHTML = '';
             
             if (partNumberData.length === 0) {
-                tableBody.innerHTML = '<tr><td colspan="10" class="no-data">Belum ada data</td></tr>';
+                tableBody.innerHTML = '<tr><td colspan="9" class="no-data">Belum ada data</td></tr>';
                 return;
             }
             
-            partNumberData.forEach((data, index) => {
+            tableBody.innerHTML = '';
+            
+            const filteredData = filterCategory === 'all' 
+                ? partNumberData 
+                : partNumberData.filter(item => item.partNumber.startsWith(filterCategory));
+            
+            if (filteredData.length === 0) {
+                tableBody.innerHTML = '<tr><td colspan="9" class="no-data">Tidak ada data untuk kategori ini</td></tr>';
+                return;
+            }
+            
+            filteredData.forEach((item, index) => {
                 const row = document.createElement('tr');
                 
                 row.innerHTML = `
                     <td>${index + 1}</td>
-                    <td>${data.partNumber}</td>
-                    <td>${data.category}</td>
-                    <td>${data.subCategory}</td>
-                    <td>${data.product}</td>
-                    <td>${data.material}</td>
-                    <td>${data.size}</td>
-                    <td>${data.price}</td>
-                    <td>${data.headerType}</td>
+                    <td>${item.partNumber}</td>
+                    <td>${item.category}</td>
+                    <td>${item.subCategory}</td>
+                    <td>${item.product}</td>
+                    <td>${item.material}</td>
+                    <td>${item.dimensions}</td>
+                    <td>${item.price ? 'Rp ' + item.price.toLocaleString('id-ID') : '-'}</td>
                     <td class="action-buttons">
-                        <button class="action-btn view-btn" onclick="viewData(${data.id})">View</button>
-                        <button class="action-btn delete-btn" onclick="deleteData(${data.id})">Delete</button>
+                        <button class="action-btn view-btn" onclick="viewItem(${item.id})">View</button>
+                        <button class="action-btn delete-btn" onclick="deleteItem(${item.id})">Delete</button>
                     </td>
                 `;
                 
@@ -2023,125 +1845,43 @@
 
         // Filter data table by category
         function filterDataTable(category) {
-            const tabs = document.querySelectorAll('.category-tab');
-            tabs.forEach(tab => tab.classList.remove('active'));
-            
+            document.querySelectorAll('.category-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
             event.target.classList.add('active');
             
-            const tableBody = document.getElementById('tableBody');
-            tableBody.innerHTML = '';
-            
-            let filteredData = partNumberData;
-            
-            if (category !== 'all') {
-                filteredData = partNumberData.filter(data => data.partNumber.startsWith(category));
-            }
-            
-            if (filteredData.length === 0) {
-                tableBody.innerHTML = '<tr><td colspan="10" class="no-data">Tidak ada data untuk kategori ini</td></tr>';
-                return;
-            }
-            
-            filteredData.forEach((data, index) => {
-                const row = document.createElement('tr');
-                
-                row.innerHTML = `
-                    <td>${index + 1}</td>
-                    <td>${data.partNumber}</td>
-                    <td>${data.category}</td>
-                    <td>${data.subCategory}</td>
-                    <td>${data.product}</td>
-                    <td>${data.material}</td>
-                    <td>${data.size}</td>
-                    <td>${data.price}</td>
-                    <td>${data.headerType}</td>
-                    <td class="action-buttons">
-                        <button class="action-btn view-btn" onclick="viewData(${data.id})">View</button>
-                        <button class="action-btn delete-btn" onclick="deleteData(${data.id})">Delete</button>
-                    </td>
-                `;
-                
-                tableBody.appendChild(row);
-            });
+            updateDataTable(category);
         }
 
-        // Search table
-        function searchTable() {
-            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-            const tableBody = document.getElementById('tableBody');
-            tableBody.innerHTML = '';
+        // View item details
+        function viewItem(id) {
+            const item = partNumberData.find(item => item.id === id);
+            if (!item) return;
             
-            if (!searchTerm) {
+            generatePartNumber(true, item);
+        }
+
+        // Delete item
+        function deleteItem(id) {
+            if (confirm('Are you sure you want to delete this item?')) {
+                partNumberData = partNumberData.filter(item => item.id !== id);
+                savePartNumberDataToStorage();
                 updateDataTable();
-                return;
-            }
-            
-            const filteredData = partNumberData.filter(data => 
-                data.partNumber.toLowerCase().includes(searchTerm) ||
-                data.category.toLowerCase().includes(searchTerm) ||
-                data.subCategory.toLowerCase().includes(searchTerm) ||
-                data.product.toLowerCase().includes(searchTerm) ||
-                data.material.toLowerCase().includes(searchTerm)
-            );
-            
-            if (filteredData.length === 0) {
-                tableBody.innerHTML = '<tr><td colspan="10" class="no-data">Tidak ada data yang cocok</td></tr>';
-                return;
-            }
-            
-            filteredData.forEach((data, index) => {
-                const row = document.createElement('tr');
                 
-                row.innerHTML = `
-                    <td>${index + 1}</td>
-                    <td>${data.partNumber}</td>
-                    <td>${data.category}</td>
-                    <td>${data.subCategory}</td>
-                    <td>${data.product}</td>
-                    <td>${data.material}</td>
-                    <td>${data.size}</td>
-                    <td>${data.price}</td>
-                    <td>${data.headerType}</td>
-                    <td class="action-buttons">
-                        <button class="action-btn view-btn" onclick="viewData(${data.id})">View</button>
-                        <button class="action-btn delete-btn" onclick="deleteData(${data.id})">Delete</button>
-                    </td>
-                `;
-                
-                tableBody.appendChild(row);
-            });
-        }
-
-        // View data details
-        function viewData(id) {
-            const data = partNumberData.find(item => item.id === id);
-            if (!data) return;
-            
-            // Populate the form with the data
-            // This would need to be implemented based on your specific data structure
-            alert(`Viewing data: ${data.partNumber}\nCategory: ${data.category}\nProduct: ${data.product}`);
-            
-            // In a real implementation, you might want to show a modal with all details
-            // or populate the form fields to allow editing
-        }
-
-        // Delete data
-        function deleteData(id) {
-            if (!confirm('Are you sure you want to delete this item?')) return;
-            
-            partNumberData = partNumberData.filter(item => item.id !== id);
-            savePartNumberDataToStorage();
-            updateDataTable();
+                // Optionally send delete to Sheets if implemented in Apps Script
+            }
         }
 
         // Clear all data
         function clearAllData() {
-            if (!confirm('Are you sure you want to delete ALL data? This cannot be undone.')) return;
-            
-            partNumberData = [];
-            currentDataId = 1;
-            savePartNumberDataToStorage();
-            updateDataTable();
+            if (confirm('Are you sure you want to delete ALL data? This cannot be undone.')) {
+                partNumberData = [];
+                currentDataId = 1;
+                savePartNumberDataToStorage();
+                updateDataTable();
+                
+                // Optionally clear in Sheets if implemented
+            }
         }
 
         // Export to Excel
@@ -2151,51 +1891,68 @@
                 return;
             }
             
-            // Prepare data for export
-            const dataToExport = partNumberData.map(item => ({
+            const data = partNumberData.map(item => ({
                 'Part Number': item.partNumber,
-                'Category': item.category,
-                'Sub Category': item.subCategory,
-                'Product': item.product,
+                'Kategori': item.category,
+                'Sub Kategori': item.subCategory,
+                'Produk': item.product,
                 'Material': item.material,
-                'Size': item.size,
-                'Price': item.price,
-                'Header Type': item.headerType,
-                'Generated Date': new Date(item.timestamp).toLocaleString('id-ID')
+                'Ukuran': item.dimensions,
+                'Harga': item.price ? 'Rp ' + item.price.toLocaleString('id-ID') : '-',
+                'Header Type': item.headerType || '-',
+                'Tanggal': new Date(item.timestamp).toLocaleString('id-ID')
             }));
             
-            // Create worksheet
-            const ws = XLSX.utils.json_to_sheet(dataToExport);
-            
-            // Create workbook
+            const ws = XLSX.utils.json_to_sheet(data);
             const wb = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(wb, ws, 'Part Numbers');
-            
-            // Generate Excel file and download
-            const date = new Date().toISOString().slice(0, 10);
-            XLSX.writeFile(wb, `Part_Numbers_${date}.xlsx`);
+            XLSX.utils.book_append_sheet(wb, ws, 'PartNumbers');
+            XLSX.writeFile(wb, `Farrindo_Part_Numbers_${new Date().toISOString().slice(0, 10)}.xlsx`);
         }
 
-        // Copy to clipboard
-        function copyToClipboard(elementId) {
-            const element = document.getElementById(elementId);
-            element.select();
-            document.execCommand('copy');
-            alert('Copied to clipboard');
-        }
-
-        // Save QR code as image
-        function saveQRCode(format) {
-            const qrContainer = document.getElementById('qr-code');
+        // Search table
+        function searchTable() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const rows = document.querySelectorAll('#tableBody tr');
             
-            html2canvas(qrContainer).then(canvas => {
-                const link = document.createElement('a');
-                const partNumber = document.getElementById('partNumber').value;
-                
-                link.download = `QR_${partNumber}.${format}`;
-                link.href = canvas.toDataURL(`image/${format}`);
-                link.click();
+            if (!searchTerm) {
+                rows.forEach(row => row.style.display = '');
+                return;
+            }
+            
+            rows.forEach(row => {
+                const rowText = row.textContent.toLowerCase();
+                row.style.display = rowText.includes(searchTerm) ? '' : 'none';
             });
+        }
+
+        // Unit converter function
+        function convertUnits() {
+            const value = parseFloat(document.getElementById('convertValue').value);
+            const fromUnit = document.getElementById('fromUnit').value;
+            
+            if (isNaN(value)) {
+                document.getElementById('toMm').value = '';
+                document.getElementById('toCm').value = '';
+                document.getElementById('toInch').value = '';
+                return;
+            }
+            
+            let mmValue;
+            switch (fromUnit) {
+                case 'mm':
+                    mmValue = value;
+                    break;
+                case 'cm':
+                    mmValue = value * 10;
+                    break;
+                case 'inch':
+                    mmValue = value * 25.4;
+                    break;
+            }
+            
+            document.getElementById('toMm').value = mmValue.toFixed(2) + ' mm';
+            document.getElementById('toCm').value = (mmValue / 10).toFixed(2) + ' cm';
+            document.getElementById('toInch').value = (mmValue / 25.4).toFixed(2) + ' inch';
         }
     </script>
 </body>
