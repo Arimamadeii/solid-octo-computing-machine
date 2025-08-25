@@ -162,6 +162,12 @@
             margin-top: 10px;
         }
         
+        /* Header Type Input Styles */
+        .header-type-input {
+            display: none;
+            margin-top: 10px;
+        }
+        
         /* Size Code Generator Button */
         .generate-size-btn {
             margin-top: 10px;
@@ -198,6 +204,50 @@
         }
         .search-container button:hover {
             background-color: #2980b9;
+        }
+        
+        /* Unit Converter Styles */
+        .unit-converter {
+            position: fixed;
+            top: 60px;
+            right: 10px;
+            background-color: rgba(255, 255, 255, 0.95);
+            border: 1px solid #ddd;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            z-index: 1000;
+            width: 250px;
+        }
+        .unit-converter h3 {
+            margin: 0 0 10px 0;
+            font-size: 14px;
+            color: #2c3e50;
+            text-align: center;
+        }
+        .converter-input {
+            display: flex;
+            margin-bottom: 8px;
+        }
+        .converter-input input {
+            flex: 1;
+            padding: 5px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .converter-input select {
+            width: 70px;
+            margin-left: 5px;
+            padding: 5px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .converter-result {
+            margin-top: 8px;
+            padding: 8px;
+            background-color: #f9f9f9;
+            border-radius: 4px;
+            font-size: 12px;
         }
         
         /* Main Application Styles */
@@ -445,6 +495,28 @@
         <div class="clock-date" id="jakarta-date"></div>
     </div>
 
+    <!-- Unit Converter -->
+    <div class="unit-converter">
+        <h3>Unit Converter</h3>
+        <div class="converter-input">
+            <input type="number" id="converterValue" placeholder="Value" value="1">
+            <select id="converterFrom">
+                <option value="mm">mm</option>
+                <option value="cm">cm</option>
+                <option value="inch">inch</option>
+            </select>
+        </div>
+        <div class="converter-input">
+            <input type="number" id="converterResult" placeholder="Result" readonly>
+            <select id="converterTo">
+                <option value="mm">mm</option>
+                <option value="cm" selected>cm</option>
+                <option value="inch">inch</option>
+            </select>
+        </div>
+        <div class="converter-result" id="converterFormula"></div>
+    </div>
+
     <!-- Login Modal -->
     <div id="loginModal" class="login-modal">
         <div class="login-content">
@@ -540,6 +612,16 @@
                     </div>
                 </div>
                 
+                <!-- Header Type Input -->
+                <div class="form-group header-type-input" id="headerTypeGroup">
+                    <label for="headerType">Tipe Header</label>
+                    <select id="headerType">
+                        <option value="1">1. Non Header</option>
+                        <option value="2">2. Single Header</option>
+                        <option value="3">3. Double Header</option>
+                    </select>
+                </div>
+                
                 <div class="form-group" id="materialGroup">
                     <label for="material">Bahan/Media Utama</label>
                     <div class="dropdown-with-add">
@@ -621,6 +703,15 @@
                 </div>
             </div>
             
+            <!-- Order Number Section for Raw Materials -->
+            <div class="section" id="orderNumberSection" style="display: none;">
+                <div class="section-title">Nomor Order (PO)</div>
+                <div class="form-group">
+                    <label for="orderNumber">Nomor Order</label>
+                    <input type="text" id="orderNumber">
+                </div>
+            </div>
+            
             <div class="form-group">
                 <label for="price">Harga Rp.</label>
                 <input type="number" id="price" min="0">
@@ -687,12 +778,13 @@
                                 <th>Material</th>
                                 <th>Ukuran</th>
                                 <th>Harga</th>
+                                <th>Header Type</th>
                                 <th>Aksi</th>
                             </tr>
                         </thead>
                         <tbody id="tableBody">
                             <tr>
-                                <td colspan="9" class="no-data">Belum ada data</td>
+                                <td colspan="10" class="no-data">Belum ada data</td>
                             </tr>
                         </tbody>
                     </table>
@@ -777,7 +869,10 @@
                 {value: '02', text: '02. Hospital'},
                 {value: '03', text: '03. Accessories'}
             ],
-            '03': [],
+            '03': [
+                {value: '01', text: '01. Lokal'},
+                {value: '02', text: '02. Impor'}
+            ],
             '04': [],
             '05': [],
             '06': []
@@ -863,11 +958,25 @@
                 {value: '05', text: 'Jual Dwyer Minihetic II Original (Differential Pressure Gage 2)'},
                 {value: '06', text: 'Motor Rotor Centrifugal Blower Air Shower'}
             ],
-            '03': [],
+            '03-01': [
+                {value: '01', text: '01. Bahan utama'},
+                {value: '02', text: '02. Bahan pembantu'},
+                {value: '03', text: '03. Bahan biaya'},
+                {value: '04', text: '04. Bahan jasa'}
+            ],
+            '03-02': [
+                {value: '01', text: '01. Bahan utama'},
+                {value: '02', text: '02. Bahan pembantu'},
+                {value: '03', text: '03. Bahan biaya'},
+                {value: '04', text: '04. Bahan jasa'}
+            ],
             '04': [],
             '05': [],
             '06': []
         };
+
+        // Products that require header type selection
+        const headerTypeProducts = ['06', '11', '04', '02', '03', '04', '02', '05'];
 
         // Media options classified by subcategory with codes
         const mediaOptionsBySubCategory = {
@@ -963,8 +1072,8 @@
             {code: '35', name: "Plat Besi Hitam 2.0mm x 4ft x 8ft (STD)"}
         ];
 
-        // Size code maps
-        const sizeCodeMaps = {};
+        // Size code maps loaded from Google Sheets
+        let sizeCodeMaps = {};
         let sizeCodeCounters = {};
         
         // Data storage
@@ -976,7 +1085,95 @@
             document.getElementById('loginModal').style.display = 'block';
             loadSavedOptions();
             loadPartNumberData();
+            loadSizeCodesFromSheets();
+            setupUnitConverter();
         });
+
+        // Setup unit converter
+        function setupUnitConverter() {
+            const converterValue = document.getElementById('converterValue');
+            const converterFrom = document.getElementById('converterFrom');
+            const converterTo = document.getElementById('converterTo');
+            
+            const updateConversion = () => {
+                const value = parseFloat(converterValue.value) || 0;
+                const fromUnit = converterFrom.value;
+                const toUnit = converterTo.value;
+                
+                // Convert to mm first
+                let valueInMm;
+                switch(fromUnit) {
+                    case 'mm': valueInMm = value; break;
+                    case 'cm': valueInMm = value * 10; break;
+                    case 'inch': valueInMm = value * 25.4; break;
+                }
+                
+                // Convert from mm to target unit
+                let result;
+                switch(toUnit) {
+                    case 'mm': result = valueInMm; break;
+                    case 'cm': result = valueInMm / 10; break;
+                    case 'inch': result = valueInMm / 25.4; break;
+                }
+                
+                document.getElementById('converterResult').value = result.toFixed(4);
+                
+                // Show conversion formula
+                let formula = '';
+                if (fromUnit !== toUnit) {
+                    formula = `${value} ${fromUnit} = ${result.toFixed(4)} ${toUnit}`;
+                    if (fromUnit === 'inch' && toUnit === 'mm') formula += ` (×25.4)`;
+                    if (fromUnit === 'mm' && toUnit === 'inch') formula += ` (÷25.4)`;
+                    if (fromUnit === 'cm' && toUnit === 'mm') formula += ` (×10)`;
+                    if (fromUnit === 'mm' && toUnit === 'cm') formula += ` (÷10)`;
+                }
+                document.getElementById('converterFormula').textContent = formula;
+            };
+            
+            converterValue.addEventListener('input', updateConversion);
+            converterFrom.addEventListener('change', updateConversion);
+            converterTo.addEventListener('change', updateConversion);
+            
+            // Initial calculation
+            updateConversion();
+        }
+
+        // Load size codes from Google Sheets
+        function loadSizeCodesFromSheets() {
+            // In a real implementation, this would fetch from Google Sheets
+            // For now, we'll simulate with localStorage
+            const savedSizeCodes = localStorage.getItem('sizeCodeData');
+            if (savedSizeCodes) {
+                const data = JSON.parse(savedSizeCodes);
+                sizeCodeMaps = data.maps || {};
+                sizeCodeCounters = data.counters || {};
+            } else {
+                // Initialize with default values
+                sizeCodeMaps = {
+                    'filter': {},
+                    'sheetmetal': {},
+                    'cartridge': {}
+                };
+                sizeCodeCounters = {
+                    'filter': 1,
+                    'sheetmetal': 1,
+                    'cartridge': 1
+                };
+            }
+        }
+
+        // Save size codes to Google Sheets (simulated with localStorage)
+        function saveSizeCodesToSheets() {
+            const data = {
+                maps: sizeCodeMaps,
+                counters: sizeCodeCounters,
+                timestamp: new Date().toISOString()
+            };
+            localStorage.setItem('sizeCodeData', JSON.stringify(data));
+            
+            // In a real implementation, this would send to Google Sheets
+            console.log("Size codes saved (would send to Google Sheets in production)");
+        }
 
         // Login validation
         function validateLogin() {
@@ -1021,15 +1218,6 @@
                     currentDataId = Math.max(...partNumberData.map(item => item.id)) + 1;
                 }
                 updateDataTable();
-        // 🔹 Tambahan: Kirim ke Google Spreadsheet lewat Apps Script
-        fetch("https://script.google.com/macros/s/AKfycbxjs9DrsKnhq8r9vZRetKRSnwkaYBZZ6icReM4rko5QGRjDx1GyXRpnTcEDUW4XGWrk5g/exec", {
-            method: "POST",
-            body: JSON.stringify(dataItem)
-        })
-        .then(res => res.text())
-        .then(msg => console.log("Google Sheets response:", msg))
-        .catch(err => console.error("Error sending to Sheets:", err));
-
             }
         }
 
@@ -1281,15 +1469,19 @@
             const materialGroup = document.getElementById('materialGroup');
             const materialAddBtn = document.getElementById('materialAddBtn');
             const pocketInputGroup = document.getElementById('pocketInputGroup');
+            const headerTypeGroup = document.getElementById('headerTypeGroup');
             const regularDimensions = document.getElementById('regularDimensions');
             const cartridgeDimensions = document.getElementById('cartridgeDimensions');
+            const orderNumberSection = document.getElementById('orderNumberSection');
             
             subCategorySelect.innerHTML = '<option value="">-- Pilih Sub Kategori --</option>';
             productNameSelect.innerHTML = '<option value="">-- Pilih Nama Product --</option>';
             materialSelect.innerHTML = '<option value="">-- Pilih Bahan/Media --</option>';
             pocketInputGroup.style.display = 'none';
+            headerTypeGroup.style.display = 'none';
             regularDimensions.style.display = 'block';
             cartridgeDimensions.style.display = 'none';
+            orderNumberSection.style.display = 'none';
             
             const selectedCategory = categorySelect.value;
             
@@ -1314,6 +1506,12 @@
                     productNameGroup.style.display = 'none';
                     materialGroup.style.display = 'none';
                 }
+                
+                // Show order number section for raw materials
+                if (selectedCategory === '03') {
+                    orderNumberSection.style.display = 'block';
+                    regularDimensions.style.display = 'none';
+                }
             } else {
                 subCategorySelect.disabled = true;
                 productNameSelect.disabled = true;
@@ -1332,12 +1530,14 @@
             const materialSelect = document.getElementById('material');
             const materialAddBtn = document.getElementById('materialAddBtn');
             const pocketInputGroup = document.getElementById('pocketInputGroup');
+            const headerTypeGroup = document.getElementById('headerTypeGroup');
             const regularDimensions = document.getElementById('regularDimensions');
             const cartridgeDimensions = document.getElementById('cartridgeDimensions');
             
             productNameSelect.innerHTML = '<option value="">-- Pilih Nama Product --</option>';
             materialSelect.innerHTML = '<option value="">-- Pilih Bahan/Media --</option>';
             pocketInputGroup.style.display = 'none';
+            headerTypeGroup.style.display = 'none';
             regularDimensions.style.display = 'block';
             cartridgeDimensions.style.display = 'none';
             
@@ -1361,6 +1561,12 @@
                 
                 // Enable material add button only for Filter category (01)
                 materialAddBtn.disabled = selectedCategory !== '01';
+                
+                // Show header type dropdown for specific products
+                const selectedProduct = productNameSelect.value;
+                if (headerTypeProducts.includes(selectedProduct)) {
+                    headerTypeGroup.style.display = 'block';
+                }
             } else {
                 productNameSelect.disabled = true;
                 materialSelect.disabled = true;
@@ -1374,11 +1580,13 @@
             const materialSelect = document.getElementById('material');
             const materialAddBtn = document.getElementById('materialAddBtn');
             const pocketInputGroup = document.getElementById('pocketInputGroup');
+            const headerTypeGroup = document.getElementById('headerTypeGroup');
             const regularDimensions = document.getElementById('regularDimensions');
             const cartridgeDimensions = document.getElementById('cartridgeDimensions');
             
             materialSelect.innerHTML = '<option value="">-- Pilih Bahan/Media --</option>';
             pocketInputGroup.style.display = 'none';
+            headerTypeGroup.style.display = 'none';
             regularDimensions.style.display = 'block';
             cartridgeDimensions.style.display = 'none';
             
@@ -1388,6 +1596,11 @@
             
             if (selectedProduct) {
                 materialSelect.disabled = false;
+                
+                // Show header type dropdown for specific products
+                if (headerTypeProducts.includes(selectedProduct)) {
+                    headerTypeGroup.style.display = 'block';
+                }
                 
                 // Check if this is a cartridge filter product
                 const cartridgeProducts = ['06', '07', '08', '09'];
@@ -1435,6 +1648,22 @@
                     
                     // Enable the add button
                     materialAddBtn.disabled = false;
+                } else if (selectedCategory === '03') {
+                    // For raw materials, change to text input
+                    materialSelect.innerHTML = '';
+                    materialSelect.disabled = true;
+                    materialAddBtn.disabled = true;
+                    
+                    // Create a text input for raw materials
+                    const materialInput = document.createElement('input');
+                    materialInput.type = 'text';
+                    materialInput.id = 'materialText';
+                    materialInput.placeholder = 'Masukkan nama bahan';
+                    
+                    // Replace the select with input
+                    const materialContainer = materialSelect.parentNode;
+                    materialSelect.style.display = 'none';
+                    materialContainer.appendChild(materialInput);
                 } else {
                     // For other categories, enable material add button
                     materialAddBtn.disabled = false;
@@ -1547,6 +1776,9 @@
                     sizeCodeInput.value = '';
                 }
             }
+            
+            // Save size codes to Google Sheets
+            saveSizeCodesToSheets();
         }
 
         // Generate the part number
@@ -1555,279 +1787,233 @@
             const subCategory = document.getElementById('subCategory').value;
             const productName = document.getElementById('productName').value;
             const material = document.getElementById('material').value;
+            const materialText = document.getElementById('materialText') ? document.getElementById('materialText').value : '';
             const sizeCode = document.getElementById('sizeCode').value;
-            const cartridgeSizeCode = document.getElementById('cartridgeSizeCode').value;
-            const price = document.getElementById('price').value;
+            const cartridgeSizeCode = document.getElementById('cartridgeSizeCode')
+            const headerType = document.getElementById('headerType').value;
             const pocketCount = document.getElementById('pocketCount').value;
+            const price = document.getElementById('price').value;
+            const orderNumber = document.getElementById('orderNumber').value;
             
+            // Validate required fields
             if (!category) {
                 alert('Please select a category');
                 return;
             }
             
-            // Get category prefix
-            const categoryInfo = categoryMappings[category];
-            if (!categoryInfo) {
-                alert('Invalid category selected');
+            if (!subCategory) {
+                alert('Please select a sub category');
                 return;
             }
             
-            let partNumber = '';
-            let qrData = '';
+            // For categories 01-02, 04, product name is required
+            if (['01', '02', '04'].includes(category) && !productName) {
+                alert('Please select a product name');
+                return;
+            }
             
-            // Build the part number based on category
+            // For category 01, material is required
+            if (category === '01' && !material && !materialText) {
+                alert('Please select or enter a material');
+                return;
+            }
+            
+            // For category 03, material text is required
+            if (category === '03' && !materialText) {
+                alert('Please enter a material name');
+                return;
+            }
+            
+            // For categories 01-02, size code is required
+            if (['01', '02'].includes(category) && !sizeCode && !cartridgeSizeCode) {
+                alert('Please generate a size code');
+                return;
+            }
+            
+            // For category 03, order number is required
+            if (category === '03' && !orderNumber) {
+                alert('Please enter an order number');
+                return;
+            }
+            
+            // Build the part number
+            let partNumber = '';
+            
+            // Category prefix
+            partNumber += categoryMappings[category].prefix;
+            
+            // Sub category
+            partNumber += '-' + subCategory;
+            
+            // Product name
+            if (productName) {
+                partNumber += '-' + productName.padStart(2, '0');
+            } else {
+                partNumber += '-00';
+            }
+            
+            // Material code (handle different approaches for different categories)
             if (category === '01') {
-                // Filter category
-                if (!subCategory || !productName || !material || (!sizeCode && !cartridgeSizeCode)) {
-                    alert('Please fill in all required fields for Filter category');
-                    return;
-                }
+                // For filters, use the material code from the predefined list
+                const subCatMedia = mediaOptionsBySubCategory[subCategory] || [];
+                const materialObj = subCatMedia.find(m => m.name === material);
                 
-                const sizeCodeToUse = cartridgeSizeCode || sizeCode;
-                
-                // Find material code
-                const mediaOptions = mediaOptionsBySubCategory[subCategory] || [];
-                const mediaInfo = mediaOptions.find(m => m.name === material);
-                const mediaCode = mediaInfo ? mediaInfo.code : '00';
-                
-                // Build part number: F1 (category) + 01 (subcategory) + 01 (product) + 01 (material) + A001 (size)
-                partNumber = `${categoryInfo.prefix}${subCategory}${productName.padStart(2, '0')}-${mediaCode}${sizeCodeToUse}`;
-                
-                // Build QR data
-                qrData = `Category: ${categoryInfo.name}\n`;
-                qrData += `Sub Category: ${document.getElementById('subCategory').options[document.getElementById('subCategory').selectedIndex].text}\n`;
-                qrData += `Product: ${document.getElementById('productName').options[document.getElementById('productName').selectedIndex].text}\n`;
-                qrData += `Material: ${material}\n`;
-                
-                // Add dimensions to QR data
-                if (cartridgeSizeCode) {
-                    const internalTop = document.getElementById('internalTop').value;
-                    const internalBottom = document.getElementById('internalBottom').value;
-                    const externalTop = document.getElementById('externalTop').value;
-                    const externalBottom = document.getElementById('externalBottom').value;
-                    const cartridgeLength = document.getElementById('cartridgeLength').value;
-                    qrData += `Dimensions: IT${internalTop}×IB${internalBottom}×ET${externalTop}×EB${externalBottom}×L${cartridgeLength}mm\n`;
+                if (materialObj) {
+                    partNumber += '-' + materialObj.code.padStart(2, '0');
                 } else {
-                    const length = document.getElementById('length').value;
-                    const width = document.getElementById('width').value;
-                    const height = document.getElementById('height').value;
-                    qrData += `Dimensions: ${length}×${width}×${height}mm\n`;
-                }
-                
-                // Add pocket count if applicable
-                const productNameText = document.getElementById('productName').options[document.getElementById('productName').selectedIndex].text;
-                if (productNameText.includes('Multi Pocket Filter') && pocketCount) {
-                    qrData += `Pockets: ${pocketCount}\n`;
+                    // For custom materials, use a generic code
+                    partNumber += '-99';
                 }
             } else if (category === '02') {
-                // Sheet metal category
-                if (!subCategory || !productName || !material || !sizeCode) {
-                    alert('Please fill in all required fields for Sheetmetal category');
-                    return;
-                }
-                
-                // For sheet metal, material is already a code
-                partNumber = `${categoryInfo.prefix}${subCategory}${productName.padStart(2, '0')}-${material}${sizeCode}`;
-                
-                qrData = `Category: ${categoryInfo.name}\n`;
-                qrData += `Sub Category: ${document.getElementById('subCategory').options[document.getElementById('subCategory').selectedIndex].text}\n`;
-                qrData += `Product: ${document.getElementById('productName').options[document.getElementById('productName').selectedIndex].text}\n`;
-                
-                // Get material name for QR data
-                const materialInfo = sheetMetalMaterials.find(m => m.code === material);
-                qrData += `Material: ${materialInfo ? materialInfo.name : material}\n`;
-                
-                const length = document.getElementById('length').value;
-                const width = document.getElementById('width').value;
-                const height = document.getElementById('height').value;
-                qrData += `Dimensions: ${length}×${width}×${height}mm\n`;
+                // For sheet metal, use the material code directly
+                partNumber += '-' + material.padStart(2, '0');
+            } else if (category === '03') {
+                // For raw materials, use a fixed code based on subcategory
+                partNumber += '-' + '01'; // Default code for raw materials
             } else {
-                // Other categories
-                if (!sizeCode) {
-                    alert('Please fill in all required fields');
-                    return;
-                }
-                
-                partNumber = `${categoryInfo.prefix}${subCategory ? subCategory.padStart(2, '0') : '00'}${productName ? productName.padStart(2, '0') : '00'}-${material ? 'XX' : 'XX'}${sizeCode}`;
-                
-                qrData = `Category: ${categoryInfo.name}\n`;
-                if (subCategory) {
-                    qrData += `Sub Category: ${document.getElementById('subCategory').options[document.getElementById('subCategory').selectedIndex].text}\n`;
-                }
-                if (productName) {
-                    qrData += `Product: ${document.getElementById('productName').options[document.getElementById('productName').selectedIndex].text}\n`;
-                }
-                if (material) {
-                    qrData += `Material: ${material}\n`;
-                }
-                
-                const length = document.getElementById('length').value;
-                const width = document.getElementById('width').value;
-                const height = document.getElementById('height').value;
-                qrData += `Dimensions: ${length}×${width}×${height}mm\n`;
+                // For other categories, use a fixed code
+                partNumber += '-' + '01';
+            }
+            
+            // Size code
+            if (cartridgeSizeCode) {
+                partNumber += '-' + cartridgeSizeCode;
+            } else if (sizeCode) {
+                partNumber += '-' + sizeCode;
+            } else {
+                partNumber += '-A000';
+            }
+            
+            // Header type (if applicable)
+            const productSelect = document.getElementById('productName');
+            const selectedProduct = productSelect.options[productSelect.selectedIndex].value;
+            
+            if (headerTypeProducts.includes(selectedProduct)) {
+                partNumber += '-' + headerType;
+            }
+            
+            // Pocket count (if applicable)
+            const productNameText = productSelect.options[productSelect.selectedIndex].text;
+            if (productNameText.includes('Multi Pocket Filter')) {
+                partNumber += '-' + pocketCount.padStart(2, '0');
+            }
+            
+            // For raw materials, add order number
+            if (category === '03') {
+                partNumber += '-' + orderNumber;
+            }
+            
+            // Display the part number
+            document.getElementById('partNumber').value = partNumber;
+            document.getElementById('result').style.display = 'block';
+            
+            // Generate QR data
+            const categoryName = document.getElementById('category').options[document.getElementById('category').selectedIndex].text;
+            const subCategoryName = document.getElementById('subCategory').options[document.getElementById('subCategory').selectedIndex].text;
+            const productNameText = document.getElementById('productName').options[document.getElementById('productName').selectedIndex]?.text || '';
+            const materialName = category === '03' ? materialText : document.getElementById('material').options[document.getElementById('material').selectedIndex]?.text || '';
+            
+            let qrData = `Part Number: ${partNumber}\n`;
+            qrData += `Category: ${categoryName}\n`;
+            qrData += `Sub Category: ${subCategoryName}\n`;
+            
+            if (productNameText) {
+                qrData += `Product: ${productNameText}\n`;
+            }
+            
+            if (materialName) {
+                qrData += `Material: ${materialName}\n`;
+            }
+            
+            // Add dimensions to QR data
+            if (category === '01' && document.getElementById('cartridgeDimensions').style.display === 'block') {
+                qrData += `Internal Top: ${document.getElementById('internalTop').value}mm\n`;
+                qrData += `Internal Bottom: ${document.getElementById('internalBottom').value}mm\n`;
+                qrData += `External Top: ${document.getElementById('externalTop').value}mm\n`;
+                qrData += `External Bottom: ${document.getElementById('externalBottom').value}mm\n`;
+                qrData += `Length: ${document.getElementById('cartridgeLength').value}mm\n`;
+            } else if (['01', '02'].includes(category)) {
+                qrData += `Length: ${document.getElementById('length').value}mm\n`;
+                qrData += `Width: ${document.getElementById('width').value}mm\n`;
+                qrData += `Height: ${document.getElementById('height').value}mm\n`;
             }
             
             if (price) {
-                qrData += `Price: Rp ${parseInt(price).toLocaleString('id-ID')}`;
+                qrData += `Price: Rp. ${parseInt(price).toLocaleString('id-ID')}\n`;
             }
             
-            // Display the results
-        document.getElementById('partNumber').value = partNumber;
-
-// Format qrData baru sesuai kebutuhan
-        qrData = `PART NUMBER: ${partNumber}
-`;
-        qrData += `CATEGORY: ${categoryInfo.name}
-`;
-        if (subCategory) {
-            qrData += `SUB CATEGORY: ${document.getElementById('subCategory').options[document.getElementById('subCategory').selectedIndex].text}
-`;
-        }
-        if (productName) {
-            qrData += `PRODUCT: ${document.getElementById('productName').options[document.getElementById('productName').selectedIndex].text}
-`;
-        }
-        if (material) {
-            qrData += `MATERIAL: ${material}
-`;
-        }
-        qrData += `DIMENSIONS: ${getDimensionsString()}
-`;
-        if (price) {
-            qrData += `PRICE: Rp ${parseInt(price).toLocaleString('id-ID')}`;
-        }
-
-        document.getElementById('qrData').value = qrData;
-        document.getElementById('qr-text').textContent = qrData;
-        document.getElementById('result').style.display = 'block';
-
+            if (category === '03' && orderNumber) {
+                qrData += `Order Number: ${orderNumber}\n`;
+            }
+            
+            qrData += `Generated: ${new Date().toLocaleString('id-ID')}`;
+            
+            document.getElementById('qrData').value = qrData;
+            document.getElementById('qr-text').textContent = qrData;
             
             // Generate QR code
-            generateAndStoreQRCode(partNumber);
+            const qrContainer = document.getElementById('qr-code');
+            qrContainer.innerHTML = '';
+            new QRCode(qrContainer, {
+                text: qrData,
+                width: 200,
+                height: 200,
+                colorDark: '#000000',
+                colorLight: '#ffffff',
+                correctLevel: QRCode.CorrectLevel.H
+            });
             
-            // Save to data storage
-            const dataItem = {
+            // Save the part number data
+            savePartNumberData(partNumber, categoryName, subCategoryName, productNameText, materialName, 
+                              sizeCode || cartridgeSizeCode, price, headerType);
+        }
+
+        // Save part number data to storage and update table
+        function savePartNumberData(partNumber, category, subCategory, product, material, size, price, headerType) {
+            const newData = {
                 id: currentDataId++,
                 partNumber: partNumber,
-                category: categoryInfo.name,
-                subCategory: subCategory ? document.getElementById('subCategory').options[document.getElementById('subCategory').selectedIndex].text : '',
-                product: productName ? document.getElementById('productName').options[document.getElementById('productName').selectedIndex].text : '',
-                material: material || '',
-                size: sizeCode || cartridgeSizeCode,
-                dimensions: getDimensionsString(),
-                price: price ? parseInt(price) : 0,
-                qrData: qrData,
+                category: category,
+                subCategory: subCategory,
+                product: product,
+                material: material,
+                size: size,
+                price: price ? `Rp. ${parseInt(price).toLocaleString('id-ID')}` : '-',
+                headerType: headerType || '-',
                 timestamp: new Date().toISOString()
             };
             
-            partNumberData.unshift(dataItem);
+            partNumberData.push(newData);
             savePartNumberDataToStorage();
             updateDataTable();
-        // 🔹 Tambahan: Kirim ke Google Spreadsheet lewat Apps Script
-        fetch("https://script.google.com/macros/s/AKfycbxjs9DrsKnhq8r9vZRetKRSnwkaYBZZ6icReM4rko5QGRjDx1GyXRpnTcEDUW4XGWrk5g/exec", {
-            method: "POST",
-            body: JSON.stringify(dataItem)
-        })
-        .then(res => res.text())
-        .then(msg => console.log("Google Sheets response:", msg))
-        .catch(err => console.error("Error sending to Sheets:", err));
-
-            
-            // Scroll to result
-            document.getElementById('result').scrollIntoView({ behavior: 'smooth' });
         }
 
-        function getDimensionsString() {
-            const cartridgeDimensions = document.getElementById('cartridgeDimensions');
-            if (cartridgeDimensions.style.display === 'block') {
-                const internalTop = document.getElementById('internalTop').value;
-                const internalBottom = document.getElementById('internalBottom').value;
-                const externalTop = document.getElementById('externalTop').value;
-                const externalBottom = document.getElementById('externalBottom').value;
-                const cartridgeLength = document.getElementById('cartridgeLength').value;
-                return `IT${internalTop}×IB${internalBottom}×ET${externalTop}×EB${externalBottom}×L${cartridgeLength}mm`;
-            } else {
-                const length = document.getElementById('length').value;
-                const width = document.getElementById('width').value;
-                const height = document.getElementById('height').value;
-                return `${length}×${width}×${height}mm`;
-            }
-        }
-
-        function generateAndStoreQRCode(data) {
-            const qrCodeElement = document.getElementById('qr-code');
-            qrCodeElement.innerHTML = '';
-            new QRCode(qrCodeElement, {
-                text: data,
-                width: 200,
-                height: 200,
-                colorDark: "#000000",
-                colorLight: "#ffffff",
-                correctLevel: QRCode.CorrectLevel.H
-            });
-        }
-
-        // Copy text to clipboard
-        function copyToClipboard(elementId) {
-            const element = document.getElementById(elementId);
-            element.select();
-            document.execCommand('copy');
-            
-            // Show a temporary tooltip
-            const originalText = element.nextElementSibling.textContent;
-            element.nextElementSibling.textContent = 'Copied!';
-            setTimeout(() => {
-                element.nextElementSibling.textContent = originalText;
-            }, 2000);
-        }
-
-        // Save QR code as image
-        function saveQRCode(format) {
-            const qrCodeElement = document.getElementById('qr-code');
-            
-            html2canvas(qrCodeElement).then(canvas => {
-                const link = document.createElement('a');
-                link.download = `QR_${document.getElementById('partNumber').value}.${format}`;
-                link.href = canvas.toDataURL(`image/${format}`);
-                link.click();
-            });
-        }
-
-        // Update the data table
-        function updateDataTable(filterCategory = 'all') {
+        // Update data table with all part numbers
+        function updateDataTable() {
             const tableBody = document.getElementById('tableBody');
-            
-            if (partNumberData.length === 0) {
-                tableBody.innerHTML = '<tr><td colspan="9" class="no-data">Belum ada data</td></tr>';
-                return;
-            }
-            
             tableBody.innerHTML = '';
             
-            const filteredData = filterCategory === 'all' 
-                ? partNumberData 
-                : partNumberData.filter(item => item.partNumber.startsWith(filterCategory));
-            
-            if (filteredData.length === 0) {
-                tableBody.innerHTML = '<tr><td colspan="9" class="no-data">Tidak ada data untuk kategori ini</td></tr>';
+            if (partNumberData.length === 0) {
+                tableBody.innerHTML = '<tr><td colspan="10" class="no-data">Belum ada data</td></tr>';
                 return;
             }
             
-            filteredData.forEach((item, index) => {
+            partNumberData.forEach((data, index) => {
                 const row = document.createElement('tr');
                 
                 row.innerHTML = `
                     <td>${index + 1}</td>
-                    <td>${item.partNumber}</td>
-                    <td>${item.category}</td>
-                    <td>${item.subCategory}</td>
-                    <td>${item.product}</td>
-                    <td>${item.material}</td>
-                    <td>${item.dimensions}</td>
-                    <td>${item.price ? 'Rp ' + item.price.toLocaleString('id-ID') : '-'}</td>
+                    <td>${data.partNumber}</td>
+                    <td>${data.category}</td>
+                    <td>${data.subCategory}</td>
+                    <td>${data.product}</td>
+                    <td>${data.material}</td>
+                    <td>${data.size}</td>
+                    <td>${data.price}</td>
+                    <td>${data.headerType}</td>
                     <td class="action-buttons">
-                        <button class="action-btn view-btn" onclick="viewItem(${item.id})">View</button>
-                        <button class="action-btn delete-btn" onclick="deleteItem(${item.id})">Delete</button>
+                        <button class="action-btn view-btn" onclick="viewData(${data.id})">View</button>
+                        <button class="action-btn delete-btn" onclick="deleteData(${data.id})">Delete</button>
                     </td>
                 `;
                 
@@ -1837,68 +2023,125 @@
 
         // Filter data table by category
         function filterDataTable(category) {
-            // Update active tab
-            document.querySelectorAll('.category-tab').forEach(tab => {
-                tab.classList.remove('active');
-            });
+            const tabs = document.querySelectorAll('.category-tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
             event.target.classList.add('active');
             
-            updateDataTable(category);
-        }
-
-        // View item details
-        function viewItem(id) {
-            const item = partNumberData.find(item => item.id === id);
-            if (!item) return;
+            const tableBody = document.getElementById('tableBody');
+            tableBody.innerHTML = '';
             
-            // Display the item details
-            document.getElementById('partNumber').value = item.partNumber;
-            document.getElementById('qrData').value = item.qrData;
-            document.getElementById('qr-text').textContent = item.qrData;
-            document.getElementById('result').style.display = 'block';
+            let filteredData = partNumberData;
             
-            // Generate QR code
-            generateAndStoreQRCode(item.qrData);
-            
-            // Scroll to result
-            document.getElementById('result').scrollIntoView({ behavior: 'smooth' });
-        }
-
-        // Delete item
-        function deleteItem(id) {
-            if (confirm('Are you sure you want to delete this item?')) {
-                partNumberData = partNumberData.filter(item => item.id !== id);
-                savePartNumberDataToStorage();
-                updateDataTable();
-        // 🔹 Tambahan: Kirim ke Google Spreadsheet lewat Apps Script
-        fetch("https://script.google.com/macros/s/AKfycbxjs9DrsKnhq8r9vZRetKRSnwkaYBZZ6icReM4rko5QGRjDx1GyXRpnTcEDUW4XGWrk5g/exec", {
-            method: "POST",
-            body: JSON.stringify(dataItem)
-        })
-        .then(res => res.text())
-        .then(msg => console.log("Google Sheets response:", msg))
-        .catch(err => console.error("Error sending to Sheets:", err));
-
+            if (category !== 'all') {
+                filteredData = partNumberData.filter(data => data.partNumber.startsWith(category));
             }
+            
+            if (filteredData.length === 0) {
+                tableBody.innerHTML = '<tr><td colspan="10" class="no-data">Tidak ada data untuk kategori ini</td></tr>';
+                return;
+            }
+            
+            filteredData.forEach((data, index) => {
+                const row = document.createElement('tr');
+                
+                row.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td>${data.partNumber}</td>
+                    <td>${data.category}</td>
+                    <td>${data.subCategory}</td>
+                    <td>${data.product}</td>
+                    <td>${data.material}</td>
+                    <td>${data.size}</td>
+                    <td>${data.price}</td>
+                    <td>${data.headerType}</td>
+                    <td class="action-buttons">
+                        <button class="action-btn view-btn" onclick="viewData(${data.id})">View</button>
+                        <button class="action-btn delete-btn" onclick="deleteData(${data.id})">Delete</button>
+                    </td>
+                `;
+                
+                tableBody.appendChild(row);
+            });
+        }
+
+        // Search table
+        function searchTable() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const tableBody = document.getElementById('tableBody');
+            tableBody.innerHTML = '';
+            
+            if (!searchTerm) {
+                updateDataTable();
+                return;
+            }
+            
+            const filteredData = partNumberData.filter(data => 
+                data.partNumber.toLowerCase().includes(searchTerm) ||
+                data.category.toLowerCase().includes(searchTerm) ||
+                data.subCategory.toLowerCase().includes(searchTerm) ||
+                data.product.toLowerCase().includes(searchTerm) ||
+                data.material.toLowerCase().includes(searchTerm)
+            );
+            
+            if (filteredData.length === 0) {
+                tableBody.innerHTML = '<tr><td colspan="10" class="no-data">Tidak ada data yang cocok</td></tr>';
+                return;
+            }
+            
+            filteredData.forEach((data, index) => {
+                const row = document.createElement('tr');
+                
+                row.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td>${data.partNumber}</td>
+                    <td>${data.category}</td>
+                    <td>${data.subCategory}</td>
+                    <td>${data.product}</td>
+                    <td>${data.material}</td>
+                    <td>${data.size}</td>
+                    <td>${data.price}</td>
+                    <td>${data.headerType}</td>
+                    <td class="action-buttons">
+                        <button class="action-btn view-btn" onclick="viewData(${data.id})">View</button>
+                        <button class="action-btn delete-btn" onclick="deleteData(${data.id})">Delete</button>
+                    </td>
+                `;
+                
+                tableBody.appendChild(row);
+            });
+        }
+
+        // View data details
+        function viewData(id) {
+            const data = partNumberData.find(item => item.id === id);
+            if (!data) return;
+            
+            // Populate the form with the data
+            // This would need to be implemented based on your specific data structure
+            alert(`Viewing data: ${data.partNumber}\nCategory: ${data.category}\nProduct: ${data.product}`);
+            
+            // In a real implementation, you might want to show a modal with all details
+            // or populate the form fields to allow editing
+        }
+
+        // Delete data
+        function deleteData(id) {
+            if (!confirm('Are you sure you want to delete this item?')) return;
+            
+            partNumberData = partNumberData.filter(item => item.id !== id);
+            savePartNumberDataToStorage();
+            updateDataTable();
         }
 
         // Clear all data
         function clearAllData() {
-            if (confirm('Are you sure you want to delete ALL data? This cannot be undone.')) {
-                partNumberData = [];
-                currentDataId = 1;
-                savePartNumberDataToStorage();
-                updateDataTable();
-        // 🔹 Tambahan: Kirim ke Google Spreadsheet lewat Apps Script
-        fetch("https://script.google.com/macros/s/AKfycbxjs9DrsKnhq8r9vZRetKRSnwkaYBZZ6icReM4rko5QGRjDx1GyXRpnTcEDUW4XGWrk5g/exec", {
-            method: "POST",
-            body: JSON.stringify(dataItem)
-        })
-        .then(res => res.text())
-        .then(msg => console.log("Google Sheets response:", msg))
-        .catch(err => console.error("Error sending to Sheets:", err));
-
-            }
+            if (!confirm('Are you sure you want to delete ALL data? This cannot be undone.')) return;
+            
+            partNumberData = [];
+            currentDataId = 1;
+            savePartNumberDataToStorage();
+            updateDataTable();
         }
 
         // Export to Excel
@@ -1908,42 +2151,50 @@
                 return;
             }
             
-            // Prepare the data
-            const data = partNumberData.map(item => ({
+            // Prepare data for export
+            const dataToExport = partNumberData.map(item => ({
                 'Part Number': item.partNumber,
-                'Kategori': item.category,
-                'Sub Kategori': item.subCategory,
-                'Produk': item.product,
+                'Category': item.category,
+                'Sub Category': item.subCategory,
+                'Product': item.product,
                 'Material': item.material,
-                'Ukuran': item.dimensions,
-                'Harga': item.price ? 'Rp ' + item.price.toLocaleString('id-ID') : '-',
-                'Tanggal': new Date(item.timestamp).toLocaleString('id-ID')
+                'Size': item.size,
+                'Price': item.price,
+                'Header Type': item.headerType,
+                'Generated Date': new Date(item.timestamp).toLocaleString('id-ID')
             }));
             
             // Create worksheet
-            const ws = XLSX.utils.json_to_sheet(data);
+            const ws = XLSX.utils.json_to_sheet(dataToExport);
             
             // Create workbook
             const wb = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(wb, ws, 'PartNumbers');
+            XLSX.utils.book_append_sheet(wb, ws, 'Part Numbers');
             
-            // Export to file
-            XLSX.writeFile(wb, `Farrindo_Part_Numbers_${new Date().toISOString().slice(0, 10)}.xlsx`);
+            // Generate Excel file and download
+            const date = new Date().toISOString().slice(0, 10);
+            XLSX.writeFile(wb, `Part_Numbers_${date}.xlsx`);
         }
 
-        // Search table
-        function searchTable() {
-            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-            const rows = document.querySelectorAll('#tableBody tr');
+        // Copy to clipboard
+        function copyToClipboard(elementId) {
+            const element = document.getElementById(elementId);
+            element.select();
+            document.execCommand('copy');
+            alert('Copied to clipboard');
+        }
+
+        // Save QR code as image
+        function saveQRCode(format) {
+            const qrContainer = document.getElementById('qr-code');
             
-            if (!searchTerm) {
-                rows.forEach(row => row.style.display = '');
-                return;
-            }
-            
-            rows.forEach(row => {
-                const rowText = row.textContent.toLowerCase();
-                row.style.display = rowText.includes(searchTerm) ? '' : 'none';
+            html2canvas(qrContainer).then(canvas => {
+                const link = document.createElement('a');
+                const partNumber = document.getElementById('partNumber').value;
+                
+                link.download = `QR_${partNumber}.${format}`;
+                link.href = canvas.toDataURL(`image/${format}`);
+                link.click();
             });
         }
     </script>
